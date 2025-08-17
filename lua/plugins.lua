@@ -41,6 +41,117 @@ return {
     end,
   },
 
+  -- Additional dark themes
+  {
+    "folke/tokyonight.nvim",
+    lazy = true,
+    opts = {
+      style = "night",
+      transparent = true,
+      terminal_colors = true,
+    },
+  },
+
+  {
+    "navarasu/onedark.nvim",
+    lazy = true,
+    opts = {
+      style = "dark",
+      transparent = true,
+    },
+  },
+
+  {
+    "ellisonleao/gruvbox.nvim",
+    lazy = true,
+    opts = {
+      transparent_mode = true,
+    },
+  },
+
+  {
+    "shaunsingh/nord.nvim",
+    lazy = true,
+  },
+
+  {
+    "Mofiqul/dracula.nvim",
+    lazy = true,
+  },
+
+  {
+    "EdenEast/nightfox.nvim",
+    lazy = true,
+    opts = {
+      options = {
+        transparent = true,
+      },
+    },
+  },
+
+  {
+    "EdenEast/nightfox.nvim",
+    lazy = true,
+    name = "carbonfox",
+    opts = {
+      options = {
+        transparent = true,
+      },
+    },
+  },
+
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = true,
+    opts = {
+      transparent = true,
+    },
+  },
+
+  {
+    "rose-pine/neovim",
+    lazy = true,
+    name = "rose-pine",
+    opts = {
+      variant = "moon",
+      transparent_background = true,
+    },
+  },
+
+  {
+    "sainnhe/everforest",
+    lazy = true,
+    opts = {
+      transparent_background = true,
+    },
+  },
+
+  {
+    "sainnhe/sonokai",
+    lazy = true,
+    opts = {
+      transparent_background = true,
+    },
+  },
+
+  {
+    "marko-cerovac/material.nvim",
+    lazy = true,
+    opts = {
+      transparent_background = true,
+    },
+  },
+
+  {
+    "tanvirtin/monokai.nvim",
+    lazy = true,
+  },
+
+  {
+    "drewtempelmeyer/palenight.vim",
+    lazy = true,
+  },
+
   -- LSP Configuration
   {
     "neovim/nvim-lspconfig",
@@ -317,19 +428,112 @@ return {
     opts = {},
   },
 
-  -- Auto pairs
+  -- Enhanced auto pairs with better bracket matching
   {
     "windwp/nvim-autopairs",
+    event = "InsertEnter",
     config = function()
-      require("nvim-autopairs").setup()
+      require("nvim-autopairs").setup({
+        check_ts = true,
+        ts_config = {
+          lua = { "string", "source" },
+          javascript = { "string", "template_string" },
+          java = false,
+        },
+        disable_filetype = { "TelescopePrompt", "spectre_panel" },
+        fast_wrap = {
+          map = "<M-e>",
+          chars = { "{", "[", "(", '"', "'" },
+          pattern = string.gsub([[ [%'%"%)%>%]%)%}%,] ]], "%s+", ""),
+          offset = 0,
+          end_key = "$",
+          keys = "qwertyuiopzxcvbnmasdfghjkl",
+          check_comma = true,
+          highlight = "PmenuSel",
+          highlight_grey = "LineNr",
+        },
+      })
     end,
   },
 
-  -- Comment
+  -- Enhanced comments with better formatting
   {
     "numToStr/Comment.nvim",
+    event = "VeryLazy",
     config = function()
-      require("Comment").setup()
+      require("Comment").setup({
+        padding = true,
+        sticky = true,
+        ignore = nil,
+        toggler = {
+          line = "<leader>cc",
+          block = "<leader>cb",
+        },
+        opleader = {
+          line = "<leader>c",
+          block = "<leader>b",
+        },
+        extra = {
+          above = "<leader>cO",
+          below = "<leader>co",
+          eol = "<leader>cA",
+        },
+        mappings = {
+          basic = true,
+          extra = true,
+          extended = false,
+        },
+        pre_hook = nil,
+        post_hook = nil,
+      })
+    end,
+  },
+
+  -- Rainbow brackets for better visual matching
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    config = function()
+      local rainbow_delimiters = require("rainbow-delimiters")
+      vim.g.rainbow_delimiters = {
+        strategy = {
+          [""] = rainbow_delimiters.strategy["global"],
+          vim = rainbow_delimiters.strategy["local"],
+        },
+        query = {
+          [""] = "rainbow-delimiters",
+          lua = "rainbow-blocks",
+          tsx = "rainbow-parens",
+          javascript = "rainbow-parens",
+          typescript = "rainbow-parens",
+        },
+        highlight = {
+          "RainbowDelimiterRed",
+          "RainbowDelimiterYellow",
+          "RainbowDelimiterBlue",
+          "RainbowDelimiterOrange",
+          "RainbowDelimiterGreen",
+          "RainbowDelimiterViolet",
+          "RainbowDelimiterCyan",
+        },
+      }
+    end,
+  },
+
+  -- Auto tag closing for HTML/JSX/XML
+  {
+    "windwp/nvim-ts-autotag",
+    config = function()
+      require("nvim-ts-autotag").setup({
+        filetypes = {
+          "html", "javascript", "typescript", "javascriptreact", "typescriptreact",
+          "svelte", "vue", "tsx", "jsx", "rescript", "xml", "php", "markdown",
+          "astro", "glimmer", "handlebars", "hbs"
+        },
+        skip_tags = {
+          "area", "base", "br", "col", "command", "embed", "hr", "img", "input",
+          "keygen", "link", "meta", "param", "source", "track", "wbr", "menuitem"
+        },
+      })
     end,
   },
 
@@ -624,6 +828,127 @@ return {
           DEBUG = " ",
           TRACE = " ",
         },
+      })
+    end,
+  },
+
+  -- Dashboard
+  {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = function()
+      require("dashboard")
+    end,
+  },
+
+  -- Enhanced syntax highlighting
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    config = function()
+      require("treesitter-context").setup({
+        enable = true,
+        max_lines = 0,
+        trim_scope = "outer",
+        patterns = {
+          default = {
+            "class",
+            "function",
+            "method",
+            "for",
+            "while",
+            "if",
+            "switch",
+            "case",
+          },
+        },
+        exact_patterns = {},
+        zindex = 20,
+        mode = "cursor",
+        separator = nil,
+        min_window_height = 0,
+        line_numbers = true,
+        multiline_threshold = 20,
+        max_show_lines = 0,
+        trim_indent = false,
+        line_num_hl = "LineNr",
+        before_context_hl = "Comment",
+        after_context_hl = "Comment",
+        before_context_string_hl = "String",
+        after_context_string_hl = "String",
+        before_context_char_hl = "Comment",
+        after_context_char_hl = "Comment",
+        before_context_number_hl = "Number",
+        after_context_number_hl = "Number",
+        before_context_function_hl = "Function",
+        after_context_function_hl = "Function",
+        before_context_class_hl = "Type",
+        after_context_class_hl = "Type",
+        before_context_constant_hl = "Constant",
+        after_context_constant_hl = "Constant",
+        before_context_type_hl = "Type",
+        after_context_type_hl = "Type",
+        before_context_variable_hl = "Variable",
+        after_context_variable_hl = "Variable",
+        before_context_namespace_hl = "Include",
+        after_context_namespace_hl = "Include",
+        before_context_event_hl = "Special",
+        after_context_event_hl = "Special",
+        before_context_property_hl = "Property",
+        after_context_property_hl = "Property",
+        before_context_field_hl = "Field",
+        after_context_field_hl = "Field",
+        before_context_section_hl = "Special",
+        after_context_section_hl = "Special",
+        before_context_literal_hl = "Literal",
+        after_context_literal_hl = "Literal",
+        before_context_conditional_hl = "Conditional",
+        after_context_conditional_hl = "Conditional",
+        before_context_repeat_hl = "Repeat",
+        after_context_repeat_hl = "Repeat",
+        before_context_operator_hl = "Operator",
+        after_context_operator_hl = "Operator",
+        before_context_keyword_hl = "Keyword",
+        after_context_keyword_hl = "Keyword",
+        before_context_exception_hl = "Exception",
+        after_context_exception_hl = "Exception",
+        before_context_preproc_hl = "PreProc",
+        after_context_preproc_hl = "PreProc",
+        before_context_storage_hl = "StorageClass",
+        after_context_storage_hl = "StorageClass",
+        before_context_structure_hl = "Structure",
+        after_context_structure_hl = "Structure",
+        before_context_typedef_hl = "Typedef",
+        after_context_typedef_hl = "Typedef",
+        before_context_special_hl = "Special",
+        after_context_special_hl = "Special",
+        before_context_tag_hl = "Tag",
+        after_context_tag_hl = "Tag",
+        before_context_delimiter_hl = "Delimiter",
+        after_context_delimiter_hl = "Delimiter",
+        before_context_specialchar_hl = "SpecialChar",
+        after_context_specialchar_hl = "SpecialChar",
+        before_context_debug_hl = "Debug",
+        after_context_debug_hl = "Debug",
+        before_context_underlined_hl = "Underlined",
+        after_context_underlined_hl = "Underlined",
+        before_context_ignore_hl = "Ignore",
+        after_context_ignore_hl = "Ignore",
+        before_context_error_hl = "Error",
+        after_context_error_hl = "Error",
+        before_context_todo_hl = "Todo",
+        after_context_todo_hl = "Todo",
+      })
+    end,
+  },
+
+  -- Better color highlighting
+  {
+    "brenoprata10/nvim-highlight-colors",
+    config = function()
+      require("nvim-highlight-colors").setup({
+        render = "background",
+        enable_named_colors = true,
+        enable_tailwind = true,
       })
     end,
   },

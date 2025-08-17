@@ -87,8 +87,14 @@ keymap("n", "<leader>t+", "<cmd>lua require('transparency').increase()<cr>", opt
 keymap("n", "<leader>t-", "<cmd>lua require('transparency').decrease()<cr>", opts)
 keymap("n", "<leader>tw", "<cmd>lua require('wallpaper').toggle()<cr>", opts)
 
--- Image viewer
-keymap("n", "<leader>iv", "<cmd>lua toggle_image_viewer()<cr>", opts)
-keymap("n", "<leader>id", "<cmd>lua download_remote_images()<cr>", opts)
+  -- Image viewer
+  keymap("n", "<leader>iv", "<cmd>lua toggle_image_viewer()<cr>", opts)
+  keymap("n", "<leader>id", "<cmd>lua download_remote_images()<cr>", opts)
 
-return M
+  -- Enhanced comments
+  keymap("n", "<leader>cc", "<cmd>CommentToggle<CR>", opts)
+  keymap("n", "<leader>cb", "<cmd>CommentToggleBlock<CR>", opts)
+  keymap("v", "<leader>c", ":CommentToggle<CR>", opts)
+  keymap("v", "<leader>b", ":CommentToggleBlock<CR>", opts)
+
+  return M

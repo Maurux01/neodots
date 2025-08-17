@@ -58,6 +58,17 @@ require("nvim-treesitter.configs").setup({
     extended_mode = true,
     max_file_lines = nil,
   },
+  -- Enhanced highlighting for better colors
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+    use_languagetree = true,
+  },
+  -- Better indentation
+  indent = {
+    enable = true,
+    disable = { "python", "css", "scss" },
+  },
   textobjects = {
     select = {
       enable = true,

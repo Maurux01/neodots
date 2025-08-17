@@ -136,6 +136,12 @@ La primera vez que inicies Neovim, se instalarán automáticamente todos los plu
 - `<leader>ws` - Seleccionar wallpaper
 - `<leader>wr` - Wallpaper aleatorio
 
+### 🎨 Cambio Rápido de Temas
+- `<leader>tn` - Siguiente tema oscuro
+- `<leader>tp` - Tema anterior
+- `<leader>ts` - Seleccionar tema con Telescope
+- `<leader>tc` - Mostrar tema actual
+
 ### Git y Docker
 - `<leader>gg` - Abrir LazyGit
 - `<leader>gd` - Abrir LazyDocker
@@ -145,16 +151,51 @@ La primera vez que inicies Neovim, se instalarán automáticamente todos los plu
 - `<leader>bn` - Siguiente buffer
 - `<leader>bp` - Buffer anterior
 
+### Comentarios Mejorados
+- `<leader>cc` - Comentar/descomentar línea
+- `<leader>cb` - Comentar/descomentar bloque
+- `<leader>c` - Comentar selección (modo visual)
+- `<leader>b` - Comentar bloque (modo visual)
+
+### Brackets y Sintaxis
+- **Rainbow brackets**: Colores automáticos para paréntesis/brackets
+- **Auto-tags**: Cierre automático de tags HTML/JSX/XML
+- **Resaltado de colores**: Visualización de códigos de color
+
 ## 🎨 Personalización
 
-### Colores y Temas
+### 🎨 Temas Oscuros Disponibles
 
-La configuración usa el tema Catppuccin por defecto. Puedes cambiar el tema editando `lua/plugins.lua`:
+Tu configuración incluye **15 temas oscuros** preconfigurados que puedes cambiar rápidamente:
 
-```lua
--- Cambiar a otro tema
-vim.cmd.colorscheme "tokyonight"
-```
+#### Temas Incluidos:
+1. **Catppuccin** - Tema principal (por defecto)
+2. **Tokyo Night** - Elegante y moderno
+3. **One Dark** - Inspirado en Atom
+4. **Gruvbox** - Clásico y cálido
+5. **Nord** - Frío y minimalista
+6. **Dracula** - Vibrante y colorido
+7. **Nightfox** - Suave y elegante
+8. **Carbonfox** - Oscuro y sofisticado
+9. **Kanagawa** - Inspirado en el arte japonés
+10. **Rose Pine** - Romántico y suave
+11. **Everforest** - Natural y relajante
+12. **Sonokai** - Vibrante y moderno
+13. **Material** - Inspirado en Material Design
+14. **Monokai** - Clásico y colorido
+15. **Palenight** - Suave y elegante
+
+#### Cambio Rápido de Temas:
+- **`<leader>tn`** - Cambiar al siguiente tema
+- **`<leader>tp`** - Cambiar al tema anterior
+- **`<leader>ts`** - Seleccionar tema con Telescope
+- **`<leader>tc`** - Ver tema actual
+
+#### Características:
+- **Transparencia habilitada** en todos los temas
+- **Cambio instantáneo** sin reiniciar Neovim
+- **Notificaciones visuales** al cambiar tema
+- **Integración con dashboard** para cambio rápido
 
 ### Configuración de Transparencia
 
@@ -177,6 +218,34 @@ local wallpaper_dir = vim.fn.expand("~/tu/ruta/personalizada")
 Los siguientes LSP se instalan automáticamente:
 
 - **Lua**: lua_ls
+
+## 🌈 Mejoras de Sintaxis y Brackets
+
+### Rainbow Delimiters
+Los paréntesis, corchetes y llaves se muestran en diferentes colores según su nivel de anidamiento:
+- **Rojo**: Primer nivel
+- **Amarillo**: Segundo nivel  
+- **Azul**: Tercer nivel
+- **Naranja**: Cuarto nivel
+- **Verde**: Quinto nivel
+- **Violeta**: Sexto nivel
+- **Cian**: Séptimo nivel
+
+### Auto-tags Mejorado
+- **HTML/JSX/XML**: Cierre automático de tags
+- **Tags auto-cerrados**: `img`, `br`, `hr`, `input`, etc.
+- **Soporte para**: React, Vue, Svelte, Astro
+
+### Resaltado de Colores
+- **CSS/SCSS**: Visualización de códigos de color
+- **HTML**: Colores en atributos style
+- **Tailwind**: Soporte para clases de Tailwind CSS
+- **Colores nombrados**: Red, blue, green, etc.
+
+### Comentarios Inteligentes
+- **Contexto-aware**: Detecta el tipo de archivo automáticamente
+- **Formato mejorado**: Espaciado y formato consistente
+- **Soporte multilínea**: Comentarios de bloque para todos los lenguajes
 - **JavaScript/TypeScript**: tsserver
 - **Python**: pyright
 - **Rust**: rust_analyzer
