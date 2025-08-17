@@ -55,12 +55,20 @@ install_linux_deps() {
     if command_exists apt; then
         # Ubuntu/Debian
         sudo apt update
-        sudo apt install -y git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh
+        sudo apt install -y git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh make cmake ninja-build
         
         # Crear symlink para fd
         if ! command_exists fd; then
             sudo ln -s /usr/bin/fd-find /usr/bin/fd
         fi
+        
+        # Instalar herramientas de debugging y testing
+        pip3 install debugpy pytest black isort
+        
+        # Instalar formateadores
+        npm install -g prettier
+        rustup component add rustfmt
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
     elif command_exists dnf; then
         # Fedora
         sudo dnf install -y git nodejs npm python3 rust cargo fd-find ripgrep fzf ffmpeg feh
@@ -82,7 +90,15 @@ install_macos_deps() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     
-    brew install git node python rust fd ripgrep fzf ffmpeg
+    brew install git node python rust fd ripgrep fzf ffmpeg make cmake ninja
+    
+    # Instalar herramientas de debugging y testing
+    pip3 install debugpy pytest black isort
+    
+    # Instalar formateadores
+    npm install -g prettier
+    rustup component add rustfmt
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest
 }
 
 # Función para instalar dependencias en Windows

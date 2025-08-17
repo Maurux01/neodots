@@ -6,7 +6,8 @@ Una configuración moderna y completa de Neovim con todas las características q
 
 ### ✨ Funcionalidades Principales
 
-- **🎨 Capturas de pantalla**: Toma capturas directamente desde el editor
+- **🎨 Dashboard personalizado**: Pantalla de inicio con acceso rápido
+- **📸 Capturas de pantalla**: Toma capturas directamente desde el editor
 - **⚠️ Errores y advertencias visuales**: Muestra errores de forma clara y atractiva
 - **💡 Autocompletado inteligente**: Sugerencias en tiempo real para código y comandos
 - **🤖 Chat con IA integrado**: Asistente de programación con ChatGPT
@@ -15,6 +16,13 @@ Una configuración moderna y completa de Neovim con todas las características q
 - **🎬 Grabación de video**: Graba todo lo que escribes y ejecutas
 - **🖼️ Visualización de imágenes**: Soporte para ver imágenes y SVG en el editor
 - **🐙 Integración Git/Docker**: LazyGit y LazyDocker integrados
+- **🐛 Debugging avanzado**: Depurador integrado para múltiples lenguajes
+- **🧪 Testing framework**: Ejecución y gestión de tests
+- **📊 Análisis de código**: Herramientas de diagnóstico avanzadas
+- **🎯 Formateo automático**: Formateo de código al guardar
+- **📚 Gestión de proyectos**: Detección y navegación de proyectos
+- **📝 Notas y documentación**: Sistema de notas integrado
+- **🎨 UI mejorada**: Interfaz moderna y responsive
 
 ### 🔧 Herramientas Integradas
 
@@ -24,6 +32,13 @@ Una configuración moderna y completa de Neovim con todas las características q
 - **LazyGit**: Gestión de Git visual
 - **LazyDocker**: Gestión de contenedores
 - **ChatGPT**: Asistente de IA para programación
+- **nvim-dap**: Debugging avanzado
+- **neotest**: Framework de testing
+- **Trouble**: Análisis de problemas
+- **Conform**: Formateo automático
+- **Neorg/Vimwiki**: Sistema de notas
+- **Noice**: UI mejorada
+- **Aerial**: Outline de código
 
 ## 📋 Requisitos Previos
 
@@ -218,6 +233,196 @@ local wallpaper_dir = vim.fn.expand("~/tu/ruta/personalizada")
 Los siguientes LSP se instalan automáticamente:
 
 - **Lua**: lua_ls
+- **JavaScript/TypeScript**: tsserver
+- **Python**: pyright
+- **Rust**: rust_analyzer
+- **Go**: gopls
+- **C/C++**: clangd
+- **JSON**: jsonls
+- **YAML**: yamlls
+- **HTML**: html
+- **CSS**: cssls
+- **Tailwind**: tailwindcss
+
+## 🐛 Debugging Avanzado
+
+### nvim-dap
+Configuración completa de debugging para múltiples lenguajes:
+
+- **Python**: debugpy
+- **JavaScript/TypeScript**: node-debug2-adapter
+- **C/C++**: cppdbg
+- **Go**: delve
+- **Lua**: nlua
+
+### Comandos de Debugging
+- `<leader>db` - Toggle breakpoint
+- `<leader>dc` - Continue
+- `<leader>di` - Step into
+- `<leader>do` - Step over
+- `<leader>dO` - Step out
+- `<leader>dr` - Toggle REPL
+- `<leader>dl` - Run last
+- `<leader>du` - Toggle DAP UI
+
+## 🧪 Testing Framework
+
+### neotest
+Framework de testing para múltiples lenguajes:
+
+- **Python**: pytest
+- **JavaScript**: jest
+- **Go**: go test
+- **Rust**: cargo test
+
+### Comandos de Testing
+- `<leader>tt` - Run test
+- `<leader>tf` - Run test file
+- `<leader>td` - Debug test
+- `<leader>ts` - Toggle test summary
+- `<leader>to` - Open test output
+
+## 📊 Análisis de Código
+
+### Trouble
+Herramienta avanzada para análisis de problemas:
+
+- `<leader>xx` - Toggle trouble
+- `<leader>xw` - Workspace diagnostics
+- `<leader>xd` - Document diagnostics
+- `<leader>xl` - Location list
+- `<leader>xq` - Quickfix list
+
+## 🎯 Formateo Automático
+
+### Conform
+Formateo automático al guardar para:
+
+- **Lua**: stylua
+- **Python**: isort + black
+- **JavaScript/TypeScript**: prettier
+- **JSON/YAML**: prettier
+- **HTML/CSS**: prettier
+- **Rust**: rustfmt
+- **Go**: gofmt
+- **C/C++**: clang_format
+
+### Comandos
+- `<leader>cf` - Format code manually
+
+## 📚 Gestión de Proyectos
+
+### project.nvim
+Detección automática de proyectos:
+
+- `<leader>pp` - Project picker
+- Detección por patrones: .git, package.json, Makefile, etc.
+- Navegación rápida entre proyectos
+
+## 📝 Sistema de Notas
+
+### Neorg
+Sistema de notas avanzado con:
+
+- Workspaces organizados
+- Conceal mejorado
+- Gestión de directorios
+
+### Vimwiki
+Sistema de notas alternativo:
+
+- `<leader>ww` - Vimwiki index
+- `<leader>wt` - Vimwiki tab index
+- `<leader>ws` - Vimwiki UI select
+
+### Markdown Preview
+- `<leader>mp` - Toggle markdown preview
+
+## 🎨 UI Mejorada
+
+### Noice
+Interfaz moderna con:
+
+- Mejor presentación de LSP
+- Command palette mejorado
+- Notificaciones elegantes
+
+### Scrollbar
+Scrollbar inteligente con:
+
+- Marcadores de errores
+- Indicadores de búsqueda
+- Gestión de folds
+
+### Aerial
+Outline de código:
+
+- `<leader>aa` - Toggle aerial
+- `<leader>an` - Next aerial
+- `<leader>ap` - Previous aerial
+
+## 💾 Gestión de Sesiones
+
+### Auto-session
+Gestión automática de sesiones:
+
+- `<leader>ss` - Save session
+- `<leader>sl` - Load session
+- `<leader>sd` - Delete session
+- Auto-save al salir
+- Restauración automática
+
+## 🖥️ Terminal Mejorado
+
+### Toggleterm
+Terminal flotante con:
+
+- `<C-\>` - Toggle terminal
+- Navegación con Ctrl+h/j/k/l
+- Terminal flotante
+- Múltiples terminales
+
+## 📁 Explorador de Archivos
+
+### Nvim-tree
+Explorador de archivos alternativo:
+
+- `<leader>e` - Toggle file explorer
+- `<leader>ef` - Focus file explorer
+- Vista adaptativa
+- Filtros inteligentes
+
+## ⚡ Utilidades Avanzadas
+
+### Emmet
+Expansión rápida de HTML/CSS:
+
+- `<C-y>,` - Expandir emmet
+- Snippets personalizados
+- Soporte para múltiples frameworks
+
+### Legendary
+Command palette avanzado:
+
+- `<leader>:` - Legendary command palette
+- Registro automático de comandos
+- Búsqueda inteligente
+
+### Text Objects
+Objetos de texto avanzados:
+
+- `af/if` - Function
+- `ac/ic` - Class
+- `aa/ia` - Parameter
+- `ab/ib` - Block
+- `al/il` - Loop
+- `as/is` - Statement
+
+### Movimiento Avanzado
+- `]m/[m` - Next/previous function
+- `]c/[c` - Next/previous class
+- `]a/[a` - Next/previous parameter
+- `]b/[b` - Next/previous block
 
 ## 🌈 Mejoras de Sintaxis y Brackets
 

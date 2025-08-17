@@ -82,7 +82,19 @@ function Install-Dependencies {
         "rust",
         "fd",
         "ripgrep",
-        "fzf"
+        "fzf",
+        "debugpy",
+        "delve",
+        "stylua",
+        "black",
+        "isort",
+        "prettier",
+        "rustfmt",
+        "gofmt",
+        "clang-format",
+        "make",
+        "cmake",
+        "ninja"
     )
     
     foreach ($package in $packages) {

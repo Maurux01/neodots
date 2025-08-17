@@ -29,6 +29,9 @@ local function setup_dashboard()
         dashboard.button("t", "🎭 Transparency", ":lua toggle_transparency()<CR>"),
         dashboard.button("w", "🖼️ Wallpaper", ":lua toggle_wallpaper()<CR>"),
         dashboard.button("h", "🎨 Next Theme", ":lua cycle_theme()<CR>"),
+        dashboard.button("d", "🐛 Debug", ":lua require('dap').continue()<CR>"),
+        dashboard.button("x", "⚠️ Troubles", ":TroubleToggle<CR>"),
+        dashboard.button("a", "📋 Aerial", ":AerialToggle!<CR>"),
         dashboard.button("q", "❌ Quit Neovim", ":qa<CR>"),
     }
 
