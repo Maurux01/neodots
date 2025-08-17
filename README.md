@@ -1,236 +1,284 @@
 # Neodots - Neovim Configuration
 
-Una configuración moderna y completa de Neovim con todas las características que necesitas para programar de manera eficiente.
+A modern and complete Neovim configuration with all the features you need to program efficiently.
 
-## 🚀 Características
+## 🚀 Features
 
-### ✨ Funcionalidades Principales
+### ✨ Main Features
 
-- **🎨 Dashboard personalizado**: Pantalla de inicio con acceso rápido
-- **📸 Capturas de pantalla**: Toma capturas directamente desde el editor
-- **⚠️ Errores y advertencias visuales**: Muestra errores de forma clara y atractiva
-- **💡 Autocompletado inteligente**: Sugerencias en tiempo real para código y comandos
-- **🤖 Chat con IA integrado**: Asistente de programación con ChatGPT
-- **🎭 Transparencia graduable**: Control de transparencia del editor
-- **🖼️ Wallpaper personalizable**: Cambia el fondo de escritorio desde el editor
-- **🎬 Grabación de video**: Graba todo lo que escribes y ejecutas
-- **🖼️ Visualización de imágenes**: Soporte para ver imágenes y SVG en el editor
-- **🐙 Integración Git/Docker**: LazyGit y LazyDocker integrados
-- **🐛 Debugging avanzado**: Depurador integrado para múltiples lenguajes
-- **🧪 Testing framework**: Ejecución y gestión de tests
-- **📊 Análisis de código**: Herramientas de diagnóstico avanzadas
-- **🎯 Formateo automático**: Formateo de código al guardar
-- **📚 Gestión de proyectos**: Detección y navegación de proyectos
-- **📝 Notas y documentación**: Sistema de notas integrado
-- **🎨 UI mejorada**: Interfaz moderna y responsive
+- **🎨 Custom Dashboard**: Home screen with quick access
+- **📸 Screenshots**: Take screenshots directly from the editor
+- **⚠️ Visual Errors and Warnings**: Display errors clearly and attractively
+- **💡 Intelligent Autocompletion**: Real-time suggestions for code and commands
+- **🤖 Integrated AI Chat**: Programming assistant with ChatGPT
+- **🎭 Adjustable Transparency**: Control editor transparency
+- **🖼️ Customizable Wallpaper**: Change desktop background from the editor
+- **🎬 Video Recording**: Record everything you write and execute
+- **🖼️ Image Visualization**: Support for viewing images and SVG in the editor
+- **🐙 Git/Docker Integration**: LazyGit and LazyDocker integrated
+- **🐛 Advanced Debugging**: Integrated debugger for multiple languages
+- **🧪 Testing Framework**: Test execution and management
+- **📊 Code Analysis**: Advanced diagnostic tools
+- **🎯 Automatic Formatting**: Code formatting on save
+- **📚 Project Management**: Project detection and navigation
+- **📝 Notes and Documentation**: Integrated note system
+- **🎨 Improved UI**: Modern and responsive interface
 
-### 🔧 Herramientas Integradas
+### 🔧 Integrated Tools
 
-- **LSP**: Soporte completo para múltiples lenguajes
-- **Telescope**: Búsqueda y navegación avanzada
-- **Treesitter**: Syntax highlighting mejorado
-- **LazyGit**: Gestión de Git visual
-- **LazyDocker**: Gestión de contenedores
-- **ChatGPT**: Asistente de IA para programación
-- **nvim-dap**: Debugging avanzado
-- **neotest**: Framework de testing
-- **Trouble**: Análisis de problemas
-- **Conform**: Formateo automático
-- **Neorg/Vimwiki**: Sistema de notas
-- **Noice**: UI mejorada
-- **Aerial**: Outline de código
+- **LSP**: Complete support for multiple languages
+- **Telescope**: Advanced search and navigation
+- **Treesitter**: Enhanced syntax highlighting
+- **LazyGit**: Visual Git management
+- **LazyDocker**: Container management
+- **ChatGPT**: AI programming assistant
+- **nvim-dap**: Advanced debugging
+- **neotest**: Testing framework
+- **Trouble**: Problem analysis
+- **Conform**: Automatic formatting
+- **Neorg/Vimwiki**: Note system
+- **Noice**: Improved UI
+- **Aerial**: Code outline
 
-## 📋 Requisitos Previos
+## 📋 Prerequisites
 
-### Software Necesario
+### Required Software
 
-1. **Neovim** (versión 0.8.0 o superior)
+1. **Neovim** (version 0.8.0 or higher)
 2. **Git**
-3. **Node.js** (para LSP)
-4. **Python** (para algunos LSP)
-5. **Rust** (opcional, para rust-analyzer)
+3. **Node.js** (for LSP)
+4. **Python** (for some LSP)
+5. **Rust** (optional, for rust-analyzer)
 
-### Herramientas Opcionales
+### Optional Tools
 
-- **fd** (para búsqueda rápida de archivos)
-- **ripgrep** (para búsqueda en archivos)
-- **fzf** (para fuzzy finding)
-- **Kitty** (para visualización de imágenes)
-- **ffmpeg** (para grabación de video)
-- **feh** (Linux, para wallpapers)
+- **fd** (for fast file search)
+- **ripgrep** (for file search)
+- **fzf** (for fuzzy finding)
+- **Kitty** (for image visualization)
+- **ffmpeg** (for video recording)
+- **feh** (Linux, for wallpapers)
 
-## 🛠️ Instalación
+## 🛠️ Installation
 
-### 1. Clonar la configuración
+### 1. Clone the configuration
 
 ```bash
-git clone https://github.com/tu-usuario/neodots.git ~/.config/nvim
+git clone https://github.com/your-username/neodots.git ~/.config/nvim
 cd ~/.config/nvim
 ```
 
-### 2. Instalar dependencias del sistema
+### 2. Install system dependencies
+
+#### 🚀 **Automatic Installation (Recommended)**
+
+The automatic installer detects your operating system and installs all necessary dependencies:
+
+**Linux/macOS:**
+```bash
+# Make script executable
+chmod +x install.sh
+
+# Run installer
+./install.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+# Run installer
+.\install.ps1
+```
+
+#### 📦 **Manual Installation**
 
 #### Windows (PowerShell)
 ```powershell
-# Instalar Chocolatey si no lo tienes
+# Install Chocolatey if you don't have it
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-# Instalar herramientas
+# Install tools
 choco install git nodejs python rust fd ripgrep fzf
 ```
 
 #### macOS
 ```bash
-# Instalar Homebrew si no lo tienes
+# Install Homebrew if you don't have it
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Instalar herramientas
+# Install tools
 brew install git node python rust fd ripgrep fzf ffmpeg
 ```
 
-#### Linux (Ubuntu/Debian)
+#### Linux (Multiple Distributions)
+
+**Ubuntu/Debian:**
 ```bash
-# Instalar herramientas
+# Install tools
 sudo apt update
 sudo apt install git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh
 
-# Instalar fd como fd
+# Install fd as fd
 sudo ln -s /usr/bin/fd-find /usr/bin/fd
 ```
 
-### 3. Configurar variables de entorno
-
+**Arch Linux:**
 ```bash
-# Configurar API key de OpenAI para ChatGPT
-export OPENAI_API_KEY="tu-api-key-aqui"
+# Install tools
+sudo pacman -Syu
+sudo pacman -S git nodejs npm python python-pip rust cargo fd ripgrep fzf ffmpeg feh
 ```
 
-### 4. Iniciar Neovim
+**Fedora:**
+```bash
+# Install tools
+sudo dnf install git nodejs npm python3 python3-pip rust cargo fd-find ripgrep fzf ffmpeg feh
+```
+
+**openSUSE:**
+```bash
+# Install tools
+sudo zypper install git nodejs npm python3 python3-pip rust cargo fd ripgrep fzf ffmpeg feh
+```
+
+**Gentoo:**
+```bash
+# Install tools
+sudo emerge --ask dev-vcs/git net-libs/nodejs dev-lang/python dev-lang/rust app-misc/fd sys-apps/ripgrep app-misc/fzf media-video/ffmpeg media-gfx/feh
+```
+
+### 3. Configure environment variables
+
+```bash
+# Configure OpenAI API key for ChatGPT
+export OPENAI_API_KEY="your-api-key-here"
+```
+
+### 4. Start Neovim
 
 ```bash
 nvim
 ```
 
-La primera vez que inicies Neovim, se instalarán automáticamente todos los plugins y LSP necesarios.
+The first time you start Neovim, all necessary plugins and LSP will be installed automatically.
 
-## ⌨️ Atajos de Teclado
+## ⌨️ Keybindings
 
-### Navegación General
-- `<Space>` - Tecla líder
-- `<C-h/j/k/l>` - Navegar entre ventanas
-- `<leader>ff` - Buscar archivos
-- `<leader>fg` - Buscar en archivos
-- `<leader>fb` - Listar buffers
-- `<leader>e` - Explorador de archivos
+### General Navigation
+- `<Space>` - Leader key
+- `<C-h/j/k/l>` - Navigate between windows
+- `<leader>ff` - Find files
+- `<leader>fg` - Search in files
+- `<leader>fb` - List buffers
+- `<leader>e` - File explorer
 
-### LSP y Autocompletado
-- `gd` - Ir a definición
-- `gr` - Ver referencias
-- `K` - Ver información (hover)
-- `<leader>ca` - Acciones de código
-- `<leader>rn` - Renombrar símbolo
-- `<C-Space>` - Activar autocompletado
-- `<Tab>` - Siguiente sugerencia
-- `<S-Tab>` - Sugerencia anterior
+### LSP and Autocompletion
+- `gd` - Go to definition
+- `gr` - View references
+- `K` - View information (hover)
+- `<leader>ca` - Code actions
+- `<leader>rn` - Rename symbol
+- `<C-Space>` - Activate autocompletion
+- `<Tab>` - Next suggestion
+- `<S-Tab>` - Previous suggestion
 
-### IA y Asistencia
-- `<leader>ai` - Abrir chat con IA
-- `<leader>ae` - Editar con instrucciones de IA
+### AI and Assistance
+- `<leader>ai` - Open AI chat
+- `<leader>ae` - Edit with AI instructions
 
-### Capturas y Grabación
-- `<leader>ss` - Tomar captura de pantalla
-- `<leader>sr` - Iniciar/Detener grabación
-- `<leader>srs` - Iniciar grabación
-- `<leader>srt` - Detener grabación
+### Screenshots and Recording
+- `<leader>ss` - Take screenshot
+- `<leader>sr` - Start/Stop recording
+- `<leader>srs` - Start recording
+- `<leader>srt` - Stop recording
 
-### Transparencia y Wallpaper
-- `<leader>t+` - Aumentar transparencia
-- `<leader>t-` - Disminuir transparencia
-- `<leader>tr` - Resetear transparencia
+### Transparency and Wallpaper
+- `<leader>t+` - Increase transparency
+- `<leader>t-` - Decrease transparency
+- `<leader>tr` - Reset transparency
 - `<leader>tw` - Toggle wallpaper
-- `<leader>ws` - Seleccionar wallpaper
-- `<leader>wr` - Wallpaper aleatorio
+- `<leader>ws` - Select wallpaper
+- `<leader>wr` - Random wallpaper
 
-### 🎨 Cambio Rápido de Temas
-- `<leader>tn` - Siguiente tema oscuro
-- `<leader>tp` - Tema anterior
-- `<leader>ts` - Seleccionar tema con Telescope
-- `<leader>tc` - Mostrar tema actual
+### 🎨 Quick Theme Switching
+- `<leader>tn` - Next dark theme
+- `<leader>tp` - Previous theme
+- `<leader>ts` - Select theme with Telescope
+- `<leader>tc` - Show current theme
 
-### Git y Docker
-- `<leader>gg` - Abrir LazyGit
-- `<leader>gd` - Abrir LazyDocker
+### Git and Docker
+- `<leader>gg` - Open LazyGit
+- `<leader>gd` - Open LazyDocker
 
-### Gestión de Buffers
-- `<leader>bd` - Cerrar buffer
-- `<leader>bn` - Siguiente buffer
-- `<leader>bp` - Buffer anterior
+### Buffer Management
+- `<leader>bd` - Close buffer
+- `<leader>bn` - Next buffer
+- `<leader>bp` - Previous buffer
 
-### Comentarios Mejorados
-- `<leader>cc` - Comentar/descomentar línea
-- `<leader>cb` - Comentar/descomentar bloque
-- `<leader>c` - Comentar selección (modo visual)
-- `<leader>b` - Comentar bloque (modo visual)
+### Enhanced Comments
+- `<leader>cc` - Comment/uncomment line
+- `<leader>cb` - Comment/uncomment block
+- `<leader>c` - Comment selection (visual mode)
+- `<leader>b` - Comment block (visual mode)
 
-### Brackets y Sintaxis
-- **Rainbow brackets**: Colores automáticos para paréntesis/brackets
-- **Auto-tags**: Cierre automático de tags HTML/JSX/XML
-- **Resaltado de colores**: Visualización de códigos de color
+### Brackets and Syntax
+- **Rainbow brackets**: Automatic colors for parentheses/brackets
+- **Auto-tags**: Automatic closing of HTML/JSX/XML tags
+- **Color highlighting**: Color code visualization
 
-## 🎨 Personalización
+## 🎨 Customization
 
-### 🎨 Temas Oscuros Disponibles
+### 🎨 Available Dark Themes
 
-Tu configuración incluye **15 temas oscuros** preconfigurados que puedes cambiar rápidamente:
+Your configuration includes **15 preconfigured dark themes** that you can change quickly:
 
-#### Temas Incluidos:
-1. **Catppuccin** - Tema principal (por defecto)
-2. **Tokyo Night** - Elegante y moderno
-3. **One Dark** - Inspirado en Atom
-4. **Gruvbox** - Clásico y cálido
-5. **Nord** - Frío y minimalista
-6. **Dracula** - Vibrante y colorido
-7. **Nightfox** - Suave y elegante
-8. **Carbonfox** - Oscuro y sofisticado
-9. **Kanagawa** - Inspirado en el arte japonés
-10. **Rose Pine** - Romántico y suave
-11. **Everforest** - Natural y relajante
-12. **Sonokai** - Vibrante y moderno
-13. **Material** - Inspirado en Material Design
-14. **Monokai** - Clásico y colorido
-15. **Palenight** - Suave y elegante
+#### Included Themes:
+1. **Catppuccin** - Main theme (default)
+2. **Tokyo Night** - Elegant and modern
+3. **One Dark** - Atom inspired
+4. **Gruvbox** - Classic and warm
+5. **Nord** - Cold and minimalist
+6. **Dracula** - Vibrant and colorful
+7. **Nightfox** - Soft and elegant
+8. **Carbonfox** - Dark and sophisticated
+9. **Kanagawa** - Japanese art inspired
+10. **Rose Pine** - Romantic and soft
+11. **Everforest** - Natural and relaxing
+12. **Sonokai** - Vibrant and modern
+13. **Material** - Material Design inspired
+14. **Monokai** - Classic and colorful
+15. **Palenight** - Soft and elegant
 
-#### Cambio Rápido de Temas:
-- **`<leader>tn`** - Cambiar al siguiente tema
-- **`<leader>tp`** - Cambiar al tema anterior
-- **`<leader>ts`** - Seleccionar tema con Telescope
-- **`<leader>tc`** - Ver tema actual
+#### Quick Theme Switching:
+- **`<leader>tn`** - Change to next theme
+- **`<leader>tp`** - Change to previous theme
+- **`<leader>ts`** - Select theme with Telescope
+- **`<leader>tc`** - View current theme
 
-#### Características:
-- **Transparencia habilitada** en todos los temas
-- **Cambio instantáneo** sin reiniciar Neovim
-- **Notificaciones visuales** al cambiar tema
-- **Integración con dashboard** para cambio rápido
+#### Features:
+- **Transparency enabled** in all themes
+- **Instant change** without restarting Neovim
+- **Visual notifications** when changing theme
+- **Dashboard integration** for quick switching
 
-### Configuración de Transparencia
+### Transparency Configuration
 
-Ajusta la transparencia por defecto en `lua/transparency.lua`:
-
-```lua
-local current_transparency = 0.8  -- Cambiar este valor
-```
-
-### Directorios de Wallpapers
-
-Los wallpapers se guardan en `~/Pictures/wallpapers/`. Puedes cambiar esto editando `lua/wallpaper.lua`:
+Adjust default transparency in `lua/transparency.lua`:
 
 ```lua
-local wallpaper_dir = vim.fn.expand("~/tu/ruta/personalizada")
+local current_transparency = 0.8  -- Change this value
 ```
 
-## 🔧 Configuración de LSP
+### Wallpaper Directories
 
-Los siguientes LSP se instalan automáticamente:
+Wallpapers are saved in `~/Pictures/wallpapers/`. You can change this by editing `lua/wallpaper.lua`:
+
+```lua
+local wallpaper_dir = vim.fn.expand("~/your/custom/path")
+```
+
+## 🔧 LSP Configuration
+
+The following LSP are installed automatically:
 
 - **Lua**: lua_ls
 - **JavaScript/TypeScript**: tsserver
@@ -244,10 +292,10 @@ Los siguientes LSP se instalan automáticamente:
 - **CSS**: cssls
 - **Tailwind**: tailwindcss
 
-## 🐛 Debugging Avanzado
+## 🐛 Advanced Debugging
 
 ### nvim-dap
-Configuración completa de debugging para múltiples lenguajes:
+Complete debugging configuration for multiple languages:
 
 - **Python**: debugpy
 - **JavaScript/TypeScript**: node-debug2-adapter
@@ -255,7 +303,7 @@ Configuración completa de debugging para múltiples lenguajes:
 - **Go**: delve
 - **Lua**: nlua
 
-### Comandos de Debugging
+### Debugging Commands
 - `<leader>db` - Toggle breakpoint
 - `<leader>dc` - Continue
 - `<leader>di` - Step into
@@ -268,24 +316,24 @@ Configuración completa de debugging para múltiples lenguajes:
 ## 🧪 Testing Framework
 
 ### neotest
-Framework de testing para múltiples lenguajes:
+Testing framework for multiple languages:
 
 - **Python**: pytest
 - **JavaScript**: jest
 - **Go**: go test
 - **Rust**: cargo test
 
-### Comandos de Testing
+### Testing Commands
 - `<leader>tt` - Run test
 - `<leader>tf` - Run test file
 - `<leader>td` - Debug test
 - `<leader>ts` - Toggle test summary
 - `<leader>to` - Open test output
 
-## 📊 Análisis de Código
+## 📊 Code Analysis
 
 ### Trouble
-Herramienta avanzada para análisis de problemas:
+Advanced tool for problem analysis:
 
 - `<leader>xx` - Toggle trouble
 - `<leader>xw` - Workspace diagnostics
@@ -293,10 +341,10 @@ Herramienta avanzada para análisis de problemas:
 - `<leader>xl` - Location list
 - `<leader>xq` - Quickfix list
 
-## 🎯 Formateo Automático
+## 🎯 Automatic Formatting
 
 ### Conform
-Formateo automático al guardar para:
+Automatic formatting on save for:
 
 - **Lua**: stylua
 - **Python**: isort + black
@@ -307,29 +355,29 @@ Formateo automático al guardar para:
 - **Go**: gofmt
 - **C/C++**: clang_format
 
-### Comandos
+### Commands
 - `<leader>cf` - Format code manually
 
-## 📚 Gestión de Proyectos
+## 📚 Project Management
 
 ### project.nvim
-Detección automática de proyectos:
+Automatic project detection:
 
 - `<leader>pp` - Project picker
-- Detección por patrones: .git, package.json, Makefile, etc.
-- Navegación rápida entre proyectos
+- Detection by patterns: .git, package.json, Makefile, etc.
+- Quick navigation between projects
 
-## 📝 Sistema de Notas
+## 📝 Note System
 
 ### Neorg
-Sistema de notas avanzado con:
+Advanced note system with:
 
-- Workspaces organizados
-- Conceal mejorado
-- Gestión de directorios
+- Organized workspaces
+- Enhanced conceal
+- Directory management
 
 ### Vimwiki
-Sistema de notas alternativo:
+Alternative note system:
 
 - `<leader>ww` - Vimwiki index
 - `<leader>wt` - Vimwiki tab index
@@ -338,78 +386,78 @@ Sistema de notas alternativo:
 ### Markdown Preview
 - `<leader>mp` - Toggle markdown preview
 
-## 🎨 UI Mejorada
+## 🎨 Improved UI
 
 ### Noice
-Interfaz moderna con:
+Modern interface with:
 
-- Mejor presentación de LSP
-- Command palette mejorado
-- Notificaciones elegantes
+- Better LSP presentation
+- Enhanced command palette
+- Elegant notifications
 
 ### Scrollbar
-Scrollbar inteligente con:
+Intelligent scrollbar with:
 
-- Marcadores de errores
-- Indicadores de búsqueda
-- Gestión de folds
+- Error markers
+- Search indicators
+- Fold management
 
 ### Aerial
-Outline de código:
+Code outline:
 
 - `<leader>aa` - Toggle aerial
 - `<leader>an` - Next aerial
 - `<leader>ap` - Previous aerial
 
-## 💾 Gestión de Sesiones
+## 💾 Session Management
 
 ### Auto-session
-Gestión automática de sesiones:
+Automatic session management:
 
 - `<leader>ss` - Save session
 - `<leader>sl` - Load session
 - `<leader>sd` - Delete session
-- Auto-save al salir
-- Restauración automática
+- Auto-save on exit
+- Automatic restoration
 
-## 🖥️ Terminal Mejorado
+## 🖥️ Enhanced Terminal
 
 ### Toggleterm
-Terminal flotante con:
+Floating terminal with:
 
 - `<C-\>` - Toggle terminal
-- Navegación con Ctrl+h/j/k/l
-- Terminal flotante
-- Múltiples terminales
+- Navigation with Ctrl+h/j/k/l
+- Floating terminal
+- Multiple terminals
 
-## 📁 Explorador de Archivos
+## 📁 File Explorer
 
 ### Nvim-tree
-Explorador de archivos alternativo:
+Alternative file explorer:
 
 - `<leader>e` - Toggle file explorer
 - `<leader>ef` - Focus file explorer
-- Vista adaptativa
-- Filtros inteligentes
+- Adaptive view
+- Smart filters
 
-## ⚡ Utilidades Avanzadas
+## ⚡ Advanced Utilities
 
 ### Emmet
-Expansión rápida de HTML/CSS:
+Fast HTML/CSS expansion:
 
-- `<C-y>,` - Expandir emmet
-- Snippets personalizados
-- Soporte para múltiples frameworks
+- `<C-y>,` - Expand emmet
+- Custom snippets
+- Support for multiple frameworks
 
 ### Legendary
-Command palette avanzado:
+Advanced command palette:
 
 - `<leader>:` - Legendary command palette
-- Registro automático de comandos
-- Búsqueda inteligente
+- Automatic command registration
+- Intelligent search
 
 ### Text Objects
-Objetos de texto avanzados:
+Advanced text objects:
 
 - `af/if` - Function
 - `ac/ic` - Class
@@ -418,39 +466,39 @@ Objetos de texto avanzados:
 - `al/il` - Loop
 - `as/is` - Statement
 
-### Movimiento Avanzado
+### Advanced Movement
 - `]m/[m` - Next/previous function
 - `]c/[c` - Next/previous class
 - `]a/[a` - Next/previous parameter
 - `]b/[b` - Next/previous block
 
-## 🌈 Mejoras de Sintaxis y Brackets
+## 🌈 Syntax and Bracket Improvements
 
 ### Rainbow Delimiters
-Los paréntesis, corchetes y llaves se muestran en diferentes colores según su nivel de anidamiento:
-- **Rojo**: Primer nivel
-- **Amarillo**: Segundo nivel  
-- **Azul**: Tercer nivel
-- **Naranja**: Cuarto nivel
-- **Verde**: Quinto nivel
-- **Violeta**: Sexto nivel
-- **Cian**: Séptimo nivel
+Parentheses, brackets, and braces are displayed in different colors according to their nesting level:
+- **Red**: First level
+- **Yellow**: Second level  
+- **Blue**: Third level
+- **Orange**: Fourth level
+- **Green**: Fifth level
+- **Purple**: Sixth level
+- **Cyan**: Seventh level
 
-### Auto-tags Mejorado
-- **HTML/JSX/XML**: Cierre automático de tags
-- **Tags auto-cerrados**: `img`, `br`, `hr`, `input`, etc.
-- **Soporte para**: React, Vue, Svelte, Astro
+### Enhanced Auto-tags
+- **HTML/JSX/XML**: Automatic tag closing
+- **Auto-closed tags**: `img`, `br`, `hr`, `input`, etc.
+- **Support for**: React, Vue, Svelte, Astro
 
-### Resaltado de Colores
-- **CSS/SCSS**: Visualización de códigos de color
-- **HTML**: Colores en atributos style
-- **Tailwind**: Soporte para clases de Tailwind CSS
-- **Colores nombrados**: Red, blue, green, etc.
+### Color Highlighting
+- **CSS/SCSS**: Color code visualization
+- **HTML**: Colors in style attributes
+- **Tailwind**: Support for Tailwind CSS classes
+- **Named colors**: Red, blue, green, etc.
 
-### Comentarios Inteligentes
-- **Contexto-aware**: Detecta el tipo de archivo automáticamente
-- **Formato mejorado**: Espaciado y formato consistente
-- **Soporte multilínea**: Comentarios de bloque para todos los lenguajes
+### Intelligent Comments
+- **Context-aware**: Automatically detects file type
+- **Enhanced formatting**: Consistent spacing and formatting
+- **Multiline support**: Block comments for all languages
 - **JavaScript/TypeScript**: tsserver
 - **Python**: pyright
 - **Rust**: rust_analyzer
@@ -462,110 +510,110 @@ Los paréntesis, corchetes y llaves se muestran en diferentes colores según su 
 - **CSS**: cssls
 - **Tailwind**: tailwindcss
 
-### Instalar LSP adicionales
+### Install additional LSP
 
-Para instalar LSP adicionales, edita `lua/lsp.lua` y agrega el LSP a la lista `ensure_installed`.
+To install additional LSP, edit `lua/lsp.lua` and add the LSP to the `ensure_installed` list.
 
-## 🖼️ Visualización de Imágenes
+## 🖼️ Image Visualization
 
-### Configuración de Kitty
+### Kitty Configuration
 
-Para ver imágenes en la terminal, asegúrate de usar Kitty y tener la configuración correcta:
+To view images in the terminal, make sure you use Kitty and have the correct configuration:
 
 ```bash
-# En tu kitty.conf
+# In your kitty.conf
 term xterm-kitty
 ```
 
-### Formatos Soportados
+### Supported Formats
 
 - PNG, JPG, JPEG, GIF, WebP
-- SVG (con soporte de Kitty)
-- Imágenes en Markdown
+- SVG (with Kitty support)
+- Images in Markdown
 
-## 🎬 Grabación de Video
+## 🎬 Video Recording
 
-### Herramientas por Sistema Operativo
+### Tools by Operating System
 
 - **Windows**: OBS Studio
 - **macOS**: QuickTime Player
 - **Linux**: ffmpeg
 
-### Configuración
+### Configuration
 
-Los videos se guardan en `~/Videos/neovim_recordings/`. Puedes cambiar esto editando `lua/recording.lua`.
+Videos are saved in `~/Videos/neovim_recordings/`. You can change this by editing `lua/recording.lua`.
 
-## 🤖 Configuración de ChatGPT
+## 🤖 ChatGPT Configuration
 
 ### API Key
 
-Configura tu API key de OpenAI:
+Configure your OpenAI API key:
 
 ```bash
-export OPENAI_API_KEY="tu-api-key-aqui"
+export OPENAI_API_KEY="your-api-key-here"
 ```
 
-### Modelos Disponibles
+### Available Models
 
-- GPT-3.5-turbo (por defecto)
-- GPT-4 (cambiar en configuración)
+- GPT-3.5-turbo (default)
+- GPT-4 (change in configuration)
 
-### Personalización
+### Customization
 
-Edita la configuración de ChatGPT en `lua/plugins.lua` para personalizar el comportamiento.
+Edit the ChatGPT configuration in `lua/plugins.lua` to customize behavior.
 
-## 🐛 Solución de Problemas
+## 🐛 Troubleshooting
 
-### Plugins no se instalan
+### Plugins don't install
 
 ```bash
-# Limpiar cache de Lazy
+# Clear Lazy cache
 rm -rf ~/.local/share/nvim/lazy
 nvim --headless -c "Lazy! sync" -c "qa"
 ```
 
-### LSP no funciona
+### LSP doesn't work
 
 ```bash
-# Verificar instalación de Mason
+# Check Mason installation
 :Mason
-# Instalar LSP manualmente si es necesario
+# Install LSP manually if necessary
 ```
 
-### Transparencia no funciona
+### Transparency doesn't work
 
-Asegúrate de que tu terminal soporte transparencia:
+Make sure your terminal supports transparency:
 - **Windows**: Windows Terminal
-- **macOS**: iTerm2 o Terminal.app
-- **Linux**: Cualquier terminal moderno
+- **macOS**: iTerm2 or Terminal.app
+- **Linux**: Any modern terminal
 
-### Imágenes no se muestran
+### Images don't display
 
-1. Verifica que uses Kitty
-2. Asegúrate de que `image.nvim` esté configurado correctamente
-3. Verifica que las imágenes estén en formatos soportados
+1. Verify you use Kitty
+2. Make sure `image.nvim` is configured correctly
+3. Verify images are in supported formats
 
-## 📝 Contribuir
+## 📝 Contributing
 
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Crea un Pull Request
+1. Fork the repository
+2. Create a branch for your feature (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
+5. Create a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+This project is under the MIT License. See the `LICENSE` file for more details.
 
-## 🙏 Agradecimientos
+## 🙏 Acknowledgments
 
-- [Lazy.nvim](https://github.com/folke/lazy.nvim) - Gestor de plugins
-- [Catppuccin](https://github.com/catppuccin/nvim) - Tema de colores
-- [ChatGPT.nvim](https://github.com/jackMort/ChatGPT.nvim) - Integración de IA
-- [Telescope](https://github.com/nvim-telescope/telescope.nvim) - Búsqueda y navegación
-- [LazyGit](https://github.com/kdheepak/lazygit.nvim) - Git visual
-- [LazyDocker](https://github.com/lazytanuki/nvim-docker) - Docker visual
+- [Lazy.nvim](https://github.com/folke/lazy.nvim) - Plugin manager
+- [Catppuccin](https://github.com/catppuccin/nvim) - Color theme
+- [ChatGPT.nvim](https://github.com/jackMort/ChatGPT.nvim) - AI integration
+- [Telescope](https://github.com/nvim-telescope/telescope.nvim) - Search and navigation
+- [LazyGit](https://github.com/kdheepak/lazygit.nvim) - Visual Git
+- [LazyDocker](https://github.com/lazytanuki/nvim-docker) - Visual Docker
 
 ---
 
-**¡Disfruta programando con Neodots! 🚀**
+**Enjoy programming with Neodots! 🚀**

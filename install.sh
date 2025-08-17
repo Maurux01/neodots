@@ -54,6 +54,7 @@ install_linux_deps() {
     
     if command_exists apt; then
         # Ubuntu/Debian
+        print_status "Instalando dependencias para Ubuntu/Debian..."
         sudo apt update
         sudo apt install -y git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh make cmake ninja-build
         
@@ -71,12 +72,60 @@ install_linux_deps() {
         go install mvdan.cc/sh/v3/cmd/shfmt@latest
     elif command_exists dnf; then
         # Fedora
-        sudo dnf install -y git nodejs npm python3 rust cargo fd-find ripgrep fzf ffmpeg feh
+        print_status "Instalando dependencias para Fedora..."
+        sudo dnf install -y git nodejs npm python3 python3-pip rust cargo fd-find ripgrep fzf ffmpeg feh make cmake ninja-build
+        
+        # Instalar herramientas de debugging y testing
+        pip3 install debugpy pytest black isort
+        
+        # Instalar formateadores
+        npm install -g prettier
+        rustup component add rustfmt
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
     elif command_exists pacman; then
         # Arch Linux
-        sudo pacman -S --noconfirm git nodejs npm python rust fd ripgrep fzf ffmpeg feh
+        print_status "Instalando dependencias para Arch Linux..."
+        sudo pacman -Syu --noconfirm
+        sudo pacman -S --noconfirm git nodejs npm python python-pip rust cargo fd ripgrep fzf ffmpeg feh make cmake ninja
+        
+        # Instalar herramientas de debugging y testing
+        pip3 install debugpy pytest black isort
+        
+        # Instalar formateadores
+        npm install -g prettier
+        rustup component add rustfmt
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+    elif command_exists zypper; then
+        # openSUSE
+        print_status "Instalando dependencias para openSUSE..."
+        sudo zypper install -y git nodejs npm python3 python3-pip rust cargo fd ripgrep fzf ffmpeg feh make cmake ninja
+        
+        # Instalar herramientas de debugging y testing
+        pip3 install debugpy pytest black isort
+        
+        # Instalar formateadores
+        npm install -g prettier
+        rustup component add rustfmt
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+    elif command_exists emerge; then
+        # Gentoo
+        print_status "Instalando dependencias para Gentoo..."
+        sudo emerge --ask --noreplace dev-vcs/git net-libs/nodejs dev-lang/python dev-lang/rust app-misc/fd sys-apps/ripgrep app-misc/fzf media-video/ffmpeg media-gfx/feh dev-util/cmake dev-util/ninja
+        
+        # Instalar herramientas de debugging y testing
+        pip3 install debugpy pytest black isort
+        
+        # Instalar formateadores
+        npm install -g prettier
+        rustup component add rustfmt
+        go install mvdan.cc/sh/v3/cmd/shfmt@latest
     else
-        print_error "No se pudo detectar el gestor de paquetes. Instala manualmente: git, nodejs, python3, rust, fd, ripgrep, fzf, ffmpeg, feh"
+        print_error "No se pudo detectar el gestor de paquetes. Instala manualmente:"
+        echo "  - git, nodejs, python3, rust, fd, ripgrep, fzf, ffmpeg, feh"
+        echo "  - make, cmake, ninja"
+        echo "  - debugpy, pytest, black, isort (via pip)"
+        echo "  - prettier (via npm)"
+        echo "  - rustfmt (via rustup)"
         return 1
     fi
 }
@@ -117,7 +166,11 @@ install_windows_deps() {
 check_neovim() {
     if ! command_exists nvim; then
         print_error "Neovim no está instalado. Por favor, instálalo primero:"
-        echo "  Linux: sudo apt install neovim (Ubuntu/Debian)"
+        echo "  Ubuntu/Debian: sudo apt install neovim"
+        echo "  Arch Linux: sudo pacman -S neovim"
+        echo "  Fedora: sudo dnf install neovim"
+        echo "  openSUSE: sudo zypper install neovim"
+        echo "  Gentoo: sudo emerge --ask app-editors/neovim"
         echo "  macOS: brew install neovim"
         echo "  Windows: choco install neovim"
         exit 1
