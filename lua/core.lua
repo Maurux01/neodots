@@ -81,6 +81,7 @@ keymap("n", "<leader>sr", "<cmd>lua require('recording').toggle_recording()<cr>"
 -- Git and Docker
 keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 keymap("n", "<leader>gd", "<cmd>LazyDocker<cr>", opts)
+keymap("n", "<leader>gs", ":Git<CR>", opts)
 
 -- Transparency controls
 keymap("n", "<leader>t+", "<cmd>lua require('transparency').increase()<cr>", opts)
@@ -96,5 +97,11 @@ keymap("n", "<leader>tw", "<cmd>lua require('wallpaper').toggle()<cr>", opts)
   keymap("n", "<leader>cb", "<cmd>CommentToggleBlock<CR>", opts)
   keymap("v", "<leader>c", ":CommentToggle<CR>", opts)
   keymap("v", "<leader>b", ":CommentToggleBlock<CR>", opts)
+
+-- Productivity tools
+keymap("n", "<leader>sc", ":lua require('spellsitter').toggle()<CR>", opts)
+keymap("n", "<leader>r", ":RunCode<CR>", opts)
+keymap("n", "<leader>du", ":DBUIToggle<CR>", opts)
+keymap("n", "<leader>rr", ":Rest run<CR>", opts)
 
   return M
