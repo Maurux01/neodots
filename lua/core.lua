@@ -99,7 +99,7 @@ keymap("n", "<leader>tw", "<cmd>lua require('wallpaper').toggle()<cr>", opts)
   keymap("v", "<leader>b", ":CommentToggleBlock<CR>", opts)
 
 -- Productivity tools
-keymap("n", "<leader>sc", ":lua require('spellsitter').toggle()<CR>", opts)
+keymap("n", "<leader>sc", ":set spell!<CR>", opts)
 keymap("n", "<leader>r", ":RunCode<CR>", opts)
 keymap("n", "<leader>du", ":DBUIToggle<CR>", opts)
 keymap("n", "<leader>rr", ":Rest run<CR>", opts)
