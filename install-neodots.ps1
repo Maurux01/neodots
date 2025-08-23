@@ -115,12 +115,7 @@ function Install-Neodots {
     $packages = @(
         "git",       # Version control
         "nodejs",    # For LSP and other tools
-        "python",    # For Python support
-        "ripgrep",   # Fast text search
-        "fzf",       # Fuzzy finder
-        "fd",        # Fast file finder
-        "lazygit",   # Git UI
-        "lazydocker" # Docker UI
+        "python"     # For Python support
     )
     
     foreach ($pkg in $packages) {
