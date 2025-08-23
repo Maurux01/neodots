@@ -47,7 +47,7 @@ function Test-Neovim {
     }
     
     # Verificar versión mínima
-    $nvimVersion = (nvim --version | Select-Object -First 1) -split " " | Select-Object -Index 1
+    $nvimVersion = ((nvim --version | Select-Object -First 1) -split " " | Select-Object -Index 1) -replace '^v'
     $requiredVersion = "0.8.0"
     
     if ([version]$nvimVersion -lt [version]$requiredVersion) {
