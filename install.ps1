@@ -1,11 +1,11 @@
 # Neodots - Neovim Configuration Installer for Windows
-# Script de instalación automática para PowerShell
+# Script de instalacion automatica para PowerShell
 
 param(
     [switch]$Force
 )
 
-# Función para imprimir mensajes con colores
+# Funcion para imprimir mensajes con colores
 function Write-Status {
     param([string]$Message)
     Write-Host "[INFO] $Message" -ForegroundColor Blue
@@ -26,7 +26,7 @@ function Write-Error {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
-# Función para verificar si un comando existe
+# Funcion para verificar si un comando existe
 function Test-Command {
     param([string]$Command)
     try {
@@ -38,10 +38,10 @@ function Test-Command {
     }
 }
 
-# Función para verificar Neovim
+# Funcion para verificar Neovim
 function Test-Neovim {
     if (-not (Test-Command "nvim")) {
-        Write-Error "Neovim no está instalado. Por favor, instálalo primero:"
+        Write-Error "Neovim no esta instalado. Por favor, instalalo primero:"
         Write-Host "  choco install neovim" -ForegroundColor Yellow
         exit 1
     }
@@ -51,14 +51,14 @@ function Test-Neovim {
     $requiredVersion = "0.8.0"
     
     if ([version]$nvimVersion -lt [version]$requiredVersion) {
-        Write-Error "Neovim versión $nvimVersion detectada. Se requiere versión $requiredVersion o superior."
+        Write-Error "Neovim version $nvimVersion detectada. Se requiere version $requiredVersion o superior."
         exit 1
     }
     
     Write-Success "Neovim $nvimVersion detectado"
 }
 
-# Función para instalar Chocolatey
+# Funcion para instalar Chocolatey
 function Install-Chocolatey {
     if (-not (Test-Command "choco")) {
         Write-Status "Instalando Chocolatey..."
@@ -71,7 +71,7 @@ function Install-Chocolatey {
     }
 }
 
-# Función para instalar dependencias
+# Funcion para instalar dependencias
 function Install-Dependencies {
     Write-Status "Instalando dependencias..."
     
@@ -92,13 +92,13 @@ function Install-Dependencies {
         if (-not (Test-Command $package)) {
             choco install $package -y --no-progress | Out-Null
         } else {
-            Write-Status "$package ya está instalado"
+            Write-Status "$package ya esta instalado"
         }
     }
     Write-Progress -Activity "Instalando dependencias" -Completed
 }
 
-# Función para crear directorios
+# Funcion para crear directorios
 function New-Directories {
     Write-Status "Creando directorios necesarios..."
     
@@ -118,7 +118,7 @@ function New-Directories {
     }
 }
 
-# Función para configurar variables de entorno
+# Funcion para configurar variables de entorno
 function Set-EnvironmentVariables {
     Write-Status "Configurando variables de entorno..."
     
@@ -132,53 +132,14 @@ function Set-EnvironmentVariables {
         [Environment]::SetEnvironmentVariable($envVar, $envValue, "User")
         Write-Success "Variable de entorno $envVar configurada"
     } else {
-        Write-Warning "Variable de entorno $envVar ya está configurada"
+        Write-Warning "Variable de entorno $envVar ya esta configurada"
     }
 }
 
-# Función principal
-function Main {
-    Write-Host @"
-╔══════════════════════════════════════════════════════════════╗
-║                    Neodots - Neovim Setup                   ║
-║                Configuración Moderna y Completa             ║
-╚══════════════════════════════════════════════════════════════╝
-"@ -ForegroundColor Blue
-    
-    Write-Status "Sistema operativo detectado: Windows"
-    
-    # Verificar Neovim
-    Test-Neovim
-    
-    # Instalar Chocolatey si es necesario
-    Install-Chocolatey
-    
-    # Instalar dependencias
-    Install-Dependencies
-    
-    # Crear directorios
-    New-Directories
-    
-    # Configurar variables de entorno
-    Set-EnvironmentVariables
-    
-    Write-Success "¡Instalación completada!"
-    Write-Host ""
-    Write-Host "Próximos pasos:" -ForegroundColor Yellow
-    Write-Host "1. Configura tu API key de OpenAI:"
-    Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'tu-api-key-aqui', 'User')"
-    Write-Host ""
-    Write-Host "2. Inicia Neovim para instalar plugins automáticamente:"
-    Write-Host "   nvim"
-    Write-Host ""
-    Write-Host "3. Consulta el README.md para más información sobre el uso"
-    Write-Host ""
-    Write-Host "¡Disfruta programando con Neodots! 🚀" -ForegroundColor Green
-}
 
-# Función para sincronizar los archivos de configuración
+# Funcion para sincronizar los archivos de configuracion
 function Sync-ConfigFiles {
-    Write-Status "Sincronizando archivos de configuración a $env:LOCALAPPDATA\nvim..."
+    Write-Status "Sincronizando archivos de configuracion a $env:LOCALAPPDATA\nvim..."
     $configDir = "$env:LOCALAPPDATA\nvim"
     $sourceDir = (Get-Location).Path
 
@@ -187,34 +148,34 @@ function Sync-ConfigFiles {
         New-Item -ItemType Directory -Path $configDir -Force | Out-Null
     }
 
-    # Usar robocopy para una copia más robusta
-    Write-Status "Copiando archivos de configuración con robocopy..."
+    # Usar robocopy para una copia mas robusta
+    Write-Status "Copiando archivos de configuracion con robocopy..."
     robocopy $sourceDir $configDir /E /XF install.sh install.ps1 README.md /XD .git .github /NFL /NDL /NJH /NJS /nc /ns /np
     if ($LASTEXITCODE -ge 8) {
-        Write-Error "Robocopy falló con el código de salida: $LASTEXITCODE"
+        Write-Error "Robocopy fallo con el codigo de salida: $LASTEXITCODE"
         exit 1
     }
 
-    Write-Success "Archivos de configuración sincronizados."
+    Write-Success "Archivos de configuracion sincronizados."
 }
 
-# Función principal
+# Funcion principal
 function Main {
     Write-Host @"
-   ╔══════════════════════════════════════════════════════════════╗
-   ║                    Neodots - Neovim Setup                   ║
-   ║                Configuración Moderna y Completa             ║
-   ╚══════════════════════════════════════════════════════════════╝
++--------------------------------------------------------------+
+|                    Neodots - Neovim Setup                    |
+|                Configuracion Moderna y Completa              |
++--------------------------------------------------------------+
 "@ -ForegroundColor Blue
 
-    # Confirmación del usuario
-    $confirmation = Read-Host -Prompt "El script instalará todas las dependencias y configurará Neodots. ¿Deseas continuar? (s/n)"
+    # Confirmacion del usuario
+    $confirmation = Read-Host -Prompt "El script instalara todas las dependencias y configurara Neodots. Deseas continuar? (s/n)"
     if ($confirmation -ne 's') {
-        Write-Warning "Instalación cancelada por el usuario."
+        Write-Warning "Instalacion cancelada por el usuario."
         exit
     }
     
-    # Sincronizar archivos de configuración primero
+    # Sincronizar archivos de configuracion primero
     Sync-ConfigFiles
 
     Write-Status "Sistema operativo detectado: Windows"
@@ -234,19 +195,19 @@ function Main {
     # Configurar variables de entorno
     Set-EnvironmentVariables
     
-    Write-Success "¡Instalación completada!"
+    Write-Success "Instalacion completada!"
     Write-Host ""
-    Write-Host "Próximos pasos:" -ForegroundColor Yellow
+    Write-Host "Proximos pasos:" -ForegroundColor Yellow
     Write-Host "1. Configura tu API key de OpenAI:"
     Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'tu-api-key-aqui', 'User')"
     Write-Host ""
-    Write-Host "2. Inicia Neovim para instalar plugins automáticamente:"
+    Write-Host "2. Inicia Neovim para instalar plugins automaticamente:"
     Write-Host "   nvim"
     Write-Host ""
-    Write-Host "3. Consulta el README.md para más información sobre el uso"
+    Write-Host "3. Consulta el README.md para mas informacion sobre el uso"
     Write-Host ""
-    Write-Host "¡Disfruta programando con Neodots! 🚀" -ForegroundColor Green
+    Write-Host "Disfruta programando con Neodots!" -ForegroundColor Green
 }
 
-# Ejecutar función principal
+# Ejecutar funcion principal
 Main
