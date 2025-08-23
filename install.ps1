@@ -64,7 +64,7 @@ function Install-Chocolatey {
         Write-Status "Instalando Chocolatey..."
         Set-ExecutionPolicy Bypass -Scope Process -Force
         [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-        iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
         
         # Refrescar variables de entorno
         $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
@@ -76,35 +76,26 @@ function Install-Dependencies {
     Write-Status "Instalando dependencias..."
     
     $packages = @(
-        "git",
-        "nodejs",
-        "python",
-        "rust",
-        "fd",
-        "ripgrep",
-        "fzf",
-        "debugpy",
-        "delve",
-        "stylua",
-        "black",
-        "isort",
-        "prettier",
-        "rustfmt",
-        "gofmt",
-        "clang-format",
-        "make",
-        "cmake",
-        "ninja"
+        "git", "nodejs", "python", "rust", "fd", "ripgrep", "fzf", "debugpy", 
+        "delve", "stylua", "black", "isort", "prettier", "rustfmt", "gofmt", 
+        "clang-format", "make", "cmake", "ninja"
     )
     
+    $total = $packages.Count
+    $completed = 0
+
     foreach ($package in $packages) {
+        $completed++
+        $percent = [int](($completed / $total) * 100)
+        Write-Progress -Activity "Instalando dependencias" -Status "$percent% completado" -CurrentOperation "Instalando $package..." -PercentComplete $percent
+
         if (-not (Test-Command $package)) {
-            Write-Status "Instalando $package..."
-            choco install $package -y
+            choco install $package -y --no-progress | Out-Null
         } else {
-            Write-Success "$package ya está instalado"
+            Write-Status "$package ya está instalado"
         }
     }
+    Write-Progress -Activity "Instalando dependencias" -Completed
 }
 
 # Función para crear directorios
@@ -196,17 +187,12 @@ function Sync-ConfigFiles {
         New-Item -ItemType Directory -Path $configDir -Force | Out-Null
     }
 
-    # Copiar archivos, excluyendo el control de versiones y los propios instaladores
-    $exclude = @(".git", ".github", "install.sh", "install.ps1", "README.md")
-    Get-ChildItem -Path $sourceDir -Recurse -Exclude $exclude | ForEach-Object {
-        $destination = $_.FullName.Replace($sourceDir, $configDir)
-        if ($_.PSIsContainer) {
-            if (-not (Test-Path $destination)) {
-                New-Item -ItemType Directory -Path $destination -Force | Out-Null
-            }
-        } else {
-            Copy-Item -Path $_.FullName -Destination $destination -Force
-        }
+    # Usar robocopy para una copia más robusta
+    Write-Status "Copiando archivos de configuración con robocopy..."
+    robocopy $sourceDir $configDir /E /XF install.sh install.ps1 README.md /XD .git .github /NFL /NDL /NJH /NJS /nc /ns /np
+    if ($LASTEXITCODE -ge 8) {
+        Write-Error "Robocopy falló con el código de salida: $LASTEXITCODE"
+        exit 1
     }
 
     Write-Success "Archivos de configuración sincronizados."
@@ -220,6 +206,13 @@ function Main {
    ║                Configuración Moderna y Completa             ║
    ╚══════════════════════════════════════════════════════════════╝
 "@ -ForegroundColor Blue
+
+    # Confirmación del usuario
+    $confirmation = Read-Host -Prompt "El script instalará todas las dependencias y configurará Neodots. ¿Deseas continuar? (s/n)"
+    if ($confirmation -ne 's') {
+        Write-Warning "Instalación cancelada por el usuario."
+        exit
+    }
     
     # Sincronizar archivos de configuración primero
     Sync-ConfigFiles

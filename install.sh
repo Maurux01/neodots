@@ -52,102 +52,87 @@ command_exists() {
 install_linux_deps() {
     print_status "Instalando dependencias para Linux..."
     
+    PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
+    
+    # Función de barra de progreso
+    progress_bar() {
+        local duration=${1}
+        already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
+        remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
+        percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
+        clean_line() { printf "\r"; }
+
+        for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
+            already_done; remaining; percentage
+            sleep 0.1
+            clean_line
+        done
+        clean_line
+    }
+
     if command_exists apt; then
-        # Ubuntu/Debian
         print_status "Instalando dependencias para Ubuntu/Debian..."
-        sudo apt update
-        sudo apt install -y git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh make cmake ninja-build
-        
-        # Crear symlink para fd
-        if ! command_exists fd; then
-            sudo ln -s /usr/bin/fd-find /usr/bin/fd
-        fi
-        
-        # Instalar herramientas de debugging y testing
-        pip3 install debugpy pytest black isort
-        
-        # Instalar formateadores
-        npm install -g prettier
-        rustup component add rustfmt
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+        sudo apt update > /dev/null 2>&1
+        (sudo apt install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
     elif command_exists dnf; then
-        # Fedora
         print_status "Instalando dependencias para Fedora..."
-        sudo dnf install -y git nodejs npm python3 python3-pip rust cargo fd-find ripgrep fzf ffmpeg feh make cmake ninja-build
-        
-        # Instalar herramientas de debugging y testing
-        pip3 install debugpy pytest black isort
-        
-        # Instalar formateadores
-        npm install -g prettier
-        rustup component add rustfmt
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+        (sudo dnf install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
     elif command_exists pacman; then
-        # Arch Linux
         print_status "Instalando dependencias para Arch Linux..."
-        sudo pacman -Syu --noconfirm
-        sudo pacman -S --noconfirm git nodejs npm python python-pip rust cargo fd ripgrep fzf ffmpeg feh make cmake ninja
-        
-        # Instalar herramientas de debugging y testing
-        pip3 install debugpy pytest black isort
-        
-        # Instalar formateadores
-        npm install -g prettier
-        rustup component add rustfmt
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+        (sudo pacman -Syu --noconfirm > /dev/null 2>&1 && sudo pacman -S --noconfirm "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
     elif command_exists zypper; then
-        # openSUSE
         print_status "Instalando dependencias para openSUSE..."
-        sudo zypper install -y git nodejs npm python3 python3-pip rust cargo fd ripgrep fzf ffmpeg feh make cmake ninja
-        
-        # Instalar herramientas de debugging y testing
-        pip3 install debugpy pytest black isort
-        
-        # Instalar formateadores
-        npm install -g prettier
-        rustup component add rustfmt
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+        (sudo zypper install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
     elif command_exists emerge; then
-        # Gentoo
         print_status "Instalando dependencias para Gentoo..."
-        sudo emerge --ask --noreplace dev-vcs/git net-libs/nodejs dev-lang/python dev-lang/rust app-misc/fd sys-apps/ripgrep app-misc/fzf media-video/ffmpeg media-gfx/feh dev-util/cmake dev-util/ninja
-        
-        # Instalar herramientas de debugging y testing
-        pip3 install debugpy pytest black isort
-        
-        # Instalar formateadores
-        npm install -g prettier
-        rustup component add rustfmt
-        go install mvdan.cc/sh/v3/cmd/shfmt@latest
+        (sudo emerge --ask --noreplace "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
     else
-        print_error "No se pudo detectar el gestor de paquetes. Instala manualmente:"
-        echo "  - git, nodejs, python3, rust, fd, ripgrep, fzf, ffmpeg, feh"
-        echo "  - make, cmake, ninja"
-        echo "  - debugpy, pytest, black, isort (via pip)"
-        echo "  - prettier (via npm)"
-        echo "  - rustfmt (via rustup)"
+        print_error "No se pudo detectar el gestor de paquetes. Instala manualmente..."
         return 1
     fi
+
+    # Instalar herramientas adicionales
+    pip3 install debugpy pytest black isort > /dev/null 2>&1
+    npm install -g prettier > /dev/null 2>&1
+    rustup component add rustfmt > /dev/null 2>&1
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest > /dev/null 2>&1
 }
 
 # Función para instalar dependencias en macOS
 install_macos_deps() {
     print_status "Instalando dependencias para macOS..."
     
+
+    PACKAGES=("git" "node" "python" "rust" "fd" "ripgrep" "fzf" "ffmpeg" "make" "cmake" "ninja")
+
+    # Función de barra de progreso
+    progress_bar() {
+        local duration=${1}
+        already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
+        remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
+        percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
+        clean_line() { printf "\r"; }
+
+        for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
+            already_done; remaining; percentage
+            sleep 0.1
+            clean_line
+        done
+        clean_line
+    }
+
     if ! command_exists brew; then
         print_status "Instalando Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     
-    brew install git node python rust fd ripgrep fzf ffmpeg make cmake ninja
-    
-    # Instalar herramientas de debugging y testing
-    pip3 install debugpy pytest black isort
-    
-    # Instalar formateadores
-    npm install -g prettier
-    rustup component add rustfmt
-    go install mvdan.cc/sh/v3/cmd/shfmt@latest
+    (brew install "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+
+    # Instalar herramientas adicionales
+    pip3 install debugpy pytest black isort > /dev/null 2>&1
+    npm install -g prettier > /dev/null 2>&1
+    rustup component add rustfmt > /dev/null 2>&1
+    go install mvdan.cc/sh/v3/cmd/shfmt@latest > /dev/null 2>&1
 }
 
 # Función para instalar dependencias en Windows
@@ -224,59 +209,6 @@ setup_environment() {
     fi
 }
 
-# Función principal
-main() {
-    echo -e "${BLUE}"
-    echo "╔══════════════════════════════════════════════════════════════╗"
-    echo "║                    Neodots - Neovim Setup                   ║"
-    echo "║                Configuración Moderna y Completa             ║"
-    echo "╚══════════════════════════════════════════════════════════════╝"
-    echo -e "${NC}"
-    
-    # Detectar sistema operativo
-    OS=$(detect_os)
-    print_status "Sistema operativo detectado: $OS"
-    
-    # Verificar Neovim
-    check_neovim
-    
-    # Instalar dependencias según el OS
-    case $OS in
-        "linux")
-            install_linux_deps
-            ;;
-        "macos")
-            install_macos_deps
-            ;;
-        "windows")
-            install_windows_deps
-            ;;
-        *)
-            print_error "Sistema operativo no soportado: $OS"
-            exit 1
-            ;;
-    esac
-    
-    # Crear directorios
-    create_directories
-    
-    # Configurar variables de entorno
-    setup_environment
-    
-    print_success "¡Instalación completada!"
-    echo ""
-    echo -e "${YELLOW}Próximos pasos:${NC}"
-    echo "1. Configura tu API key de OpenAI:"
-    echo "   export OPENAI_API_KEY=\"tu-api-key-aqui\""
-    echo ""
-    echo "2. Inicia Neovim para instalar plugins automáticamente:"
-    echo "   nvim"
-    echo ""
-    echo "3. Consulta el README.md para más información sobre el uso"
-    echo ""
-    echo -e "${GREEN}¡Disfruta programando con Neodots! 🚀${NC}"
-}
-
 # Función para sincronizar los archivos de configuración
 sync_config_files() {
     print_status "Sincronizando archivos de configuración a ~/.config/nvim..."
@@ -288,12 +220,12 @@ sync_config_files() {
 
     # Copiar archivos, excluyendo el control de versiones y los propios instaladores
     if command_exists rsync; then
-        rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md"
+        rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md" > /dev/null 2>&1
     else
         print_warning "rsync no encontrado. Usando 'cp'. La sincronización puede ser menos eficiente."
         # Usamos 'shopt -s dotglob' para incluir archivos ocultos (dotfiles) en la copia
         shopt -s dotglob
-        cp -r $SOURCE_DIR/* "$CONFIG_DIR/"
+        cp -r $SOURCE_DIR/* "$CONFIG_DIR/" > /dev/null 2>&1
         shopt -u dotglob
     fi
 
@@ -308,6 +240,13 @@ main() {
     echo "║                Configuración Moderna y Completa             ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
+
+    read -p "El script instalará todas las dependencias y configurará Neodots. ¿Deseas continuar? (s/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Ss]$ ]]; then
+        print_warning "Instalación cancelada por el usuario."
+        exit 1
+    fi
     
     # Sincronizar archivos de configuración primero
     sync_config_files
