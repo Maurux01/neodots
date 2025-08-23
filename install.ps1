@@ -1,9 +1,22 @@
 # Neodots - Neovim Configuration Installer for Windows
 # Script de instalacion automatica para PowerShell
 
+# Requiere PowerShell 5.1 o superior
+# Ejecutar como administrador para instalar dependencias
+
+# Configuración de ejecución
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$ErrorActionPreference = "Stop"
+
 param(
     [switch]$Force
 )
+
+# Verificar si se está ejecutando como administrador
+function Test-Administrator {
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
 
 # Funcion para imprimir mensajes con colores
 function Write-Status {
@@ -149,76 +162,169 @@ function Set-EnvironmentVariables {
 }
 
 
-# Funcion para sincronizar los archivos de configuracion
+# Función para sincronizar los archivos de configuración
 function Sync-ConfigFiles {
-    Write-Status "Sincronizando archivos de configuracion a $env:LOCALAPPDATA\nvim..."
+    Write-Status "Sincronizando archivos de configuración a $env:LOCALAPPDATA\nvim..."
     $configDir = "$env:LOCALAPPDATA\nvim"
     $sourceDir = (Get-Location).Path
 
-    # Crear el directorio si no existe
-    if (-not (Test-Path $configDir)) {
-        New-Item -ItemType Directory -Path $configDir -Force | Out-Null
-    }
+    try {
+        # Crear el directorio si no existe
+        if (-not (Test-Path $configDir)) {
+            New-Item -ItemType Directory -Path $configDir -Force -ErrorAction Stop | Out-Null
+            Write-Success "Directorio de configuración creado: $configDir"
+        }
 
-    # Usar robocopy para una copia mas robusta
-    Write-Status "Copiando archivos de configuracion con robocopy..."
-    robocopy $sourceDir $configDir /E /XF install.sh install.ps1 README.md /XD .git .github
-    if ($LASTEXITCODE -ge 8) {
-        Write-Error "Robocopy fallo con el codigo de salida: $LASTEXITCODE"
+        # Usar robocopy para una copia más robusta
+        Write-Status "Copiando archivos de configuración..."
+        $excludeFiles = @('install.sh', 'install.ps1', 'README.md', '.gitignore')
+        $excludeDirs = @('.git', '.github')
+        
+        # Construir argumentos para robocopy
+        $robocopyArgs = @(
+            '"$sourceDir"',
+            '"$configDir"',
+            '/E',          # Copiar subdirectorios, incluyendo vacíos
+            '/COPY:DAT',   # Copiar datos, atributos y marcas de tiempo
+            '/R:3',        # Reintentar 3 veces
+            '/W:5',        # Esperar 5 segundos entre reintentos
+            '/NP',         # No mostrar porcentaje de progreso
+            '/NFL',        # No mostrar nombres de archivos
+            '/NDL',        # No mostrar nombres de directorios
+            '/NJH',        # No mostrar encabezado de trabajo
+            '/NJS'         # No mostrar resumen
+        )
+        
+        # Añadir exclusiones
+        foreach ($file in $excludeFiles) {
+            $robocopyArgs += "/XF"
+            $robocopyArgs += "$file"
+        }
+        
+        foreach ($dir in $excludeDirs) {
+            $robocopyArgs += "/XD"
+            $robocopyArgs += "$dir"
+        }
+        
+        # Ejecutar robocopy
+        $process = Start-Process -FilePath "robocopy.exe" -ArgumentList $robocopyArgs -NoNewWindow -PassThru -Wait
+        
+        # Robocopy devuelve códigos de salida especiales
+        if ($process.ExitCode -ge 8) {
+            throw "Robocopy falló con el código de salida: $($process.ExitCode)"
+        }
+        
+        Write-Success "Archivos de configuración sincronizados correctamente."
+    }
+    catch {
+        Write-Error "Error al sincronizar archivos: $_"
         exit 1
     }
-
-    Write-Success "Archivos de configuracion sincronizados."
 }
 
-# Funcion principal
+# Función principal
 function Main {
+    # Mostrar banner
     Write-Host @"
 +--------------------------------------------------------------+
 |                    Neodots - Neovim Setup                    |
-|                Configuracion Moderna y Completa              |
+|                Configuración Moderna y Completa              |
 +--------------------------------------------------------------+
 "@ -ForegroundColor Blue
+    
+    # Mostrar información del sistema
+    Write-Status "Sistema operativo: $((Get-CimInstance -ClassName Win32_OperatingSystem).Caption)"
+    Write-Status "Versión de PowerShell: $($PSVersionTable.PSVersion)"
+    
+    # Verificar si se está ejecutando como administrador
+    if (-not (Test-Administrator)) {
+        Write-Warning "Este script requiere privilegios de administrador para instalar dependencias."
+        Write-Host "  Por favor, ejecuta PowerShell como administrador y vuelve a intentarlo." -ForegroundColor Yellow
+        Write-Host "  También puedes instalar manualmente las dependencias con Chocolatey." -ForegroundColor Yellow
+        $choice = Read-Host "¿Deseas continuar sin privilegios de administrador? (s/n)"
+        if ($choice -ne 's') {
+            Write-Warning "Instalación cancelada."
+            exit 1
+        }
+    }
 
-    # Confirmacion del usuario
-    $confirmation = Read-Host -Prompt "El script instalara todas las dependencias y configurara Neodots. Deseas continuar? (s/n)"
+    # Confirmación del usuario
+    Write-Host ""
+    Write-Host "Este script realizará las siguientes acciones:" -ForegroundColor Cyan
+    Write-Host "1. Instalar dependencias (Chocolatey, Git, Node.js, etc.)"
+    Write-Host "2. Copiar archivos de configuración a $env:LOCALAPPDATA\nvim"
+    Write-Host "3. Configurar variables de entorno"
+    Write-Host ""
+    
+    $confirmation = Read-Host -Prompt "¿Deseas continuar con la instalación? (s/n)"
     if ($confirmation -ne 's') {
-        Write-Warning "Instalacion cancelada por el usuario."
-        exit
+        Write-Warning "Instalación cancelada por el usuario."
+        exit 0
     }
     
-    # Sincronizar archivos de configuracion primero
-    Sync-ConfigFiles
-
-    Write-Status "Sistema operativo detectado: Windows"
-    
-    # Verificar Neovim
-    Test-Neovim
-    
-    # Instalar Chocolatey si es necesario
-    Install-Chocolatey
-    
-    # Instalar dependencias
-    Install-Dependencies
-    
-    # Crear directorios
-    New-Directories
-    
-    # Configurar variables de entorno
-    Set-EnvironmentVariables
-    
-    Write-Success "Instalacion completada!"
+    # Mostrar advertencia sobre el tiempo de instalación
     Write-Host ""
-    Write-Host "Proximos pasos:" -ForegroundColor Yellow
-    Write-Host "1. Configura tu API key de OpenAI:"
-    Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'tu-api-key-aqui', 'User')"
+    Write-Warning "La instalación puede tomar varios minutos dependiendo de tu conexión a Internet."
+    Write-Host "  No cierres esta ventana hasta que se complete la instalación." -ForegroundColor Yellow
+    
+    try {
+        # 1. Sincronizar archivos de configuración primero
+        Sync-ConfigFiles
+        
+        # 2. Verificar Neovim
+        Test-Neovim
+        
+        # 3. Instalar Chocolatey si es necesario
+        Install-Chocolatey
+        
+        # 4. Instalar dependencias
+        Install-Dependencies
+        
+        # 5. Crear directorios
+        New-Directories
+        
+        # 6. Configurar variables de entorno
+        Set-EnvironmentVariables
+        
+        Write-Success "¡Instalación completada con éxito!"
+    }
+    catch {
+        Write-Error "Error durante la instalación: $_"
+        Write-Host ""
+        Write-Host "Si el problema persiste, puedes intentar:" -ForegroundColor Yellow
+        Write-Host "1. Ejecutar PowerShell como administrador"
+        Write-Host "2. Verificar tu conexión a Internet"
+        Write-Host "3. Instalar manualmente las dependencias con Chocolatey"
+        exit 1
+    }
+    
+    # Mostrar mensaje de finalización
     Write-Host ""
-    Write-Host "2. Inicia Neovim para instalar plugins automaticamente:"
-    Write-Host "   nvim"
+    Write-Host "+--------------------------------------------------------------+" -ForegroundColor Green
+    Write-Host "|                 INSTALACIÓN COMPLETADA CON ÉXITO             |" -ForegroundColor Green
+    Write-Host "+--------------------------------------------------------------+" -ForegroundColor Green
     Write-Host ""
-    Write-Host "3. Consulta el README.md para mas informacion sobre el uso"
+    
+    Write-Host "Siguientes pasos:" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "Disfruta programando con Neodots!" -ForegroundColor Green
+    Write-Host "1. Configura tu API key de OpenAI (opcional pero recomendado):"
+    Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'tu-api-key-aqui', 'User')" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "2. Inicia Neovim para instalar los plugins automáticamente:"
+    Write-Host "   nvim" -ForegroundColor Cyan
+    Write-Host "   (La primera vez puede tardar varios minutos en instalar los plugins)"
+    Write-Host ""
+    Write-Host "3. Si tienes problemas, consulta la documentación en:"
+    Write-Host "   https://github.com/Maurux01/neodots" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "¡Gracias por instalar Neodots! Disfruta programando. 🚀" -ForegroundColor Green
+    Write-Host ""
+    
+    # Ofrecer abrir Neovim automáticamente
+    $choice = Read-Host -Prompt "¿Deseas abrir Neovim ahora? (s/n)"
+    if ($choice -eq 's') {
+        nvim
+    }
 }
 
 # Ejecutar funcion principal
