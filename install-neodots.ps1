@@ -166,12 +166,23 @@ function Install-Neodots {
     
     # 3. Copy configuration files
     Copy-NeovimConfig
-    
 
-    # Ask to open Neovim
+    # 4. Install plugins
+    Write-Info "Installing plugins..."
+    try {
+        nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
+        Write-Success "Plugins installed successfully"
+    } catch {
+        Write-Warning "Failed to install plugins automatically. Please run :Lazy install after opening Neovim"
+    }
+
+    # 5. Ask to open Neovim
     $choice = Read-Host "`nDo you want to open Neovim now? (y/n)"
     if ($choice -eq 'y') {
-        nvim
+        Write-Info "Opening Neovim..."
+        Start-Process nvim -NoNewWindow
+    } else {
+        Write-Host "`nInstallation complete! You can now open Neovim with the command: nvim" -ForegroundColor Green
     }
 }
 
