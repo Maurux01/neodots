@@ -26,6 +26,19 @@ function Write-Error {
     Write-Host "[ERROR] $Message" -ForegroundColor Red
 }
 
+# Funcion para una barra de progreso personalizada
+function Write-CustomProgress {
+    param(
+        [int]$Percent,
+        [string]$Title = "Progreso"
+    )
+    $width = 50
+    $complete = [int](($Percent / 100) * $width)
+    $incomplete = $width - $complete
+    $bar = '█' * $complete + '░' * $incomplete
+    Write-Host "`r$Title`: [$bar] $Percent% " -NoNewline
+}
+
 # Funcion para verificar si un comando existe
 function Test-Command {
     param([string]$Command)
@@ -87,15 +100,14 @@ function Install-Dependencies {
     foreach ($package in $packages) {
         $completed++
         $percent = [int](($completed / $total) * 100)
-        Write-Progress -Activity "Instalando dependencias" -Status "$percent% completado" -CurrentOperation "Instalando $package..." -PercentComplete $percent
+        $op = "Instalando {0,-15}" -f $package
+        Write-CustomProgress -Percent $percent -Title $op
 
         if (-not (Test-Command $package)) {
             choco install $package -y --no-progress | Out-Null
-        } else {
-            Write-Status "$package ya esta instalado"
         }
     }
-    Write-Progress -Activity "Instalando dependencias" -Completed
+    Write-Host "" # Salto de línea final para la barra de progreso
 }
 
 # Funcion para crear directorios
@@ -150,7 +162,7 @@ function Sync-ConfigFiles {
 
     # Usar robocopy para una copia mas robusta
     Write-Status "Copiando archivos de configuracion con robocopy..."
-    robocopy $sourceDir $configDir /E /XF install.sh install.ps1 README.md /XD .git .github /NFL /NDL /NJH /NJS /nc /ns /np
+    robocopy $sourceDir $configDir /E /XF install.sh install.ps1 README.md /XD .git .github
     if ($LASTEXITCODE -ge 8) {
         Write-Error "Robocopy fallo con el codigo de salida: $LASTEXITCODE"
         exit 1
