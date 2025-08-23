@@ -91,7 +91,6 @@ function Copy-NeovimConfig {
         'install-fixed.ps1',
         'install-neodots.ps1',
         'install.sh',
-        'stylua.toml',
         '*.md',
         '*.log'
     )
