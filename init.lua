@@ -19,10 +19,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Load plugins
+-- Point lazy.nvim to the new plugins directory.
+-- It will load all .lua files inside of it.
 require("lazy").setup("plugins")
-
--- Load core configuration
-require("core")
-
--- Plugin configurations are loaded by lazy.nvim
