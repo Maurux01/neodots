@@ -185,5 +185,75 @@ function Main {
     Write-Host "¡Disfruta programando con Neodots! 🚀" -ForegroundColor Green
 }
 
+# Función para sincronizar los archivos de configuración
+function Sync-ConfigFiles {
+    Write-Status "Sincronizando archivos de configuración a $env:LOCALAPPDATA\nvim..."
+    $configDir = "$env:LOCALAPPDATA\nvim"
+    $sourceDir = (Get-Location).Path
+
+    # Crear el directorio si no existe
+    if (-not (Test-Path $configDir)) {
+        New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+    }
+
+    # Copiar archivos, excluyendo el control de versiones y los propios instaladores
+    $exclude = @(".git", ".github", "install.sh", "install.ps1", "README.md")
+    Get-ChildItem -Path $sourceDir -Recurse -Exclude $exclude | ForEach-Object {
+        $destination = $_.FullName.Replace($sourceDir, $configDir)
+        if ($_.PSIsContainer) {
+            if (-not (Test-Path $destination)) {
+                New-Item -ItemType Directory -Path $destination -Force | Out-Null
+            }
+        } else {
+            Copy-Item -Path $_.FullName -Destination $destination -Force
+        }
+    }
+
+    Write-Success "Archivos de configuración sincronizados."
+}
+
+# Función principal
+function Main {
+    Write-Host @"
+   ╔══════════════════════════════════════════════════════════════╗
+   ║                    Neodots - Neovim Setup                   ║
+   ║                Configuración Moderna y Completa             ║
+   ╚══════════════════════════════════════════════════════════════╝
+"@ -ForegroundColor Blue
+    
+    # Sincronizar archivos de configuración primero
+    Sync-ConfigFiles
+
+    Write-Status "Sistema operativo detectado: Windows"
+    
+    # Verificar Neovim
+    Test-Neovim
+    
+    # Instalar Chocolatey si es necesario
+    Install-Chocolatey
+    
+    # Instalar dependencias
+    Install-Dependencies
+    
+    # Crear directorios
+    New-Directories
+    
+    # Configurar variables de entorno
+    Set-EnvironmentVariables
+    
+    Write-Success "¡Instalación completada!"
+    Write-Host ""
+    Write-Host "Próximos pasos:" -ForegroundColor Yellow
+    Write-Host "1. Configura tu API key de OpenAI:"
+    Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'tu-api-key-aqui', 'User')"
+    Write-Host ""
+    Write-Host "2. Inicia Neovim para instalar plugins automáticamente:"
+    Write-Host "   nvim"
+    Write-Host ""
+    Write-Host "3. Consulta el README.md para más información sobre el uso"
+    Write-Host ""
+    Write-Host "¡Disfruta programando con Neodots! 🚀" -ForegroundColor Green
+}
+
 # Ejecutar función principal
 Main

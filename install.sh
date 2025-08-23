@@ -277,5 +277,84 @@ main() {
     echo -e "${GREEN}¡Disfruta programando con Neodots! 🚀${NC}"
 }
 
+# Función para sincronizar los archivos de configuración
+sync_config_files() {
+    print_status "Sincronizando archivos de configuración a ~/.config/nvim..."
+    CONFIG_DIR="$HOME/.config/nvim"
+    SOURCE_DIR="$(pwd)"
+
+    # Crear el directorio si no existe
+    mkdir -p "$CONFIG_DIR"
+
+    # Copiar archivos, excluyendo el control de versiones y los propios instaladores
+    if command_exists rsync; then
+        rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md"
+    else
+        print_warning "rsync no encontrado. Usando 'cp'. La sincronización puede ser menos eficiente."
+        # Usamos 'shopt -s dotglob' para incluir archivos ocultos (dotfiles) en la copia
+        shopt -s dotglob
+        cp -r $SOURCE_DIR/* "$CONFIG_DIR/"
+        shopt -u dotglob
+    fi
+
+    print_success "Archivos de configuración sincronizados."
+}
+
+# Función principal
+main() {
+    echo -e "${BLUE}"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║                    Neodots - Neovim Setup                   ║"
+    echo "║                Configuración Moderna y Completa             ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
+    
+    # Sincronizar archivos de configuración primero
+    sync_config_files
+
+    # Detectar sistema operativo
+    OS=$(detect_os)
+    print_status "Sistema operativo detectado: $OS"
+    
+    # Verificar Neovim
+    check_neovim
+    
+    # Instalar dependencias según el OS
+    case $OS in
+        "linux")
+            install_linux_deps
+            ;;
+        "macos")
+            install_macos_deps
+            ;;
+        "windows")
+            install_windows_deps
+            ;;
+        *)
+            print_error "Sistema operativo no soportado: $OS"
+            exit 1
+            ;;
+    esac
+    
+    # Crear directorios
+    create_directories
+    
+    # Configurar variables de entorno
+    setup_environment
+    
+    print_success "¡Instalación completada!"
+    echo ""
+    echo -e "${YELLOW}Próximos pasos:${NC}"
+    echo "1. Configura tu API key de OpenAI en tu archivo de shell (.bashrc, .zshrc, etc.):"
+    echo "   export OPENAI_API_KEY=\"tu-api-key-aqui\""
+    echo ""
+    echo "2. Inicia Neovim para instalar plugins automáticamente:"
+    echo "   nvim"
+    echo ""
+    echo "3. Consulta el README.md para más información sobre el uso"
+    echo ""
+    echo -e "${GREEN}¡Disfruta programando con Neodots! 🚀${NC}"
+}
+
 # Ejecutar función principal
 main "$@"

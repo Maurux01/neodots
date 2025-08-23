@@ -60,18 +60,25 @@ A modern and complete Neovim configuration with all the features you need to pro
 
 ## 🛠️ Installation
 
-### 1. Clone the configuration
+### 1. Clone the Repository
+
+First, clone the Neodots repository to any location on your local machine:
 
 ```bash
-git clone https://github.com/your-username/neodots.git ~/.config/nvim
-cd ~/.config/nvim
+git clone https://github.com/your-username/neodots.git
+cd neodots
 ```
 
-### 2. Install system dependencies
+### 2. Run the Automatic Installer
 
-#### 🚀 **Automatic Installation (Recommended)**
+The installer will automatically perform the following actions:
 
-The automatic installer detects your operating system and installs all necessary dependencies:
+- **Copy Configuration**: The configuration files will be copied to the default Neovim directory for your operating system:
+  - **Linux/macOS**: `~/.config/nvim`
+  - **Windows**: `%LOCALAPPDATA%\nvim`
+- **Install Dependencies**: All required software and tools will be installed.
+
+Run the appropriate installer for your system:
 
 **Linux/macOS:**
 ```bash
