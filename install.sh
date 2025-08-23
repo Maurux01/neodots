@@ -152,14 +152,11 @@ install_macos_deps() {
 
 # Función para instalar dependencias en Windows
 install_windows_deps() {
-    print_status "Instalando dependencias para Windows..."
-    
-    if ! command_exists choco; then
-        print_status "Instalando Chocolatey..."
-        Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-    fi
-    
-    choco install -y git nodejs python rust fd ripgrep fzf
+    print_warning "Este script no está diseñado para instalar dependencias directamente en Windows."
+    print_status "Por favor, ejecuta el script 'install.ps1' en una terminal de PowerShell con permisos de administrador."
+    echo "Para hacerlo, abre PowerShell y ejecuta:"
+    echo "Set-ExecutionPolicy Unrestricted -Scope Process -Force; .\install.ps1"
+    exit 1
 }
 
 # Función para verificar Neovim

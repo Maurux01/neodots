@@ -25,20 +25,4 @@ require("lazy").setup("plugins")
 -- Load core configuration
 require("core")
 
--- Load additional modules
-require("notifications")
-require("git-docker")
-require("image-viewer")
-require("screenshot")
-require("recording")
-require("transparency")
-require("wallpaper")
-require("dashboard")
-require("themes")
-require("dap")
-require("advanced")
-require("snippets")
-require("runner")
-require("database")
-require("rest")
-require("git")
+-- Plugin configurations are loaded by lazy.nvim

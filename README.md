@@ -10,7 +10,6 @@ A modern and complete Neovim configuration with all the features you need to pro
 - **📸 Screenshots**: Take screenshots directly from the editor
 - **⚠️ Visual Errors and Warnings**: Display errors clearly and attractively
 - **💡 Intelligent Autocompletion**: Real-time suggestions for code and commands
-- **🤖 Integrated AI Chat**: Programming assistant with ChatGPT
 - **🎭 Adjustable Transparency**: Control editor transparency
 - **🖼️ Customizable Wallpaper**: Change desktop background from the editor
 - **🎬 Video Recording**: Record everything you write and execute

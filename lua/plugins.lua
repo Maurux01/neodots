@@ -1211,8 +1211,77 @@ return {
         content_editable = false,
         disable_filename = 0,
         toc = {},
-      }
+      },
     end,
+  },
+
+  -- ===== Additional Plugins =====
+
+  -- UI & Animations
+  {
+    "anuvyklack/windows.nvim",
+    dependencies = { "anuvyklack/middleclass", "anuvyklack/animation.nvim" },
+    config = function()
+      require("windows").setup({
+        autowidth = {
+          enable = true,
+        },
+        animation = {
+          enable = true,
+          duration = 200,
+          fps = 60,
+          easing = "in_out_sine",
+        },
+      })
+    end,
+  },
+  { "anuvyklack/animation.nvim", lazy = true },
+  { "anuvyklack/windows-borders.nvim", lazy = true },
+  {
+    "aserowy/hover.nvim",
+    event = "LspAttach",
+    config = function()
+      require("hover").setup()
+    end,
+  },
+
+  -- Editing & Productivity
+  {
+    "sitiom/nvim-numbertoggle",
+    config = function()
+      require("numbertoggle").setup()
+    end,
+  },
+  { "m4xshen/autoclose.nvim", opts = {} },
+  {
+    "m4xshen/hardtime.nvim",
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+
+  -- Keymaps & Utilities
+  { "anuvyklack/hydra.nvim" },
+  { "anuvyklack/keymap-layer.nvim" },
+  { "anuvyklack/middleclass", lazy = true },
+
+  -- Integrations
+  {
+    "aserowy/tmux.nvim",
+    config = function()
+      require("tmux").setup()
+    end,
+  },
+
+  -- File Explorer (Alternative to neo-tree)
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup({})
+    end,
+    enabled = false, -- Disabled by default to avoid conflict with neo-tree
+  },
   },
 
   -- ===== UI IMPROVEMENTS =====

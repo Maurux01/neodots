@@ -26,7 +26,6 @@ vim.opt.timeoutlen = 300
 
 -- Transparency and background settings
 vim.opt.background = "dark"
-vim.opt.transparency = 0.8 -- Adjustable transparency
 
 -- Enable true colors
 vim.opt.termguicolors = true
@@ -83,20 +82,8 @@ keymap("n", "<leader>gg", "<cmd>LazyGit<cr>", opts)
 keymap("n", "<leader>gd", "<cmd>LazyDocker<cr>", opts)
 keymap("n", "<leader>gs", ":Git<CR>", opts)
 
--- Transparency controls
-keymap("n", "<leader>t+", "<cmd>lua require('transparency').increase()<cr>", opts)
-keymap("n", "<leader>t-", "<cmd>lua require('transparency').decrease()<cr>", opts)
+-- Wallpaper toggle (Transparency controls are in transparency.lua)
 keymap("n", "<leader>tw", "<cmd>lua require('wallpaper').toggle()<cr>", opts)
-
-  -- Image viewer
-  keymap("n", "<leader>iv", "<cmd>lua toggle_image_viewer()<cr>", opts)
-  keymap("n", "<leader>id", "<cmd>lua download_remote_images()<cr>", opts)
-
-  -- Enhanced comments
-  keymap("n", "<leader>cc", "<cmd>CommentToggle<CR>", opts)
-  keymap("n", "<leader>cb", "<cmd>CommentToggleBlock<CR>", opts)
-  keymap("v", "<leader>c", ":CommentToggle<CR>", opts)
-  keymap("v", "<leader>b", ":CommentToggleBlock<CR>", opts)
 
 -- Productivity tools
 keymap("n", "<leader>sc", ":set spell!<CR>", opts)
