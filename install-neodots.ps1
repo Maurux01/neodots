@@ -62,43 +62,68 @@ function Copy-NeovimConfig {
     Write-Info "Setting up Neovim configuration..."
     
     # Create Neovim config and data directories if they don't exist
-    if (-not (Test-Path $NEOVIM_CONFIG_DIR)) {
-        New-Item -ItemType Directory -Path $NEOVIM_CONFIG_DIR -Force | Out-Null
-        Write-Success "Created Neovim config directory at $NEOVIM_CONFIG_DIR"
-    }
-    
-    if (-not (Test-Path $NEOVIM_DATA_DIR)) {
-        New-Item -ItemType Directory -Path $NEOVIM_DATA_DIR -Force | Out-Null
-        Write-Success "Created Neovim data directory at $NEOVIM_DATA_DIR"
+    $directories = @(
+        $NEOVIM_CONFIG_DIR,
+        "$NEOVIM_CONFIG_DIR\lua",
+        "$NEOVIM_CONFIG_DIR\lua\config",
+        "$NEOVIM_CONFIG_DIR\lua\plugins",
+        $NEOVIM_DATA_DIR,
+        "$NEOVIM_DATA_DIR\site",
+        "$NEOVIM_DATA_DIR\site\pack",
+        "$NEOVIM_DATA_DIR\site-data",
+        "$NEOVIM_DATA_DIR\site-data\pack"
+    )
+
+    # Create all necessary directories
+    foreach ($dir in $directories) {
+        if (-not (Test-Path $dir)) {
+            New-Item -ItemType Directory -Path $dir -Force | Out-Null
+            Write-Success "Created directory: $dir"
+        }
     }
     
     # Files and directories to exclude from copying
-    $exclude = @('install.ps1', 'install-fixed.ps1', 'install-neodots.ps1', 'README.md', '.git', '.github', 'setup.ps1')
+    $exclude = @(
+        '.git',
+        '.github',
+        'README.md',
+        'install.ps1',
+        'install-fixed.ps1',
+        'install-neodots.ps1',
+        'install.sh',
+        'stylua.toml',
+        '*.md',
+        '*.log'
+    )
     
-    # Copy all files except excluded ones to config directory
+    # Copy all Lua files to their respective directories
     Write-Info "Copying configuration files to $NEOVIM_CONFIG_DIR"
-    Get-ChildItem -Path $REPO_DIR -Exclude $exclude | ForEach-Object {
+    
+    # Copy root level .lua files
+    Get-ChildItem -Path $REPO_DIR -Filter "*.lua" | ForEach-Object {
         $dest = Join-Path $NEOVIM_CONFIG_DIR $_.Name
-        if ($_.PSIsContainer) {
-            if (-not (Test-Path $dest)) {
-                Copy-Item -Path $_.FullName -Destination $dest -Recurse -Force
-            }
-        } else {
-            Copy-Item -Path $_.FullName -Destination $dest -Force
-        }
+        Copy-Item -Path $_.FullName -Destination $dest -Force
+        Write-Info "Copied: $($_.Name) -> $dest"
     }
     
-    # Create symlinks for data directory if needed
-    $dataDirs = @('site', 'site-data', 'site-data\pack')
-    foreach ($dir in $dataDirs) {
-        $dataPath = Join-Path $NEOVIM_DATA_DIR $dir
-        if (-not (Test-Path $dataPath)) {
-            New-Item -ItemType Directory -Path $dataPath -Force | Out-Null
-        }
+    # Copy lua directory contents
+    $luaSrc = Join-Path $REPO_DIR "lua"
+    if (Test-Path $luaSrc) {
+        $luaDst = Join-Path $NEOVIM_CONFIG_DIR "lua"
+        Copy-Item -Path "$luaSrc\*" -Destination $luaDst -Recurse -Force
+        Write-Info "Copied lua directory contents to $luaDst"
     }
     
-    Write-Success "Configuration files copied to $NEOVIM_CONFIG_DIR"
-    Write-Success "Data directories set up in $NEOVIM_DATA_DIR"
+    # Ensure init.lua exists
+    $initLua = Join-Path $NEOVIM_CONFIG_DIR "init.lua"
+    if (-not (Test-Path $initLua)) {
+        Set-Content -Path $initLua -Value "-- Neovim configuration entry point"
+        Write-Warning "Created empty init.lua file. You may need to configure it manually."
+    }
+    
+    Write-Success "Neovim configuration has been set up successfully!"
+    Write-Success "Config directory: $NEOVIM_CONFIG_DIR"
+    Write-Success "Data directory: $NEOVIM_DATA_DIR"
 }
 
 # Main installation process
