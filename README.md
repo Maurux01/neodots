@@ -85,7 +85,7 @@ chmod +x install.sh
 **Windows (PowerShell):**
 ```powershell
 # Run installer
-.\install.ps1
+Set-ExecutionPolicy Bypass -Scope Process -Force; .\install.ps1
 ```
 
 #### 📦 **Manual Installation**
