@@ -4,7 +4,8 @@
 # We'll install everything in user space
 
 # Configuration
-$NEOVIM_DIR = "$env:LOCALAPPDATA\nvim"
+$NEOVIM_CONFIG_DIR = "$env:LOCALAPPDATA\nvim"
+$NEOVIM_DATA_DIR = "$env:LOCALAPPDATA\nvim-data"
 $REPO_DIR = (Get-Item -Path ".").FullName
 
 # Colors for output
@@ -56,21 +57,28 @@ function Install-Package($package) {
     return $true
 }
 
-# Copy configuration files to Neovim directory
+# Copy configuration files to Neovim directories
 function Copy-NeovimConfig {
     Write-Info "Setting up Neovim configuration..."
     
-    # Create Neovim config directory if it doesn't exist
-    if (-not (Test-Path $NEOVIM_DIR)) {
-        New-Item -ItemType Directory -Path $NEOVIM_DIR -Force | Out-Null
+    # Create Neovim config and data directories if they don't exist
+    if (-not (Test-Path $NEOVIM_CONFIG_DIR)) {
+        New-Item -ItemType Directory -Path $NEOVIM_CONFIG_DIR -Force | Out-Null
+        Write-Success "Created Neovim config directory at $NEOVIM_CONFIG_DIR"
+    }
+    
+    if (-not (Test-Path $NEOVIM_DATA_DIR)) {
+        New-Item -ItemType Directory -Path $NEOVIM_DATA_DIR -Force | Out-Null
+        Write-Success "Created Neovim data directory at $NEOVIM_DATA_DIR"
     }
     
     # Files and directories to exclude from copying
     $exclude = @('install.ps1', 'install-fixed.ps1', 'install-neodots.ps1', 'README.md', '.git', '.github', 'setup.ps1')
     
-    # Copy all files except excluded ones
+    # Copy all files except excluded ones to config directory
+    Write-Info "Copying configuration files to $NEOVIM_CONFIG_DIR"
     Get-ChildItem -Path $REPO_DIR -Exclude $exclude | ForEach-Object {
-        $dest = Join-Path $NEOVIM_DIR $_.Name
+        $dest = Join-Path $NEOVIM_CONFIG_DIR $_.Name
         if ($_.PSIsContainer) {
             if (-not (Test-Path $dest)) {
                 Copy-Item -Path $_.FullName -Destination $dest -Recurse -Force
@@ -80,7 +88,17 @@ function Copy-NeovimConfig {
         }
     }
     
-    Write-Success "Configuration files copied to $NEOVIM_DIR"
+    # Create symlinks for data directory if needed
+    $dataDirs = @('site', 'site-data', 'site-data\pack')
+    foreach ($dir in $dataDirs) {
+        $dataPath = Join-Path $NEOVIM_DATA_DIR $dir
+        if (-not (Test-Path $dataPath)) {
+            New-Item -ItemType Directory -Path $dataPath -Force | Out-Null
+        }
+    }
+    
+    Write-Success "Configuration files copied to $NEOVIM_CONFIG_DIR"
+    Write-Success "Data directories set up in $NEOVIM_DATA_DIR"
 }
 
 # Main installation process
@@ -125,16 +143,7 @@ function Install-Neodots {
     # 3. Copy configuration files
     Copy-NeovimConfig
     
-    # Show completion message
-    Write-Host "`n=== Installation Complete ===" -ForegroundColor Green
-    Write-Host "Neodots has been installed successfully!"
-    Write-Host "`nNext steps:"
-    Write-Host "1. Start Neovim to install plugins:"
-    Write-Host "   nvim" -ForegroundColor Cyan
-    Write-Host "   (First start may take a few minutes to install plugins)`n"
-    Write-Host "2. Set your OpenAI API key (optional):"
-    Write-Host "   [Environment]::SetEnvironmentVariable('OPENAI_API_KEY', 'your-api-key-here', 'User')" -ForegroundColor Cyan
-    
+
     # Ask to open Neovim
     $choice = Read-Host "`nDo you want to open Neovim now? (y/n)"
     if ($choice -eq 'y') {
