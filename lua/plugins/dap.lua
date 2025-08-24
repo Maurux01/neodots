@@ -3,7 +3,7 @@ return {
     "mfussenegger/nvim-dap",
     dependencies = {
       "rcarriga/nvim-dap-ui",
-      "jay-babu/mason-nvim-dap",
+      "williamboman/mason-nvim-dap.nvim",
     },
     keys = {
       { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },

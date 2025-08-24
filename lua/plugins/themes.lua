@@ -1,6 +1,7 @@
 return {
   {
     "Neodots/themes", -- Placeholder for local plugin
+    enabled = false,
     dependencies = {
       "catppuccin/nvim",
       "folke/tokyonight.nvim",
@@ -9,13 +10,13 @@ return {
       "shaunsingh/nord.nvim",
       "Mofiqul/dracula.nvim",
       "EdenEast/nightfox.nvim",
-      "carbon-language/carbon-now-sh.nvim", -- Assuming this is carbonfox
+      "ellisonleao/carbon-now.sh.nvim", -- Assuming this is carbonfox
       "rebelot/kanagawa.nvim",
       "rose-pine/neovim",
       "sainnhe/everforest",
       "sainnhe/sonokai",
       "marko-cerovac/material.nvim",
-      "monokai/monokai.nvim",
+      "tanvirtin/monokai.nvim",
       "drewtempelmeyer/palenight.vim",
     },
     keys = {

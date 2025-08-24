@@ -9,7 +9,7 @@ return {
 
   -- ===== LAZYDOCKER =====
   {
-    "esensar/lazydocker.nvim",
+    "akinsho/lazydocker.nvim",
     keys = {
       { "<leader>gd", "<cmd>LazyDocker<CR>", desc = "LazyDocker" },
     },
