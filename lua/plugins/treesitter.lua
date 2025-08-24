@@ -5,6 +5,7 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
       "p00f/nvim-ts-rainbow",
+      "nvim-treesitter/nvim-treesitter-context",
     },
     opts = {
       ensure_installed = {
@@ -55,6 +56,7 @@ return {
           goto_previous_end = { ["[M"] = "@function.outer", ["[]"] = "@class.outer" },
         },
       },
+      context = { enable = true, mode = "cursor", max_lines = 3, min_rows = 8, },
     },
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
