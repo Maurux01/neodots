@@ -1,6 +1,5 @@
 return {
   {
-    "Neodots/wallpaper", -- Placeholder for local plugin
     dependencies = { "nvim-telescope/telescope.nvim" },
     keys = {
       { "<leader>tw", function() require("wallpaper").toggle_wallpaper() end, desc = "Toggle wallpaper" },
