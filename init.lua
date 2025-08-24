@@ -35,7 +35,7 @@ local lazy_config = {
   root = vim.fn.stdpath('data') .. '/lazy',
   defaults = {
     lazy = true, -- Enable lazy loading by default
-    version = false, -- Use the latest version of plugins
+    version = '*', -- Use the latest version of plugins
   },
   install = {
     missing = true,
@@ -43,15 +43,32 @@ local lazy_config = {
   },
   ui = {
     border = 'rounded',
+    icons = {
+      cmd = '⌘',
+      config = '🛠',
+      event = '📅',
+      ft = '📂',
+      init = '⚙',
+      keys = '🗝',
+      plugin = '🔌',
+      runtime = '💻',
+      source = '📄',
+      start = '🚀',
+      task = '📌',
+    },
   },
   spec = {
-    -- Add tokyonight colorscheme
+    -- Core plugins that should load immediately
     { 'folke/tokyonight.nvim', lazy = false, priority = 1000 },
+    
+    -- Load all other plugins from the plugins directory
+    { import = 'plugins' },
   },
   checker = {
     enabled = true,
-    notify = false, -- Disable notifications for updates
-    frequency = 86400, -- Check once per day
+    notify = true,
+    frequency = 3600, -- Check for updates every hour
+    concurrency = 4,  -- Number of concurrent checks
   },
   performance = {
     rtp = {
@@ -102,15 +119,36 @@ local function load_core()
   end
 end
 
--- Load plugins
+-- Load and configure plugins using lazy.nvim
 local function setup_plugins()
-  local status_ok, lazy = pcall(require, 'lazy')
-  if not status_ok then
+  -- First, ensure lazy.nvim is properly loaded
+  local lazy_ok, lazy = pcall(require, 'lazy')
+  if not lazy_ok then
     vim.notify('Failed to load lazy.nvim', vim.log.levels.ERROR)
     return false
   end
 
-  lazy.setup('plugins', lazy_config)
+  -- Initialize lazy with configuration
+  local success, err = pcall(function()
+    lazy.setup({
+      spec = lazy_config.spec,
+      defaults = lazy_config.defaults,
+      install = lazy_config.install,
+      ui = lazy_config.ui,
+      checker = lazy_config.checker,
+      performance = lazy_config.performance,
+      change_detection = {
+        enabled = true,
+        notify = false,
+      },
+    })
+  end)
+
+  if not success then
+    vim.notify('Error in lazy.nvim setup: ' .. (err or 'unknown error'), vim.log.levels.ERROR)
+    return false
+  end
+
   return true
 end
 
