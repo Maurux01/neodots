@@ -17,11 +17,7 @@ return {
       "tanvirtin/monokai.nvim",
       "drewtempelmeyer/palenight.vim",
     },
-    keys = {
-      { "<leader>tn", function() require("themes").cycle_theme() end, desc = "Next theme" },
-      { "<leader>tp", function() require("themes").previous_theme() end, desc = "Previous theme" },
-      { "<leader>ts", function() require("themes").select_theme() end, desc = "Select theme" },
-    },
+    
     config = function()
       local M = {}
 

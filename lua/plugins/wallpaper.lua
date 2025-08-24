@@ -1,11 +1,7 @@
 return {
   {
     dependencies = { "nvim-telescope/telescope.nvim" },
-    keys = {
-      { "<leader>tw", function() require("wallpaper").toggle_wallpaper() end, desc = "Toggle wallpaper" },
-      { "<leader>ws", function() require("wallpaper").select_wallpaper() end, desc = "Select wallpaper" },
-      { "<leader>wr", function() require("wallpaper").random_wallpaper() end, desc = "Random wallpaper" },
-    },
+    
     config = function()
       local M = {}
 

@@ -1,8 +1,6 @@
 return {
   {
-    keys = {
-      { "<leader>ss", function() require("screenshot").take_screenshot() end, desc = "Take screenshot" },
-    },
+    
     config = function()
       local M = {}
 
