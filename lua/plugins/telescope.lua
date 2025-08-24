@@ -1,92 +1,73 @@
--- Telescope configuration
-local M = {}
-
-local telescope = require("telescope")
-local actions = require("telescope.actions")
-
-telescope.setup({
-  defaults = {
-    prompt_prefix = " ",
-    selection_caret = " ",
-    path_display = { "truncate" },
-    file_ignore_patterns = {
-      "node_modules",
-      ".git",
-      ".cache",
-      "dist",
-      "build",
-      "*.pyc",
-      "__pycache__",
-      ".DS_Store",
+return {
+  {
+    "nvim-telescope/telescope.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
-    mappings = {
-      i = {
-        ["<C-n>"] = actions.cycle_history_next,
-        ["<C-p>"] = actions.cycle_history_prev,
-        ["<C-j>"] = actions.move_selection_next,
-        ["<C-k>"] = actions.move_selection_previous,
-        ["<C-c>"] = actions.close,
-        ["<Down>"] = actions.move_selection_next,
-        ["<Up>"] = actions.move_selection_previous,
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        ["<C-t>"] = actions.select_tab,
-        ["<C-u>"] = actions.preview_scrolling_up,
-        ["<C-d>"] = actions.preview_scrolling_down,
-        ["<PageUp>"] = actions.results_scrolling_up,
-        ["<PageDown>"] = actions.results_scrolling_down,
-        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<C-l>"] = actions.complete_tag,
-        ["<C-_>"] = actions.which_key,
+    keys = {
+      { "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
+      { "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
+      { "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Find buffers" },
+      { "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help tags" },
+    },
+    opts = {
+      defaults = {
+        prompt_prefix = " ",
+        selection_caret = " ",
+        path_display = { "truncate" },
+        file_ignore_patterns = {
+          "node_modules",
+          ".git",
+          ".cache",
+          "dist",
+          "build",
+          "*.pyc",
+          "__pycache__",
+          ".DS_Store",
+        },
+        mappings = {
+          i = {
+            ["<C-n>"] = "cycle_history_next",
+            ["<C-p>"] = "cycle_history_prev",
+            ["<C-j>"] = "move_selection_next",
+            ["<C-k>"] = "move_selection_previous",
+            ["<C-c>"] = "close",
+            ["<Down>"] = "move_selection_next",
+            ["<Up>"] = "move_selection_previous",
+            ["<CR>"] = "select_default",
+            ["<C-x>"] = "select_horizontal",
+            ["<C-v>"] = "select_vertical",
+            ["<C-t>"] = "select_tab",
+            ["<C-u>"] = "preview_scrolling_up",
+            ["<C-d>"] = "preview_scrolling_down",
+          },
+          n = {
+            ["<esc>"] = "close",
+            ["<CR>"] = "select_default",
+            ["j"] = "move_selection_next",
+            ["k"] = "move_selection_previous",
+          },
+        },
       },
-      n = {
-        ["<esc>"] = actions.close,
-        ["<CR>"] = actions.select_default,
-        ["<C-x>"] = actions.select_horizontal,
-        ["<C-v>"] = actions.select_vertical,
-        ["<C-t>"] = actions.select_tab,
-        ["<Tab>"] = actions.toggle_selection + actions.move_selection_worse,
-        ["<S-Tab>"] = actions.toggle_selection + actions.move_selection_better,
-        ["<C-q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["j"] = actions.move_selection_next,
-        ["k"] = actions.move_selection_previous,
-        ["H"] = actions.move_to_top,
-        ["M"] = actions.move_to_middle,
-        ["L"] = actions.move_to_bottom,
-        ["<C-u>"] = actions.preview_scrolling_up,
-        ["<C-d>"] = actions.preview_scrolling_down,
-        ["<PageUp>"] = actions.results_scrolling_up,
-        ["<PageDown>"] = actions.results_scrolling_down,
-        ["?"] = actions.which_key,
+      pickers = {
+        find_files = {
+          find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+        },
+      },
+      extensions = {
+        fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = "smart_case",
+        },
       },
     },
+    config = function(_, opts)
+      local telescope = require("telescope")
+      telescope.setup(opts)
+      telescope.load_extension("fzf")
+    end,
   },
-  pickers = {
-    find_files = {
-      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
-    },
-    live_grep = {
-      additional_args = function()
-        return { "--hidden" }
-      end,
-    },
-  },
-  extensions = {
-    fzf = {
-      fuzzy = true,
-      override_generic_sorter = true,
-      override_file_sorter = true,
-      case_mode = "smart_case",
-    },
-  },
-})
-
--- Load extensions
-telescope.load_extension("fzf")
-
-return M
+}
