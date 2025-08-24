@@ -1,9 +1,41 @@
-return {
-  {
-    "themes", -- Name of the module
-    lazy = true,
-    module = "themes",
-    dependencies = {
+local M = {}
+
+local dark_themes = {
+  "catppuccin", "tokyonight", "onedark", "gruvbox", "nord", "dracula", "nightfox",
+  "carbonfox", "kanagawa", "rose-pine", "everforest", "sonokai", "material", "monokai", "palenight",
+}
+
+local current_theme_index = 1
+
+function M.change_theme(theme_name)
+  if not theme_name then return end
+  vim.cmd.colorscheme(theme_name)
+  vim.notify("Theme changed to: " .. theme_name, vim.log.levels.INFO)
+end
+
+function M.cycle_theme()
+  current_theme_index = (current_theme_index % #dark_themes) + 1
+  M.change_theme(dark_themes[current_theme_index])
+end
+
+function M.previous_theme()
+  current_theme_index = (current_theme_index - 2) % #dark_themes + 1
+  M.change_theme(dark_themes[current_theme_index])
+end
+
+function M.select_theme()
+  local themes = dark_themes
+  vim.ui.select(themes, { prompt = "Select theme:" }, function(choice)
+    if choice then
+      for i, t in ipairs(themes) do
+        if t == choice then current_theme_index = i end
+      end
+      M.change_theme(choice)
+    end
+  end)
+end
+
+return M
       "catppuccin/nvim",
       "folke/tokyonight.nvim",
       "navarasu/onedark.nvim",

@@ -1,8 +1,6 @@
-return {
-  {
-    "local-keymaps", -- A dummy name for this "plugin"
-    keys = {
-      -- Keybindings for local plugins
+-- Este archivo solo define keymaps locales, no es un plugin de Lazy
+local M = {}
+M.keys = {
   { "<leader>ss", function() require("screenshot").take_screenshot() end, desc = "Take screenshot" },
   { "<leader>tn", function() require("themes").cycle_theme() end, desc = "Next theme" },
   { "<leader>tp", function() require("themes").previous_theme() end, desc = "Previous theme" },
@@ -35,6 +33,5 @@ return {
   { "<leader>bn", ":BufferLineCycleNext<CR>", desc = "BufferLine next" },
   { "<leader>bc", ":BufferLinePickClose<CR>", desc = "BufferLine pick close" },
   { "<leader>bb", ":BufferLinePick<CR>", desc = "BufferLine pick buffer" },
-    },
-  },
 }
+return M

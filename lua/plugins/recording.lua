@@ -1,9 +1,64 @@
-return {
-  {
-    "recording", -- Name of the module
-    lazy = true,
-    module = "recording",
-    config = function()
+local M = {}
+
+local is_recording = false
+local recording_process = nil
+local output_file = nil
+
+function M.start_recording()
+  if is_recording then
+    vim.notify("Recording is already in progress", vim.log.levels.WARN)
+    return
+  end
+  local timestamp = os.date("%Y%m%d_%H%M%S")
+  local filename = string.format("neovim_recording_%s.mp4", timestamp)
+  local output_dir = vim.fn.expand("~/Videos/neovim_recordings")
+  if vim.fn.isdirectory(output_dir) == 0 then
+    vim.fn.mkdir(output_dir, "p")
+  end
+  output_file = output_dir .. "/" .. filename
+  local cmd
+  if vim.fn.has("win32") == 1 then
+    cmd = string.format('start "" "C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe" --startrecording --output "%s"', output_file)
+  elseif vim.fn.has("mac") == 1 then
+    cmd = 'osascript -e "tell application \"QuickTime Player\" to new screen recording"'
+  else
+    cmd = string.format('ffmpeg -f x11grab -r 30 -s 1920x1080 -i :0.0 -vcodec libx264 -preset ultrafast -crf 18 "%s"', output_file)
+  end
+  recording_process = vim.fn.jobstart(cmd, {
+    on_exit = function(_, code)
+      if code == 0 then
+        vim.notify("Recording finished: " .. output_file, vim.log.levels.INFO)
+      else
+        vim.notify("Recording failed", vim.log.levels.ERROR)
+      end
+    end,
+  })
+  is_recording = true
+  vim.notify("Recording started", vim.log.levels.INFO)
+end
+
+function M.stop_recording()
+  if not is_recording then
+    vim.notify("No recording in progress", vim.log.levels.WARN)
+    return
+  end
+  if recording_process then
+    vim.fn.jobstop(recording_process)
+    recording_process = nil
+  end
+  is_recording = false
+  vim.notify("Recording stopped", vim.log.levels.INFO)
+end
+
+function M.toggle_recording()
+  if is_recording then
+    M.stop_recording()
+  else
+    M.start_recording()
+  end
+end
+
+return M
       local M = {}
 
       local is_recording = false
