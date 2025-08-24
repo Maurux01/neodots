@@ -1,5 +1,4 @@
 return {
-  {
     -- Keybindings for local plugins
     { "<leader>ss", function() require("screenshot").take_screenshot() end, desc = "Take screenshot" },
     { "<leader>tn", function() require("themes").cycle_theme() end, desc = "Next theme" },
@@ -14,5 +13,4 @@ return {
     { "<leader>sr", function() require("recording").toggle_recording() end, desc = "Toggle recording" },
     { "<leader>srs", function() require("recording").start_recording() end, desc = "Start recording" },
     { "<leader>srt", function() require("recording").stop_recording() end, desc = "Stop recording" },
-  },
-}
+  }

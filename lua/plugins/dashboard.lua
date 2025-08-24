@@ -61,6 +61,8 @@ return {
           vim.cmd("set laststatus=3")
         end,
       })
+
+      vim.cmd.Alpha()
     end,
   },
 }

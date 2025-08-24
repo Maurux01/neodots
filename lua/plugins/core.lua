@@ -65,6 +65,9 @@ return {
           vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
         end,
       })
+
+      -- Always show relative numbers
+      vim.opt.relativenumber = true
     end,
   },
 }

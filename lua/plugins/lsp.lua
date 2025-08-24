@@ -29,7 +29,7 @@ return {
         "cssls",
         "tailwindcss",
       },
-      automatic_installation = true,
+      
     },
   },
   {
@@ -69,13 +69,7 @@ return {
         end
       end
 
-      local servers = require("mason-lspconfig").get_installed_servers()
-      for _, server_name in ipairs(servers) do
-        lspconfig[server_name].setup({
-          on_attach = on_attach,
-          capabilities = capabilities,
-        })
-      end
+      
     end,
   },
 }
