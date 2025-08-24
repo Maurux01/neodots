@@ -1,182 +1,115 @@
--- DAP (Debug Adapter Protocol) configuration
-local M = {}
-
-local dap = require("dap")
-local dapui = require("dapui")
-
--- Auto open/close DAP UI
-dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
-end
-
-dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
-end
-
-dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
-end
-
--- Python debugger
-dap.adapters.python = {
-  type = "executable",
-  command = "python",
-  args = { "-m", "debugpy.adapter" },
-}
-
-dap.configurations.python = {
+return {
   {
-    type = "python",
-    request = "launch",
-    name = "Launch file",
-    program = "${file}",
-    console = "integratedTerminal",
-  },
-  {
-    type = "python",
-    request = "attach",
-    name = "Attach",
-    port = 5678,
-    host = "127.0.0.1",
-  },
-}
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "jay-babu/mason-nvim-dap",
+    },
+    keys = {
+      { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+      { "<leader>dc", function() require("dap").continue() end, desc = "Continue" },
+      { "<leader>di", function() require("dap").step_into() end, desc = "Step into" },
+      { "<leader>do", function() require("dap").step_over() end, desc = "Step over" },
+      { "<leader>dO", function() require("dap").step_out() end, desc = "Step out" },
+      { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
+      { "<leader>dl", function() require("dap").run_last() end, desc = "Run last" },
+      { "<leader>du", function() require("dapui").toggle() end, desc = "Toggle DAP UI" },
+    },
+    config = function() 
+      local dap = require("dap")
+      local dapui = require("dapui")
 
--- Node.js debugger
-dap.adapters.node2 = {
-  type = "executable",
-  command = "node",
-  args = { vim.fn.stdpath("data") .. "/mason/packages/node-debug2-adapter/out/src/nodeDebug.js" },
-}
+      require("mason-nvim-dap").setup({
+        ensure_installed = { "python", "node2", "cppdbg", "dlv" },
+        handlers = {},
+      })
 
-dap.configurations.javascript = {
-  {
-    name = "Launch",
-    type = "node2",
-    request = "launch",
-    program = "${file}",
-    cwd = vim.fn.getcwd(),
-    sourceMaps = true,
-    protocol = "inspector",
-    console = "integratedTerminal",
-  },
-  {
-    name = "Attach to process",
-    type = "node2",
-    request = "attach",
-    processId = require("dap.utils").pick_process,
-  },
-}
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
 
-dap.configurations.typescript = dap.configurations.javascript
+      -- Python
+      dap.configurations.python = {
+        {
+          type = "python",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          console = "integratedTerminal",
+        },
+      }
 
--- C/C++ debugger
-dap.adapters.cppdbg = {
-  id = "cppdbg",
-  type = "executable",
-  command = vim.fn.stdpath("data") .. "/mason/bin/OpenDebugAD7",
-}
+      -- Node.js
+      dap.configurations.javascript = {
+        {
+          name = "Launch",
+          type = "node2",
+          request = "launch",
+          program = "${file}",
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = "inspector",
+          console = "integratedTerminal",
+        },
+      }
+      dap.configurations.typescript = dap.configurations.javascript
 
-dap.configurations.cpp = {
-  {
-    name = "Launch file",
-    type = "cppdbg",
-    request = "launch",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+      -- C/C++
+      dap.configurations.cpp = {
+        {
+          name = "Launch file",
+          type = "cppdbg",
+          request = "launch",
+          program = function()
+            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+          end,
+          cwd = "${workspaceFolder}",
+          stopAtEntry = false,
+        },
+      }
+      dap.configurations.c = dap.configurations.cpp
+
+      -- Go
+      dap.configurations.go = {
+        {
+          type = "dlv",
+          name = "Debug",
+          request = "launch",
+          program = "${file}",
+        },
+      }
     end,
-    args = {},
-    stopAtEntry = false,
-    cwd = "${workspaceFolder}",
-    environment = {},
-    externalConsole = false,
-    MIMode = "gdb",
-    setupCommands = {
-      {
-        description = "Enable pretty-printing for gdb",
-        text = "-enable-pretty-printing",
-        ignoreFailures = true,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "mfussenegger/nvim-dap" },
+    opts = {
+      layouts = {
+        {
+          elements = {
+            { id = "scopes", size = 0.25 },
+            { id = "breakpoints", size = 0.25 },
+            { id = "stacks", size = 0.25 },
+            { id = "watches", size = 0.25 },
+          },
+          size = 40,
+          position = "left",
+        },
+        {
+          elements = {
+            { id = "repl", size = 0.5 },
+            { id = "console", size = 0.5 },
+          },
+          size = 10,
+          position = "bottom",
+        },
       },
     },
   },
-  {
-    name = "Attach to gdbserver :1234",
-    type = "cppdbg",
-    request = "launch",
-    MIMode = "gdb",
-    miDebuggerServerAddress = "localhost:1234",
-    miDebuggerPath = "/usr/bin/gdb",
-    cwd = "${workspaceFolder}",
-    program = function()
-      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-    end,
-  },
 }
-
-dap.configurations.c = dap.configurations.cpp
-
--- Go debugger
-dap.adapters.dlv = {
-  type = "executable",
-  command = "dlv",
-  args = { "dap", "-l", "127.0.0.1:38697" },
-}
-
-dap.configurations.go = {
-  {
-    type = "dlv",
-    name = "Debug",
-    request = "launch",
-    program = "${file}",
-  },
-  {
-    type = "dlv",
-    name = "Debug test",
-    request = "launch",
-    mode = "test",
-    program = "${file}",
-  },
-  {
-    type = "dlv",
-    name = "Debug test (go.mod)",
-    request = "launch",
-    mode = "test",
-    program = "./${relativeFileDirname}",
-  },
-}
-
--- Lua debugger
-dap.adapters.nlua = function(callback, config)
-  callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
-end
-
-dap.configurations.lua = {
-  {
-    type = "nlua",
-    request = "attach",
-    name = "Attach to running Neovim instance",
-    host = function()
-      local value = vim.fn.input("Host [127.0.0.1]: ")
-      if value ~= "" then
-        return value
-      end
-      return "127.0.0.1"
-    end,
-    port = function()
-      local val = tonumber(vim.fn.input("Port: "))
-      assert(val, "Please provide a port number")
-      return val
-    end,
-  },
-}
-
--- Keymaps for debugging
-vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle breakpoint" })
-vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
-vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step into" })
-vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "Step over" })
-vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "Step out" })
-vim.keymap.set("n", "<leader>dr", dap.repl.toggle, { desc = "Toggle REPL" })
-vim.keymap.set("n", "<leader>dl", dap.run_last, { desc = "Run last" })
-vim.keymap.set("n", "<leader>du", dapui.toggle, { desc = "Toggle DAP UI" })
-
-return M
