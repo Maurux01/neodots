@@ -1,6 +1,7 @@
 return {
   {
     "CRAG666/code_runner.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>cr", "<cmd>RunCode<CR>", desc = "Run code" },
     },

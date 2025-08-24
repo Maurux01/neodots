@@ -1,6 +1,8 @@
 return {
   {
-    
+    "transparency", -- Name of the module
+    lazy = true,
+    module = "transparency",
     config = function()
       local M = {}
 

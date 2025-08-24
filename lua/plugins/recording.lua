@@ -1,5 +1,8 @@
 return {
   {
+    "recording", -- Name of the module
+    lazy = true,
+    module = "recording",
     config = function()
       local M = {}
 

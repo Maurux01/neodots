@@ -1,5 +1,8 @@
 return {
   {
+    "themes", -- Name of the module
+    lazy = true,
+    module = "themes",
     dependencies = {
       "catppuccin/nvim",
       "folke/tokyonight.nvim",

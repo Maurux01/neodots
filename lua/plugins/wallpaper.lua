@@ -1,5 +1,8 @@
 return {
   {
+    "wallpaper", -- Name of the module
+    lazy = true,
+    module = "wallpaper",
     dependencies = { "nvim-telescope/telescope.nvim" },
     
     config = function()

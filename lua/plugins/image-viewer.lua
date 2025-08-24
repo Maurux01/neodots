@@ -1,6 +1,7 @@
 return {
   {
     "3rd/image.nvim",
+    event = "BufReadPre",
     keys = {
       { "<leader>iv", function() require("image").toggle() end, desc = "Toggle image viewer" },
       { "<leader>id", function() require("image").download() end, desc = "Download remote images" },

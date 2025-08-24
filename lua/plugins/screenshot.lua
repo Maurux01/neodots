@@ -1,6 +1,8 @@
 return {
   {
-    
+    "screenshot", -- Name of the module
+    lazy = true,
+    module = "screenshot",
     config = function()
       local M = {}
 

@@ -1,6 +1,7 @@
 return {
   {
     "rest-nvim/rest.nvim",
+    event = "VeryLazy",
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
       { "<leader>rr", "<cmd>Rest run<CR>", desc = "Run REST request" },
