@@ -1,5 +1,6 @@
 return {
   'nvzone/typr',
+  dependencies = { 'nvzone/volt' },
   event = 'VeryLazy',
   opts = {},
   config = function(_, opts)

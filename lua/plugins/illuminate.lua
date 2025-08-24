@@ -3,6 +3,6 @@ return {
   event = 'VeryLazy',
   opts = {},
   config = function(_, opts)
-    require('illuminate').setup(opts)
+    require('illuminate').configure(opts)
   end,
 }
