@@ -167,22 +167,70 @@ function Install-Neodots {
     # 3. Copy configuration files
     Copy-NeovimConfig
 
-    # 4. Install plugins
-    Write-Info "Installing plugins..."
-    try {
-        nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
-        Write-Success "Plugins installed successfully"
-    } catch {
-        Write-Warning "Failed to install plugins automatically. Please run :Lazy install after opening Neovim"
+    # 4. Install Neovim plugins using lazy.nvim
+    Write-Info "Installing Neovim plugins..."
+    
+    # First, ensure lazy.nvim is installed
+    $lazyPath = "$env:LOCALAPPDATA\nvim-data\lazy\lazy.nvim"
+    if (-not (Test-Path $lazyPath)) {
+        try {
+            Write-Info "Installing lazy.nvim..."
+            $lazyUrl = "https://github.com/folke/lazy.nvim.git"
+            $lazyDir = "$env:LOCALAPPDATA\nvim-data\lazy"
+            
+            if (-not (Test-Path $lazyDir)) {
+                New-Item -ItemType Directory -Path $lazyDir -Force | Out-Null
+            }
+            
+            git clone --filter=blob:none $lazyUrl $lazyPath
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "lazy.nvim installed successfully"
+            } else {
+                throw "Failed to clone lazy.nvim"
+            }
+        } catch {
+            Write-Warning "Failed to install lazy.nvim: $_"
+            Write-Warning "Please install it manually by running:"
+            Write-Host "  git clone --filter=blob:none https://github.com/folke/lazy.nvim.git $env:LOCALAPPDATA\nvim-data\lazy\lazy.nvim" -ForegroundColor Yellow
+        }
+    }
+    
+    # Now install plugins using lazy.nvim
+    if (Test-Path $lazyPath) {
+        Write-Info "Installing plugins with lazy.nvim..."
+        try {
+            # Ensure Mason binaries are in PATH
+            $env:PATH = "$env:LOCALAPPDATA\nvim-data\mason\bin;" + $env:PATH
+            
+            # First run to install plugins
+            Write-Info "Running initial plugin installation..."
+            nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
+            
+            # Second run to ensure everything is properly set up
+            Write-Info "Verifying plugin installation..."
+            nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
+            
+            Write-Success "Plugins installed successfully"
+        } catch {
+            Write-Warning "Failed to install plugins automatically: $_"
+            Write-Warning "You can try running :Lazy install after opening Neovim"
+        }
+    } else {
+        Write-Warning "lazy.nvim not found. Plugin installation skipped."
     }
 
     # 5. Ask to open Neovim
     $choice = Read-Host "`nDo you want to open Neovim now? (y/n)"
-    if ($choice -eq 'y') {
-        Write-Info "Opening Neovim..."
-        Start-Process nvim -NoNewWindow
-    } else {
-        Write-Host "`nInstallation complete! You can now open Neovim with the command: nvim" -ForegroundColor Green
+    try {
+        if ($choice -eq 'y') {
+            Write-Info "Opening Neovim..."
+            Start-Process -FilePath "nvim" -NoNewWindow -ErrorAction Stop
+        } else {
+            Write-Host "`nInstallation complete! You can now open Neovim with the command: nvim" -ForegroundColor Green
+        }
+    } catch {
+        Write-Warning "Failed to open Neovim: $_"
+        Write-Host "You can start Neovim manually by running: nvim" -ForegroundColor Green
     }
 }
 
