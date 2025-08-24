@@ -4,6 +4,9 @@ return {
   opts = {
     options = {
       theme = 'auto'
+    },
+    sections = {
+      lualine_x = { 'encoding', 'fileformat', 'filetype', 'ruler' }
     }
   }
 }
