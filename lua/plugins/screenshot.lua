@@ -1,6 +1,7 @@
 return {
   {
     "Neodots/screenshot", -- This is a placeholder name for a local plugin
+    enabled = false,
     keys = {
       { "<leader>ss", function() require("screenshot").take_screenshot() end, desc = "Take screenshot" },
     },

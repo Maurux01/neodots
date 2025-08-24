@@ -1,6 +1,7 @@
 return {
   {
     "Neodots/transparency", -- Placeholder for local plugin
+    enabled = false,
     keys = {
       { "<leader>t+", function() require("transparency").increase_transparency() end, desc = "Increase transparency" },
       { "<leader>t-", function() require("transparency").decrease_transparency() end, desc = "Decrease transparency" },

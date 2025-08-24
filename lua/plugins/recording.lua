@@ -1,6 +1,7 @@
 return {
   {
     "Neodots/recording", -- This is a placeholder name for a local plugin
+    enabled = false,
     keys = {
       { "<leader>sr", function() require("recording").toggle_recording() end, desc = "Toggle recording" },
       { "<leader>srs", function() require("recording").start_recording() end, desc = "Start recording" },
