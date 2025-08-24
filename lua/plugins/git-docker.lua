@@ -2,6 +2,7 @@ return {
   -- ===== LAZYGIT =====
   {
     "kdheepak/lazygit.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>gg", "<cmd>LazyGit<CR>", desc = "LazyGit" },
     },
@@ -10,6 +11,7 @@ return {
   -- ===== LAZYDOCKER =====
   {
     "mgierada/lazydocker.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>gd", "<cmd>LazyDocker<CR>", desc = "LazyDocker" },
     },
@@ -18,6 +20,7 @@ return {
   -- ===== GIT BLAME =====
   {
     "f-person/git-blame.nvim",
+    event = "BufReadPre",
     opts = {
       enabled = true,
       message_template = "<author> • <date> • <summary>",
@@ -29,6 +32,7 @@ return {
   -- ===== GIT SIGNS =====
   {
     "lewis6991/gitsigns.nvim",
+    event = "BufReadPre",
     opts = {
       signs = {
         add = { text = "│" },

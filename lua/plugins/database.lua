@@ -1,6 +1,7 @@
 return {
   {
     "kristijanhusak/vim-dadbod-ui",
+    event = "VeryLazy",
     dependencies = { "tpope/vim-dadbod" },
     keys = {
       { "<leader>dbu", "<cmd>DBUIToggle<CR>", desc = "Toggle DB UI" },

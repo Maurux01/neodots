@@ -2,6 +2,7 @@ return {
   -- ===== TESTING =====
   {
     "nvim-neotest/neotest",
+    event = "VeryLazy",
     keys = {
       { "<leader>tt", function() require("neotest").run.run() end, desc = "Run test" },
       { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("% ")) end, desc = "Run test file" },
@@ -14,6 +15,7 @@ return {
   -- ===== PROJECT MANAGEMENT =====
   {
     "ahmedkhalf/project.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>pp", "<cmd>Telescope project<CR>", desc = "Project picker" },
     },
@@ -22,6 +24,7 @@ return {
   -- ===== TROUBLE =====
   {
     "folke/trouble.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>xx", "<cmd>TroubleToggle<CR>", desc = "Toggle trouble" },
       { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<CR>", desc = "Workspace diagnostics" },
@@ -34,6 +37,7 @@ return {
   -- ===== AERIAL =====
   {
     "stevearc/aerial.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>aa", "<cmd>AerialToggle! <CR>", desc = "Toggle aerial" },
       { "<leader>an", "<cmd>AerialNext<CR>", desc = "Next aerial" },
@@ -44,6 +48,7 @@ return {
   -- ===== SESSION MANAGEMENT =====
   {
     "folke/persistence.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>ss", "<cmd>SessionSave<CR>", desc = "Save session" },
       { "<leader>sl", "<cmd>SessionLoad<CR>", desc = "Load session" },
@@ -61,6 +66,7 @@ return {
   -- ===== MARKDOWN PREVIEW =====
   {
     "iamcco/markdown-preview.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", desc = "Toggle markdown preview" },
     },
@@ -69,6 +75,7 @@ return {
   -- ===== VIMWIKI =====
   {
     "vimwiki/vimwiki",
+    event = "VeryLazy",
     keys = {
       { "<leader>ww", "<cmd>VimwikiIndex<CR>", desc = "Vimwiki index" },
       { "<leader>wt", "<cmd>VimwikiTabIndex<CR>", desc = "Vimwiki tab index" },
@@ -79,6 +86,7 @@ return {
   -- ===== EMMET =====
   {
     "mattn/emmet-vim",
+    event = "VeryLazy",
     keys = {
       { "i", "<C-y>,", "<cmd>Emmet<CR>", desc = "Emmet expand" },
     },
@@ -87,8 +95,9 @@ return {
   -- ===== TERMINAL =====
   {
     "akinsho/toggleterm.nvim",
+    event = "VeryLazy",
     keys = {
-      { "t", "<C-\><C-\>", "<cmd>ToggleTerm<CR>", desc = "Toggle terminal" },
+      { "t", "<C-\\><C-\">", "<cmd>ToggleTerm<CR>", desc = "Toggle terminal" },
       { "t", "<C-h>", "<cmd>wincmd h<CR>", desc = "Terminal left" },
       { "t", "<C-j>", "<cmd>wincmd j<CR>", desc = "Terminal down" },
       { "t", "<C-k>", "<cmd>wincmd k<CR>", desc = "Terminal up" },
@@ -99,6 +108,7 @@ return {
   -- ===== FILE EXPLORER =====
   {
     "nvim-tree/nvim-tree.lua",
+    event = "VeryLazy",
     keys = {
       { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
       { "<leader>ef", "<cmd>NvimTreeFocus<CR>", desc = "Focus file explorer" },
@@ -108,6 +118,7 @@ return {
   -- ===== LEGENDARY =====
   {
     "mrjones2014/legendary.nvim",
+    event = "VeryLazy",
     keys = {
       { "<leader>:", "<cmd>Legendary<CR>", desc = "Legendary command palette" },
     },
@@ -116,6 +127,7 @@ return {
   -- ===== CONFORM =====
   {
     "stevearc/conform.nvim",
+    event = "VeryLazy",
     keys = {
       { "n", "<leader>cf", function() require("conform").format() end, desc = "Format code" },
     },
@@ -133,6 +145,7 @@ return {
   -- ===== HIGHLIGHTING =====
   {
     "folke/todo-comments.nvim", -- Example plugin for highlighting
+    event = "VeryLazy",
     config = function()
       vim.api.nvim_create_autocmd("TextYankPost", {
         callback = function()
