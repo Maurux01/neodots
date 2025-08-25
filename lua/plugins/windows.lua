@@ -1,10 +1,10 @@
 return {
   'anuvyklack/windows.nvim',
   
-    dependencies = {
+  dependencies = {
     {
       "middleclass",
-      url = "https://raw.githubusercontent.com/kikito/middleclass/master/middleclass.lua",
+      url = "https://github.com/kikito/middleclass",
     },
   },
   event = "VeryLazy",
