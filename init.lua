@@ -67,6 +67,9 @@ require("config.keymaps")
 -- Load auto commands
 require("config.autocmds")
 
+-- Load theme switcher utility
+require("utils.theme_switcher")
+
 -- Set colorscheme
 vim.cmd("colorscheme tokyonight")
 

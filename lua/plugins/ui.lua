@@ -2,7 +2,7 @@
 -- Beautiful themes, statusline, file explorer, and animations
 
 return {
-  -- Colorscheme
+  -- Colorscheme - Multiple dark themes
   {
     "folke/tokyonight.nvim",
     lazy = false,
@@ -17,6 +17,61 @@ return {
         },
       })
       vim.cmd("colorscheme tokyonight")
+    end,
+  },
+
+  -- Additional dark themes
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha", -- latte, frappe, macchiato, mocha
+        transparent_background = true,
+        styles = {
+          comments = { "italic" },
+          conditionals = { "italic" },
+        },
+      })
+    end,
+  },
+
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("kanagawa").setup({
+        transparent = true,
+        colors = {
+          theme = {
+            all = {
+              ui = {
+                bg_gutter = "none"
+              }
+            }
+          }
+        }
+      })
+    end,
+  },
+
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("rose-pine").setup({
+        variant = "main", -- auto, main, moon, dawn
+        dark_variant = "main",
+        disable_background = true,
+        styles = {
+          italic = true,
+        },
+      })
     end,
   },
 
@@ -103,12 +158,8 @@ return {
       
       dashboard.section.header.val = {
         "                                                     ",
-        "  ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-        "  ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-        "  ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-        "  ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-        "  ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-        "  ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+        "                    neo dtos                         ",
+        "                  by maurux01                        ",
         "                                                     ",
       }
       

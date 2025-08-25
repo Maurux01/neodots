@@ -75,6 +75,9 @@ map("n", "<leader>q", ":q<CR>", opts) -- Quit
 map("n", "<leader>Q", ":qa!<CR>", opts) -- Force quit all
 map("n", "<leader>x", ":x<CR>", opts) -- Save and quit
 
+-- Theme switching
+map("n", "<leader>th", ":lua switch_theme()<CR>", opts) -- Switch theme
+
 -- Toggle options
 map("n", "<leader>tn", ":set number!<CR>", opts) -- Toggle line numbers
 map("n", "<leader>tr", ":set relativenumber!<CR>", opts) -- Toggle relative numbers
