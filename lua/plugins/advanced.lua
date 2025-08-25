@@ -111,7 +111,7 @@ return {
     event = "VeryLazy",
     keys = {
       { "<leader>fe", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
-      { "<leader>ff", "<cmd>NvimTreeFocus<CR>", desc = "Focus file explorer" },
+      { "<leader>fx", "<cmd>NvimTreeFocus<CR>", desc = "Focus file explorer" },
     },
   },
 

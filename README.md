@@ -327,7 +327,8 @@ If you encounter issues:
 - `<leader>ff` - Find files
 - `<leader>fg` - Search in files
 - `<leader>fb` - List buffers
-- `<leader>e` - File explorer
+- `<leader>fe` - File explorer toggle
+- `<leader>fx` - File explorer focus
 
 ### LSP and Autocompletion
 - `gd` - Go to definition
@@ -593,8 +594,8 @@ Floating terminal with:
 ### Nvim-tree
 Alternative file explorer:
 
-- `<leader>e` - Toggle file explorer
-- `<leader>ef` - Focus file explorer
+- `<leader>fe` - Toggle file explorer
+- `<leader>ff` - Focus file explorer
 - Adaptive view
 - Smart filters
 

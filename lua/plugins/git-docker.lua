@@ -17,18 +17,6 @@ return {
     },
   },
 
-  -- ===== GIT BLAME =====
-  {
-    "f-person/git-blame.nvim",
-    event = "BufReadPre",
-    opts = {
-      enabled = true,
-      message_template = "<author> • <date> • <summary>",
-      date_format = "%Y-%m-%d %H:%M",
-      virtual_text_column = 80,
-    },
-  },
-
   -- ===== GIT SIGNS =====
   {
     "lewis6991/gitsigns.nvim",
