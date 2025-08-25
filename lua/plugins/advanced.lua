@@ -110,8 +110,8 @@ return {
     "nvim-tree/nvim-tree.lua",
     event = "VeryLazy",
     keys = {
-      { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
-      { "<leader>ef", "<cmd>NvimTreeFocus<CR>", desc = "Focus file explorer" },
+      { "<leader>fe", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
+      { "<leader>ff", "<cmd>NvimTreeFocus<CR>", desc = "Focus file explorer" },
     },
   },
 
