@@ -1,59 +1,11 @@
-local M = {}
-
-local wallpaper_enabled = false
-local wallpaper_dir = vim.fn.expand("~/Pictures/wallpapers")
-if vim.fn.isdirectory(wallpaper_dir) == 0 then
-  vim.fn.mkdir(wallpaper_dir, "p")
-end
-
-function M.set_wallpaper(path)
-  if not path or vim.fn.filereadable(path) == 0 then
-    vim.notify("Invalid wallpaper path: " .. (path or "nil"), vim.log.levels.ERROR)
-    return
-  end
-  local cmd
-  if vim.fn.has("win32") == 1 then
-    cmd = string.format('powershell -command "Add-Type -TypeDefinition \'using System.Runtime.InteropServices; public class Wallpaper { [DllImport(\\"user32.dll\\", CharSet = CharSet.Auto)] public static extern int SystemParametersInfo(int uAction, int uParam, string lpvParam, int fuWinIni); }\'; [Wallpaper]::SystemParametersInfo(0x0014, 0, \'%s\', 0x01 -bor 0x02)"', path)
-  elseif vim.fn.has("mac") == 1 then
-    cmd = string.format('osascript -e "tell application \"System Events\" to set picture of every desktop to \"%s\""', path)
-  else
-    cmd = string.format('feh --bg-fill "%s"', path)
-  end
-  local result = vim.fn.system(cmd)
-  if vim.v.shell_error == 0 then
-    vim.notify("Wallpaper set: " .. vim.fn.fnamemodify(path, ":t"), vim.log.levels.INFO)
-  else
-    vim.notify("Failed to set wallpaper: " .. result, vim.log.levels.ERROR)
-  end
-end
-
-function M.toggle_wallpaper()
-  wallpaper_enabled = not wallpaper_enabled
-  vim.notify("Wallpaper " .. (wallpaper_enabled and "enabled" or "disabled"), vim.log.levels.INFO)
-end
-
-function M.select_wallpaper()
-  local files = vim.fn.glob(wallpaper_dir .. "/*", false, true)
-  if #files == 0 then
-    vim.notify("No wallpapers found in " .. wallpaper_dir, vim.log.levels.WARN)
-    return
-  end
-  vim.ui.select(files, { prompt = "Select wallpaper:" }, function(choice)
-    if choice then M.set_wallpaper(choice) end
-  end)
-end
-
-function M.random_wallpaper()
-  local files = vim.fn.glob(wallpaper_dir .. "/*", false, true)
-  if #files == 0 then
-    vim.notify("No wallpapers found in " .. wallpaper_dir, vim.log.levels.WARN)
-    return
-  end
-  local idx = math.random(#files)
-  M.set_wallpaper(files[idx])
-end
-
-return M
+return {
+  {
+    "wallpaper", -- Name of the module
+    lazy = true,
+    module = "wallpaper",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    
+    config = function()
       local M = {}
 
       local wallpaper_enabled = false
