@@ -58,114 +58,256 @@ A modern and complete Neovim configuration with all the features you need to pro
 - **ffmpeg** (for video recording)
 - **feh** (Linux, for wallpapers)
 
-## 🛠️ Installation
+## 🛠️ Installation Guide
 
-### 1. Clone the Repository
+### 📋 Prerequisites Verification
 
-First, clone the Neodots repository to any location on your local machine:
+Before starting, ensure you have the minimum requirements:
+
+**Neovim Version**: 0.8.0 or higher (required)
+```bash
+nvim --version
+```
+
+**Git**: Required to clone the repository
+```bash
+git --version
+```
+
+### 🚀 Quick Installation (Recommended)
+
+The easiest way to install Neodots is using our automated installers. They handle everything automatically:
+
+#### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/your-username/neodots.git
 cd neodots
 ```
 
-### 2. Run the Automatic Installer
+#### Step 2: Run the Automatic Installer
 
-The installer will automatically perform the following actions:
+Choose the installer for your operating system:
 
-- **Copy Configuration**: The configuration files will be copied to the default Neovim directory for your operating system:
-  - **Linux/macOS**: `~/.config/nvim`
-  - **Windows**: `%LOCALAPPDATA%\nvim`
-- **Install Dependencies**: All required software and tools will be installed.
-
-Run the appropriate installer for your system:
-
-**Linux/macOS:**
+**🐧 Linux/macOS:**
 ```bash
-# Make script executable
+# Make the script executable and run it
 chmod +x install.sh
-
-# Run installer
 ./install.sh
 ```
 
-**Windows (PowerShell):**
+**🪟 Windows (PowerShell):**
 ```powershell
-# Run installer
-Set-ExecutionPolicy Bypass -Scope Process -Force; .\install.ps1
+# Enable script execution and run the installer
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\install-neodots.ps1
 ```
 
-#### 📦 **Manual Installation**
+### 🔧 What the Installer Does
 
-#### Windows (PowerShell)
+Our automated installers perform the following actions:
+
+#### ✅ For Linux/macOS (`install.sh`):
+- **Detects your distribution** (Ubuntu, Fedora, Arch, macOS, etc.)
+- **Installs system dependencies**:
+  - Git, Node.js, Python, Rust
+  - Development tools: fd, ripgrep, fzf, ffmpeg
+  - Formatters: prettier, black, isort, rustfmt
+- **Copies configuration** to `~/.config/nvim/`
+- **Creates necessary directories** for screenshots, wallpapers, and recordings
+- **Sets up environment variables** for OpenAI API
+
+#### ✅ For Windows (`install-neodots.ps1`):
+- **Installs Chocolatey** (if not present)
+- **Installs essential tools**: Git, Node.js, Python
+- **Copies configuration** to `%LOCALAPPDATA%\nvim\`
+- **Sets up lazy.nvim** plugin manager
+- **Installs all plugins** automatically
+
+### 📦 Manual Installation (Alternative)
+
+If you prefer manual installation or want to understand what's being installed:
+
+#### System Dependencies
+
+**Essential Tools** (required for core functionality):
+```bash
+# Ubuntu/Debian
+sudo apt install git nodejs npm python3 python3-pip fd-find ripgrep fzf
+
+# Fedora
+sudo dnf install git nodejs npm python3 python3-pip fd-find ripgrep fzf
+
+# Arch Linux
+sudo pacman -S git nodejs npm python python-pip fd ripgrep fzf
+
+# macOS
+brew install git node python fd ripgrep fzf
+```
+
+**Optional Tools** (enhanced functionality):
+```bash
+# For image viewing (requires Kitty terminal)
+sudo apt install ffmpeg feh          # Linux
+brew install ffmpeg                  # macOS
+
+# For advanced formatting
+pip install black isort debugpy      # Python tools
+npm install -g prettier              # JavaScript/TypeScript
+rustup component add rustfmt         # Rust formatting
+```
+
+#### Configuration Setup
+
+1. **Copy configuration files**:
+```bash
+# Linux/macOS
+cp -r . ~/.config/nvim/
+
+# Windows (PowerShell)
+Copy-Item -Path . -Destination "$env:LOCALAPPDATA\nvim\" -Recurse
+```
+
+2. **Create necessary directories**:
+```bash
+mkdir -p ~/Pictures/screenshots
+mkdir -p ~/Pictures/wallpapers  
+mkdir -p ~/Videos/neovim_recordings
+```
+
+### 🔑 Environment Configuration
+
+#### OpenAI API Key (Optional but Recommended)
+
+To use ChatGPT integration, set your API key:
+
+**Linux/macOS** (add to ~/.bashrc, ~/.zshrc, or ~/.profile):
+```bash
+export OPENAI_API_KEY="your-actual-api-key-here"
+```
+
+**Windows** (PowerShell profile):
 ```powershell
-# Install Chocolatey if you don't have it
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-
-# Install tools
-choco install git nodejs python rust fd ripgrep fzf
+$env:OPENAI_API_KEY = "your-actual-api-key-here"
 ```
 
-#### macOS
-```bash
-# Install Homebrew if you don't have it
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# Install tools
-brew install git node python rust fd ripgrep fzf ffmpeg
+**Windows** (Command Prompt):
+```cmd
+setx OPENAI_API_KEY "your-actual-api-key-here"
 ```
 
-#### Linux (Multiple Distributions)
+> 💡 **Note**: Without an API key, ChatGPT features will be disabled but all other functionality will work normally.
 
-**Ubuntu/Debian:**
-```bash
-# Install tools
-sudo apt update
-sudo apt install git nodejs npm python3 python3-pip rustc cargo fd-find ripgrep fzf ffmpeg feh
+### 🎯 First Run Setup
 
-# Install fd as fd
-sudo ln -s /usr/bin/fd-find /usr/bin/fd
-```
-
-**Arch Linux:**
-```bash
-# Install tools
-sudo pacman -Syu
-sudo pacman -S git nodejs npm python python-pip rust cargo fd ripgrep fzf ffmpeg feh
-```
-
-**Fedora:**
-```bash
-# Install tools
-sudo dnf install git nodejs npm python3 python3-pip rust cargo fd-find ripgrep fzf ffmpeg feh
-```
-
-**openSUSE:**
-```bash
-# Install tools
-sudo zypper install git nodejs npm python3 python3-pip rust cargo fd ripgrep fzf ffmpeg feh
-```
-
-**Gentoo:**
-```bash
-# Install tools
-sudo emerge --ask dev-vcs/git net-libs/nodejs dev-lang/python dev-lang/rust app-misc/fd sys-apps/ripgrep app-misc/fzf media-video/ffmpeg media-gfx/feh
-```
-
-### 3. Configure environment variables
-
-```bash
-# Configure OpenAI API key for ChatGPT
-export OPENAI_API_KEY="your-api-key-here"
-```
-
-### 4. Start Neovim
+When you start Neovim for the first time:
 
 ```bash
 nvim
 ```
 
-The first time you start Neovim, all necessary plugins and LSP will be installed automatically.
+The first startup will:
+1. **Automatically install all plugins** via lazy.nvim
+2. **Set up LSP servers** for supported languages
+3. **Download Mason packages** for debugging and formatting
+4. **Build any required components**
+
+**⏳ This may take 5-15 minutes** depending on your internet connection. Please be patient and don't interrupt the process.
+
+### ✅ Verification & Testing
+
+After installation, verify everything works:
+
+1. **Check plugin installation**:
+```vim
+:Lazy status
+```
+
+2. **Test LSP functionality**:
+```vim
+:LspInfo
+```
+
+3. **Verify key mappings**:
+```vim
+:WhichKey
+```
+
+### 🐛 Troubleshooting Common Issues
+
+#### 🔧 Plugins Not Installing
+```bash
+# Clear cache and reinstall
+rm -rf ~/.local/share/nvim
+nvim --headless -c "Lazy! sync" -c "qa"
+```
+
+#### 🖥️ LSP Servers Not Working
+```vim
+:Mason          # Install missing LSP servers manually
+:LspInstall     # Alternative installation method
+```
+
+#### 🎨 Transparency Not Working
+- Ensure your terminal supports transparency
+- Windows: Use Windows Terminal
+- macOS: Use iTerm2 or enable transparency in Terminal.app
+- Linux: Most modern terminals support transparency
+
+#### 📸 Screenshots/Images Not Displaying
+- Install Kitty terminal for best image support
+- Verify ffmpeg is installed for video recording
+
+#### ⚡ Performance Issues
+```vim
+:checkhealth    # Run Neovim health check
+```
+
+### 📝 Post-Installation Tips
+
+1. **Customize your theme**:
+```vim
+<leader>ts      # Select theme with Telescope
+```
+
+2. **Explore keybindings**:
+```vim
+<leader>?       # Show which-key menu
+```
+
+3. **Configure AI integration**:
+```vim
+<leader>ai      # Open ChatGPT interface
+```
+
+4. **Set up project-specific settings**:
+```vim
+:ProjectConfig  # Configure project settings
+```
+
+### 🔄 Updating Neodots
+
+To update to the latest version:
+
+```bash
+cd ~/neodots
+git pull
+# Linux/macOS
+./install.sh
+# Windows
+.\install-neodots.ps1
+```
+
+### 🆘 Need Help?
+
+If you encounter issues:
+1. Check the troubleshooting section above
+2. Verify all prerequisites are met
+3. Ensure you have internet connection during first run
+4. Check the [Neovim documentation](https://neovim.io/doc/)
+5. Open an issue on GitHub with detailed error messages
+
+---
 
 ## ⌨️ Keybindings
 
