@@ -2,9 +2,9 @@
 local M = {}
 M.keys = {
   { "<leader>ss", function() require("screenshot").take_screenshot() end, desc = "Take screenshot" },
-  { "<leader>tn", function() require("themes").cycle_theme() end, desc = "Next theme" },
-  { "<leader>tp", function() require("themes").previous_theme() end, desc = "Previous theme" },
-  { "<leader>ts", function() require("themes").select_theme() end, desc = "Select theme" },
+  { "<leader>tn", function() require("theme-manager").cycle_theme() end, desc = "Next theme" },
+  { "<leader>tp", function() require("theme-manager").previous_theme() end, desc = "Previous theme" },
+  { "<leader>ts", function() require("theme-manager").select_theme() end, desc = "Select theme" },
   { "<leader>t+", function() require("transparency").increase_transparency() end, desc = "Increase transparency" },
   { "<leader>t-", function() require("transparency").decrease_transparency() end, desc = "Decrease transparency" },
   { "<leader>tr", function() require("transparency").reset_transparency() end, desc = "Reset transparency" },
@@ -33,5 +33,23 @@ M.keys = {
   { "<leader>bn", ":BufferLineCycleNext<CR>", desc = "BufferLine next" },
   { "<leader>bc", ":BufferLinePickClose<CR>", desc = "BufferLine pick close" },
   { "<leader>bb", ":BufferLinePick<CR>", desc = "BufferLine pick buffer" },
+
+  -- Git operations
+  { "<leader>gd", "<cmd>Gitsigns diffthis<CR>", desc = "Git diff" },
+  { "<leader>gs", "<cmd>Gitsigns stage_hunk<CR>", desc = "Stage hunk" },
+  { "<leader>gu", "<cmd>Gitsigns undo_stage_hunk<CR>", desc = "Undo stage hunk" },
+  { "<leader>gr", "<cmd>Gitsigns reset_hunk<CR>", desc = "Reset hunk" },
+  
+  -- Telescope enhancements
+  { "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
+  { "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Find buffers" },
+  { "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help tags" },
+  { "<leader>fc", "<cmd>Telescope commands<CR>", desc = "Find commands" },
+  
+  -- LSP enhancements
+  { "<leader>sh", function() vim.lsp.buf.signature_help() end, desc = "Signature help" },
+  { "<leader>i", function() vim.lsp.buf.implementation() end, desc = "Go to implementation" },
+  { "<leader>td", function() vim.lsp.buf.type_definition() end, desc = "Go to type definition" },
+  { "<leader>ws", function() vim.lsp.buf.workspace_symbol() end, desc = "Workspace symbols" },
 }
 return M

@@ -24,7 +24,7 @@ return {
       end
 
       -- Set leader keys
-      vim.g.maplocalleader = "\"
+      vim.g.maplocalleader = "\\"
       local augroup = vim.api.nvim_create_augroup("NeodotsConfig", { clear = true })
 
       -- Highlight on yank

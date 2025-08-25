@@ -20,7 +20,7 @@ return {
         "lua_ls",
         "rust_analyzer",
         "pyright",
-        "tsserver",
+        "typescript-language-server",
         "gopls",
         "clangd",
         "jsonls",
@@ -29,7 +29,7 @@ return {
         "cssls",
         "tailwindcss",
       },
-      
+      automatic_installation = true,
     },
   },
   {
