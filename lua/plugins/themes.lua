@@ -1,40 +1,340 @@
 return {
+  -- Catppuccin theme
   {
-    "themes", -- Name of the module
-    lazy = true,
-    module = "themes",
-    dependencies = {
-      "catppuccin/nvim",
-      "folke/tokyonight.nvim",
-      "navarasu/onedark.nvim",
-      "ellisonleao/gruvbox.nvim",
-      "shaunsingh/nord.nvim",
-      "Mofiqul/dracula.nvim",
-      "EdenEast/nightfox.nvim",
-      "ellisonleao/carbon-now.nvim", -- Assuming this is carbonfox
-      "rebelot/kanagawa.nvim",
-      "rose-pine/neovim",
-      "sainnhe/everforest",
-      "sainnhe/sonokai",
-      "marko-cerovac/material.nvim",
-      "tanvirtin/monokai.nvim",
-      "drewtempelmeyer/palenight.vim",
-    },
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      require("catppuccin").setup({
+        flavour = "mocha",
+        background = {
+          light = "latte",
+          dark = "mocha",
+        },
+        transparent_background = true,
+        show_end_of_buffer = false,
+        term_colors = false,
+        dim_inactive = {
+          enabled = false,
+          shade = "dark",
+          percentage = 0.15,
+        },
+        no_italic = false,
+        no_bold = false,
+        no_underline = false,
+        styles = {
+          comments = { "italic" },
+          conditionals = { "italic" },
+          loops = {},
+          functions = {},
+          keywords = {},
+          strings = {},
+          variables = {},
+          numbers = {},
+          booleans = {},
+          properties = {},
+          types = {},
+          operators = {},
+        },
+        color_overrides = {},
+        custom_highlights = {},
+        integrations = {
+          cmp = true,
+          gitsigns = true,
+          nvimtree = true,
+          treesitter = true,
+          notify = false,
+          mini = {
+            enabled = true,
+            indentscope_color = "",
+          },
+        },
+      })
+    end,
+  },
 
+  -- Tokyo Night theme
+  {
+    "folke/tokyonight.nvim",
+    priority = 1000,
+    config = function()
+      require("tokyonight").setup({
+        style = "night",
+        light_style = "day",
+        transparent = true,
+        terminal_colors = true,
+        styles = {
+          comments = { italic = true },
+          keywords = { italic = true },
+          functions = {},
+          variables = {},
+          sidebars = "transparent",
+          floats = "transparent",
+        },
+        sidebars = { "qf", "help" },
+        day_brightness = 0.3,
+        hide_inactive_statusline = false,
+        dim_inactive = false,
+        lualine_bold = false,
+      })
+    end,
+  },
+
+  -- OneDark theme
+  {
+    "navarasu/onedark.nvim",
+    priority = 1000,
+    config = function()
+      require("onedark").setup({
+        style = "dark",
+        transparent = true,
+        term_colors = true,
+        ending_tildes = false,
+        cmp_itemkind_reverse = false,
+        toggle_style_key = nil,
+        toggle_style_list = { "dark", "darker", "cool", "deep", "warm", "warmer", "light" },
+        code_style = {
+          comments = "italic",
+          keywords = "none",
+          functions = "none",
+          strings = "none",
+          variables = "none",
+        },
+        lualine = {
+          transparent = false,
+        },
+        colors = {},
+        highlights = {},
+        diagnostics = {
+          darker = true,
+          undercurl = true,
+          background = true,
+        },
+      })
+    end,
+  },
+
+  -- Gruvbox theme
+  {
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
+    config = function()
+      require("gruvbox").setup({
+        terminal_colors = true,
+        undercurl = true,
+        underline = true,
+        bold = true,
+        italic = {
+          strings = true,
+          emphasis = true,
+          comments = true,
+          operators = false,
+          folds = true,
+        },
+        strikethrough = true,
+        invert_selection = false,
+        invert_signs = false,
+        invert_tabline = false,
+        invert_intend_guides = false,
+        inverse = true,
+        contrast = "",
+        palette_overrides = {},
+        overrides = {},
+        dim_inactive = false,
+        transparent_mode = true,
+      })
+    end,
+  },
+
+  -- Nord theme
+  {
+    "shaunsingh/nord.nvim",
+    priority = 1000,
+    config = function()
+      vim.g.nord_contrast = true
+      vim.g.nord_borders = false
+      vim.g.nord_disable_background = true
+      vim.g.nord_italic = false
+      vim.g.nord_uniform_diff_background = true
+      vim.g.nord_bold = false
+    end,
+  },
+
+  -- Dracula theme
+  {
+    "Mofiqul/dracula.nvim",
+    priority = 1000,
+    config = function()
+      require("dracula").setup({
+        colors = {},
+        show_end_of_buffer = true,
+        transparent_bg = true,
+        lualine_bg_color = "#44475a",
+        italic_comment = true,
+        overrides = {},
+      })
+    end,
+  },
+
+  -- Nightfox theme
+  {
+    "EdenEast/nightfox.nvim",
+    priority = 1000,
+    config = function()
+      require("nightfox").setup({
+        options = {
+          compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+          compile_file_suffix = "_compiled",
+          transparent = true,
+          terminal_colors = true,
+          dim_inactive = false,
+          module_default = true,
+          colorblind = {
+            enable = false,
+            simulate_only = false,
+            severity = {
+              protan = 0,
+              deutan = 0,
+              tritan = 0,
+            },
+          },
+          styles = {
+            comments = "italic",
+            conditionals = "NONE",
+            constants = "NONE",
+            functions = "NONE",
+            keywords = "NONE",
+            numbers = "NONE",
+            operators = "NONE",
+            strings = "NONE",
+            types = "NONE",
+            variables = "NONE",
+          },
+          inverse = {
+            match_paren = false,
+            visual = false,
+            search = false,
+          },
+        },
+        palettes = {},
+        specs = {},
+        groups = {},
+      })
+    end,
+  },
+
+  -- Kanagawa theme
+  {
+    "rebelot/kanagawa.nvim",
+    priority = 1000,
+    config = function()
+      require("kanagawa").setup({
+        compile = false,
+        undercurl = true,
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true },
+        statementStyle = { bold = true },
+        typeStyle = {},
+        transparent = true,
+        dimInactive = false,
+        terminalColors = true,
+        colors = {
+          palette = {},
+          theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
+        },
+        overrides = function(colors)
+          return {}
+        end,
+        theme = "wave",
+        background = {
+          dark = "wave",
+          light = "lotus",
+        },
+      })
+    end,
+  },
+
+  -- Rose Pine theme
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    priority = 1000,
+    config = function()
+      require("rose-pine").setup({
+        variant = "auto",
+        dark_variant = "main",
+        bold_vert_split = false,
+        dim_nc_background = false,
+        disable_background = true,
+        disable_float_background = false,
+        disable_italics = false,
+        groups = {
+          background = "base",
+          background_nc = "_experimental_nc",
+          panel = "surface",
+          panel_nc = "base",
+          border = "highlight_med",
+          comment = "muted",
+          link = "iris",
+          punctuation = "subtle",
+          error = "love",
+          hint = "iris",
+          info = "foam",
+          warn = "gold",
+          headings = {
+            h1 = "iris",
+            h2 = "foam",
+            h3 = "rose",
+            h4 = "gold",
+            h5 = "pine",
+            h6 = "foam",
+          },
+        },
+        highlight_groups = {},
+      })
+    end,
+  },
+
+  -- Theme manager
+  {
+    "themes",
+    lazy = false,
+    priority = 999,
     config = function()
       local M = {}
 
       local dark_themes = {
-        "catppuccin", "tokyonight", "onedark", "gruvbox", "nord", "dracula", "nightfox",
-        "carbonfox", "kanagawa", "rose-pine", "everforest", "sonokai", "material", "monokai", "palenight",
+        "catppuccin",
+        "tokyonight",
+        "onedark",
+        "gruvbox",
+        "nord",
+        "dracula",
+        "nightfox",
+        "carbonfox",
+        "kanagawa",
+        "rose-pine",
       }
 
       local current_theme_index = 1
 
       function M.change_theme(theme_name)
-        if not theme_name then return end
-        vim.cmd.colorscheme(theme_name)
-        vim.notify("Theme changed to: " .. theme_name, vim.log.levels.INFO)
+        if not theme_name then
+          return
+        end
+        
+        local success, err = pcall(function()
+          vim.cmd.colorscheme(theme_name)
+        end)
+        
+        if success then
+          vim.notify("Theme changed to: " .. theme_name, vim.log.levels.INFO)
+          current_theme_index = vim.tbl_contains(dark_themes, theme_name) and 
+            vim.fn.index(dark_themes, theme_name) + 1 or current_theme_index
+        else
+          vim.notify("Failed to load theme: " .. theme_name .. " - " .. tostring(err), vim.log.levels.ERROR)
+        end
       end
 
       function M.cycle_theme()
@@ -50,15 +350,25 @@ return {
         M.change_theme(dark_themes[current_theme_index])
       end
 
+      function M.get_current_theme()
+        return vim.g.colors_name or "default"
+      end
+
       function M.select_theme()
-        require("telescope.pickers").new({}, {
+        local has_telescope, telescope = pcall(require, "telescope")
+        if not has_telescope then
+          vim.notify("Telescope not available", vim.log.levels.ERROR)
+          return
+        end
+
+        telescope.pickers.new({}, {
           prompt_title = "Select Theme",
-          finder = require("telescope.finders").new_table({ results = dark_themes }),
-          sorter = require("telescope.config").values.generic_sorter({}),
+          finder = telescope.finders.new_table({ results = dark_themes }),
+          sorter = telescope.config.values.generic_sorter({}),
           attach_mappings = function(prompt_bufnr, map)
-            require("telescope.actions").select_default:replace(function()
-              local selection = require("telescope.actions.state").get_selected_entry()
-              require("telescope.actions").close(prompt_bufnr)
+            telescope.actions.select_default:replace(function()
+              local selection = telescope.actions.state.get_selected_entry()
+              telescope.actions.close(prompt_bufnr)
               if selection then
                 M.change_theme(selection.value)
               end
@@ -68,7 +378,27 @@ return {
         }):find()
       end
 
-      require("lazy").plenary.module.require_on_exported_call("themes", M)
+      -- Set default theme
+      M.change_theme("catppuccin")
+
+      -- Create global commands
+      vim.api.nvim_create_user_command("ThemeNext", M.cycle_theme, {})
+      vim.api.nvim_create_user_command("ThemePrev", M.previous_theme, {})
+      vim.api.nvim_create_user_command("ThemeSelect", M.select_theme, {})
+      vim.api.nvim_create_user_command("ThemeCurrent", function()
+        vim.notify("Current theme: " .. M.get_current_theme(), vim.log.levels.INFO)
+      end, {})
+
+      -- Keymaps
+      vim.keymap.set("n", "<leader>tn", M.cycle_theme, { desc = "Next theme" })
+      vim.keymap.set("n", "<leader>tp", M.previous_theme, { desc = "Previous theme" })
+      vim.keymap.set("n", "<leader>ts", M.select_theme, { desc = "Select theme" })
+      vim.keymap.set("n", "<leader>tc", function()
+        vim.notify("Current theme: " .. M.get_current_theme(), vim.log.levels.INFO)
+      end, { desc = "Current theme" })
+
+      -- Make functions globally available
+      _G.Themes = M
     end,
   },
 }
