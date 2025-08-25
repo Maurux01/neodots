@@ -22,6 +22,20 @@ A minimal, beautiful, and powerful Neovim configuration inspired by kickstart.nv
    git clone https://github.com/maurux01/neodots ~/.config/nvim
    ```
 
+Step 2: Run the Automatic Installer
+Choose the installer for your operating system:
+
+🐧 Linux/macOS:
+
+# Make the script executable and run it
+chmod +x install.sh
+./install.sh
+🪟 Windows (PowerShell):
+
+# Enable script execution and run the installer
+Set-ExecutionPolicy Bypass -Scope Process -Force
+.\install-neodots.ps1
+
 3. **Start Neovim**:
    ```bash
    nvim
