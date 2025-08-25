@@ -108,14 +108,24 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 Our automated installers perform the following actions:
 
 #### ✅ For Linux/macOS (`install.sh`):
-- **Detects your distribution** (Ubuntu, Fedora, Arch, macOS, etc.)
-- **Installs system dependencies**:
-  - Git, Node.js, Python, Rust
-  - Development tools: fd, ripgrep, fzf, ffmpeg
-  - Formatters: prettier, black, isort, rustfmt
+- **Detects your distribution** and uses the appropriate package manager:
+  - **Ubuntu/Debian**: Uses `apt` to install packages
+  - **Fedora**: Uses `dnf` to install packages  
+  - **Arch Linux**: Uses `pacman` to install packages
+  - **openSUSE**: Uses `zypper` to install packages
+  - **Gentoo**: Uses `emerge` to install packages
+  - **macOS**: Uses `brew` to install packages
+
+- **Installs system dependencies automatically**:
+  - **Core tools**: git, nodejs, npm, python3, python3-pip
+  - **Development tools**: fd-find/fd, ripgrep, fzf, ffmpeg, feh (Linux)
+  - **Build tools**: make, cmake, ninja-build
+  - **Formatters**: prettier (via npm), black, isort, debugpy (via pip), rustfmt (via rustup)
+
 - **Copies configuration** to `~/.config/nvim/`
 - **Creates necessary directories** for screenshots, wallpapers, and recordings
 - **Sets up environment variables** for OpenAI API
+- **Handles package manager detection** and provides appropriate error messages
 
 #### ✅ For Windows (`install-neodots.ps1`):
 - **Installs Chocolatey** (if not present)
