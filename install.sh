@@ -54,17 +54,18 @@ install_linux_deps() {
     
     PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
     
-    # Función de barra de progreso
+    # Función de barra de progreso mejorada
     progress_bar() {
         local duration=${1}
+        local elapsed=0
         already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
         remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
-        percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
+        percentage() { printf "| %s%%" $(( ($elapsed * 100) / $duration )); }
         clean_line() { printf "\r"; }
 
         for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
             already_done; remaining; percentage
-            sleep 0.1
+            sleep 1  # Más tiempo para mejor visibilidad
             clean_line
         done
         clean_line
@@ -72,30 +73,88 @@ install_linux_deps() {
 
     if command_exists apt; then
         print_status "Instalando dependencias para Ubuntu/Debian..."
-        sudo apt update > /dev/null 2>&1
-        (sudo apt install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+        sudo apt update
+        if ! sudo apt install -y "${PACKAGES[@]}"; then
+            print_error "Error al instalar paquetes con apt"
+            return 1
+        fi
+        progress_bar ${#PACKAGES[@]}
     elif command_exists dnf; then
         print_status "Instalando dependencias para Fedora..."
-        (sudo dnf install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+        if ! sudo dnf install -y "${PACKAGES[@]}"; then
+            print_error "Error al instalar paquetes con dnf"
+            return 1
+        fi
+        progress_bar ${#PACKAGES[@]}
     elif command_exists pacman; then
         print_status "Instalando dependencias para Arch Linux..."
-        (sudo pacman -Syu --noconfirm > /dev/null 2>&1 && sudo pacman -S --noconfirm "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+        sudo pacman -Syu --noconfirm
+        if ! sudo pacman -S --noconfirm "${PACKAGES[@]}"; then
+            print_error "Error al instalar paquetes con pacman"
+            return 1
+        fi
+        progress_bar ${#PACKAGES[@]}
     elif command_exists zypper; then
         print_status "Instalando dependencias para openSUSE..."
-        (sudo zypper install -y "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+        if ! sudo zypper install -y "${PACKAGES[@]}"; then
+            print_error "Error al instalar paquetes con zypper"
+            return 1
+        fi
+        progress_bar ${#PACKAGES[@]}
     elif command_exists emerge; then
         print_status "Instalando dependencias para Gentoo..."
-        (sudo emerge --ask --noreplace "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+        if ! sudo emerge --ask --noreplace "${PACKAGES[@]}"; then
+            print_error "Error al instalar paquetes con emerge"
+            return 1
+        fi
+        progress_bar ${#PACKAGES[@]}
     else
         print_error "No se pudo detectar el gestor de paquetes. Instala manualmente..."
         return 1
     fi
 
-    # Instalar herramientas adicionales
-    pip3 install debugpy pytest black isort > /dev/null 2>&1
-    npm install -g prettier > /dev/null 2>&1
-    rustup component add rustfmt > /dev/null 2>&1
-    go install mvdan.cc/sh/v3/cmd/shfmt@latest > /dev/null 2>&1
+    # Instalar herramientas adicionales con verificación
+    print_status "Instalando herramientas adicionales..."
+    
+    if command_exists pip3; then
+        if pip3 install debugpy pytest black isort; then
+            print_success "Herramientas Python instaladas correctamente"
+        else
+            print_warning "Error al instalar herramientas Python"
+        fi
+    else
+        print_warning "pip3 no encontrado, omitiendo instalación de herramientas Python"
+    fi
+    
+    if command_exists npm; then
+        if npm install -g prettier; then
+            print_success "Prettier instalado correctamente"
+        else
+            print_warning "Error al instalar Prettier"
+        fi
+    else
+        print_warning "npm no encontrado, omitiendo instalación de Prettier"
+    fi
+    
+    if command_exists rustup; then
+        if rustup component add rustfmt; then
+            print_success "rustfmt instalado correctamente"
+        else
+            print_warning "Error al instalar rustfmt"
+        fi
+    else
+        print_warning "rustup no encontrado, omitiendo instalación de rustfmt"
+    fi
+    
+    if command_exists go; then
+        if go install mvdan.cc/sh/v3/cmd/shfmt@latest; then
+            print_success "shfmt instalado correctamente"
+        else
+            print_warning "Error al instalar shfmt"
+        fi
+    else
+        print_warning "go no encontrado, omitiendo instalación de shfmt"
+    fi
 }
 
 # Función para instalar dependencias en macOS
@@ -105,17 +164,18 @@ install_macos_deps() {
 
     PACKAGES=("git" "node" "python" "rust" "fd" "ripgrep" "fzf" "ffmpeg" "make" "cmake" "ninja")
 
-    # Función de barra de progreso
+    # Función de barra de progreso mejorada
     progress_bar() {
         local duration=${1}
+        local elapsed=0
         already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
         remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
-        percentage() { printf "| %s%%" $(( (($elapsed)*100)/($duration)*100/100 )); }
+        percentage() { printf "| %s%%" $(( ($elapsed * 100) / $duration )); }
         clean_line() { printf "\r"; }
 
         for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
             already_done; remaining; percentage
-            sleep 0.1
+            sleep 1  # Más tiempo para mejor visibilidad
             clean_line
         done
         clean_line
@@ -126,13 +186,54 @@ install_macos_deps() {
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     
-    (brew install "${PACKAGES[@]}" > /dev/null 2>&1) & progress_bar ${#PACKAGES[@]}
+    if ! brew install "${PACKAGES[@]}"; then
+        print_error "Error al instalar paquetes con brew"
+        return 1
+    fi
+    progress_bar ${#PACKAGES[@]}
 
-    # Instalar herramientas adicionales
-    pip3 install debugpy pytest black isort > /dev/null 2>&1
-    npm install -g prettier > /dev/null 2>&1
-    rustup component add rustfmt > /dev/null 2>&1
-    go install mvdan.cc/sh/v3/cmd/shfmt@latest > /dev/null 2>&1
+    # Instalar herramientas adicionales con verificación
+    print_status "Instalando herramientas adicionales..."
+    
+    if command_exists pip3; then
+        if pip3 install debugpy pytest black isort; then
+            print_success "Herramientas Python instaladas correctamente"
+        else
+            print_warning "Error al instalar herramientas Python"
+        fi
+    else
+        print_warning "pip3 no encontrado, omitiendo instalación de herramientas Python"
+    fi
+    
+    if command_exists npm; then
+        if npm install -g prettier; then
+            print_success "Prettier instalado correctamente"
+        else
+            print_warning "Error al instalar Prettier"
+        fi
+    else
+        print_warning "npm no encontrado, omitiendo instalación de Prettier"
+    fi
+    
+    if command_exists rustup; then
+        if rustup component add rustfmt; then
+            print_success "rustfmt instalado correctamente"
+        else
+            print_warning "Error al instalar rustfmt"
+        fi
+    else
+        print_warning "rustup no encontrado, omitiendo instalación de rustfmt"
+    fi
+    
+    if command_exists go; then
+        if go install mvdan.cc/sh/v3/cmd/shfmt@latest; then
+            print_success "shfmt instalado correctamente"
+        else
+            print_warning "Error al instalar shfmt"
+        fi
+    else
+        print_warning "go no encontrado, omitiendo instalación de shfmt"
+    fi
 }
 
 # Función para instalar dependencias en Windows
@@ -220,16 +321,42 @@ sync_config_files() {
 
     # Copiar archivos, excluyendo el control de versiones y los propios instaladores
     if command_exists rsync; then
-        rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md" > /dev/null 2>&1
+        print_status "Usando rsync para sincronización eficiente..."
+        if rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md" --exclude "*.md" --exclude "*.log"; then
+            print_success "Archivos sincronizados correctamente con rsync"
+        else
+            print_warning "Error al usar rsync, intentando con cp..."
+            sync_with_cp
+        fi
     else
-        print_warning "rsync no encontrado. Usando 'cp'. La sincronización puede ser menos eficiente."
-        # Usamos 'shopt -s dotglob' para incluir archivos ocultos (dotfiles) en la copia
-        shopt -s dotglob
-        cp -r $SOURCE_DIR/* "$CONFIG_DIR/" > /dev/null 2>&1
-        shopt -u dotglob
+        print_warning "rsync no encontrado. Usando 'cp' para copiar archivos..."
+        sync_with_cp
     fi
+}
 
-    print_success "Archivos de configuración sincronizados."
+# Función auxiliar para copiar archivos con cp
+sync_with_cp() {
+    local source_dir="$1"
+    local config_dir="$2"
+    
+    # Usamos 'shopt -s dotglob' para incluir archivos ocultos (dotfiles) en la copia
+    shopt -s dotglob
+    if cp -r "$source_dir"/* "$config_dir/"; then
+        print_success "Archivos copiados correctamente con cp"
+    else
+        print_error "Error al copiar archivos con cp"
+        shopt -u dotglob
+        return 1
+    fi
+    shopt -u dotglob
+    
+    # Eliminar archivos que no deberían estar en la configuración
+    local files_to_remove=("install.sh" "install.ps1" "README.md" ".git" ".github")
+    for file in "${files_to_remove[@]}"; do
+        if [ -e "$config_dir/$file" ]; then
+            rm -rf "$config_dir/$file"
+        fi
+    done
 }
 
 # Función principal
