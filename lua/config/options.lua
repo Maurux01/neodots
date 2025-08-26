@@ -100,7 +100,6 @@ vim.g.loaded_netrwSettings = 1
 vim.g.loaded_netrwFileHandlers = 1
 
 -- Performance optimizations
-vim.opt.lazyredraw = true
 vim.opt.redrawtime = 1000
 vim.opt.ttimeoutlen = 0
 
