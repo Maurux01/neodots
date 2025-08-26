@@ -8,7 +8,7 @@ vim.g.maplocalleader = " "
 
 -- Install lazy.nvim if not already installed
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.uv.fs_stat(lazypath) then
+if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -73,4 +73,4 @@ require("utils.theme_switcher")
 -- Set colorscheme
 vim.cmd("colorscheme tokyonight")
 
-print("🚀 Neovim configuration loaded successfully!")
+print("Neovim configuration loaded successfully!")
