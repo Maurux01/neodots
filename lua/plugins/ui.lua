@@ -130,6 +130,23 @@ return {
   {
     "rcarriga/nvim-notify",
     config = function()
+      require("notify").setup({
+        background_colour = "#000000",
+        fps = 30,
+        icons = {
+          DEBUG = "",
+          ERROR = "",
+          INFO = "",
+          TRACE = "✎",
+          WARN = "",
+        },
+        level = 2,
+        minimum_width = 50,
+        render = "default",
+        stages = "fade_in_slide_out",
+        timeout = 5000,
+        top_down = true,
+      })
       vim.notify = require("notify")
     end,
   },
@@ -217,6 +234,74 @@ return {
         close = {
           enable = true,
         },
+      })
+    end,
+  },
+
+  -- Modern UI for messages and popups
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "rcarriga/nvim-notify",
+    },
+    config = function()
+      require("noice").setup({
+        lsp = {
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        presets = {
+          bottom_search = true,
+          command_palette = true,
+          long_message_to_split = true,
+          inc_rename = false,
+          lsp_doc_border = false,
+        },
+      })
+    end,
+  },
+
+  -- Better input/select UI
+  {
+    "stevearc/dressing.nvim",
+    config = function()
+      require("dressing").setup({
+        input = {
+          enabled = true,
+          default_prompt = "Input:",
+          prompt_align = "left",
+          insert_only = true,
+          start_in_insert = true,
+          border = "rounded",
+          relative = "cursor",
+        },
+        select = {
+          enabled = true,
+          backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
+          trim_prompt = true,
+        },
+      })
+    end,
+  },
+
+  -- Dim inactive code
+  {
+    "folke/twilight.nvim",
+    config = function()
+      require("twilight").setup({
+        dimming = {
+          alpha = 0.25,
+          color = { "Normal", "#ffffff" },
+          term_bg = "#000000",
+          inactive = false,
+        },
+        context = 10,
+        treesitter = true,
       })
     end,
   },

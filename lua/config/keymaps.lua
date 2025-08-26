@@ -85,6 +85,51 @@ map("n", "<leader>tw", ":set wrap!<CR>", opts) -- Toggle word wrap
 map("n", "<leader>cc", ":CommentToggle<CR>", opts) -- Toggle comment
 map("n", "<leader>uu", ":UndotreeToggle<CR>", opts) -- Toggle undo tree
 
+-- Hop (jump to any location)
+map("n", "<leader>hw", ":HopWord<CR>", opts) -- Jump to word
+map("n", "<leader>hl", ":HopLine<CR>", opts) -- Jump to line
+map("n", "<leader>hc", ":HopChar1<CR>", opts) -- Jump to character
+map("n", "<leader>hp", ":HopPattern<CR>", opts) -- Jump to pattern
+
+-- Trouble (problems panel)
+map("n", "<leader>xx", ":Trouble<CR>", opts) -- Toggle trouble
+map("n", "<leader>xw", ":Trouble workspace_diagnostics<CR>", opts) -- Workspace diagnostics
+map("n", "<leader>xd", ":Trouble document_diagnostics<CR>", opts) -- Document diagnostics
+map("n", "<leader>xl", ":Trouble loclist<CR>", opts) -- Location list
+map("n", "<leader>xq", ":Trouble quickfix<CR>", opts) -- Quickfix
+
+-- Spectre (global search/replace)
+map("n", "<leader>S", ":lua require('spectre').open()<CR>", opts) -- Open Spectre
+map("n", "<leader>sw", ":lua require('spectre').open_visual({select_word=true})<CR>", opts) -- Search current word
+map("v", "<leader>sw", ":lua require('spectre').open_visual()<CR>", opts) -- Search selection
+
+-- Aerial (symbols outline)
+map("n", "<leader>a", ":AerialToggle!<CR>", opts) -- Toggle aerial
+map("n", "<leader>an", ":AerialNext<CR>", opts) -- Next symbol
+map("n", "<leader>ap", ":AerialPrev<CR>", opts) -- Previous symbol
+
+-- Harpoon (file bookmarks)
+map("n", "<leader>ha", ":lua require('harpoon'):list():append()<CR>", opts) -- Add file
+map("n", "<leader>hh", ":lua require('harpoon').ui:toggle_quick_menu(require('harpoon'):list())<CR>", opts) -- Toggle menu
+map("n", "<leader>h1", ":lua require('harpoon'):list():select(1)<CR>", opts) -- Go to file 1
+map("n", "<leader>h2", ":lua require('harpoon'):list():select(2)<CR>", opts) -- Go to file 2
+map("n", "<leader>h3", ":lua require('harpoon'):list():select(3)<CR>", opts) -- Go to file 3
+map("n", "<leader>h4", ":lua require('harpoon'):list():select(4)<CR>", opts) -- Go to file 4
+
+-- UFO (code folding)
+map("n", "zR", ":lua require('ufo').openAllFolds()<CR>", opts) -- Open all folds
+map("n", "zM", ":lua require('ufo').closeAllFolds()<CR>", opts) -- Close all folds
+map("n", "zr", ":lua require('ufo').openFoldsExceptKinds()<CR>", opts) -- Open folds except kinds
+map("n", "zm", ":lua require('ufo').closeFoldsWith()<CR>", opts) -- Close folds with
+
+-- Twilight (dim inactive code)
+map("n", "<leader>tw", ":Twilight<CR>", opts) -- Toggle twilight
+
+-- Session management
+map("n", "<leader>ss", ":SessionSave<CR>", opts) -- Save session
+map("n", "<leader>sr", ":SessionRestore<CR>", opts) -- Restore session
+map("n", "<leader>sd", ":SessionDelete<CR>", opts) -- Delete session
+
 -- Multi-cursor mappings (vim-visual-multi)
 -- Ctrl+D para seleccionar palabra bajo cursor (como VS Code)
 -- Ctrl+Alt+D para seleccionar todas las ocurrencias

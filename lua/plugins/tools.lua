@@ -86,14 +86,7 @@ return {
     end,
   },
 
-  -- Session management
-  {
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    config = function()
-      require("persistence").setup()
-    end,
-  },
+
 
   -- Which-key like popups
   {
@@ -146,6 +139,114 @@ return {
         callback = function()
           vim.lsp.buf.format({ async = false })
         end,
+      })
+    end,
+  },
+
+  -- Surround text objects (cs"' to change quotes)
+  {
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup()
+    end,
+  },
+
+  -- Jump to any location (like Ace Jump)
+  {
+    "phaazon/hop.nvim",
+    branch = "v2",
+    config = function()
+      require("hop").setup()
+    end,
+  },
+
+  -- Global search and replace
+  {
+    "nvim-pack/nvim-spectre",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("spectre").setup()
+    end,
+  },
+
+  -- Problems panel (like VS Code)
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("trouble").setup({
+        icons = false,
+        fold_open = "v",
+        fold_closed = ">",
+        indent_lines = false,
+        signs = {
+          error = "error",
+          warning = "warn",
+          hint = "hint",
+          information = "info",
+        },
+      })
+    end,
+  },
+
+  -- Code folding
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = { "kevinhwang91/promise-async" },
+    config = function()
+      vim.o.foldcolumn = "1"
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
+      
+      require("ufo").setup({
+        provider_selector = function(bufnr, filetype, buftype)
+          return { "treesitter", "indent" }
+        end,
+      })
+    end,
+  },
+
+  -- Symbols outline
+  {
+    "stevearc/aerial.nvim",
+    config = function()
+      require("aerial").setup({
+        on_attach = function(bufnr)
+          vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+          vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
+        end,
+      })
+    end,
+  },
+
+  -- File bookmarks (Harpoon)
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local harpoon = require("harpoon")
+      harpoon:setup()
+    end,
+  },
+
+  -- Color highlighter
+  {
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+  },
+
+  -- Better session management
+  {
+    "rmagatti/auto-session",
+    config = function()
+      require("auto-session").setup({
+        log_level = "error",
+        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
       })
     end,
   },

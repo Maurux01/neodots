@@ -12,6 +12,13 @@ function M.check_plugins()
     "toggleterm",
     "nvim-cmp",
     "nvim-treesitter",
+    "nvim-surround",
+    "hop",
+    "trouble",
+    "ufo",
+    "aerial",
+    "harpoon",
+    "noice",
   }
   
   local missing = {}
@@ -36,6 +43,10 @@ function M.check_keymaps()
     { "n", "<leader>ff", "Telescope find_files" },
     { "n", "<C-\\>", "ToggleTerm" },
     { "i", "<C-g>", "Codeium accept" },
+    { "n", "<leader>hw", "Hop to word" },
+    { "n", "<leader>xx", "Trouble panel" },
+    { "n", "<leader>S", "Global search/replace" },
+    { "n", "<leader>ha", "Harpoon add file" },
   }
   
   print("🔧 Keymaps principales configurados:")
@@ -54,6 +65,13 @@ vim.api.nvim_create_user_command("NeodotsCheck", function()
   print("  • AI Completion: Ctrl+G (aceptar sugerencia)")
   print("  • Terminal: Ctrl+\\ (toggle terminal)")
   print("  • LazyGit: <leader>tg")
+  print("  • Jump anywhere: <leader>hw (hop word)")
+  print("  • Problems panel: <leader>xx (trouble)")
+  print("  • Global search: <leader>S (spectre)")
+  print("  • File bookmarks: <leader>ha (harpoon add)")
+  print("  • Code folding: zR/zM (open/close all)")
+  print("  • Surround text: cs'\" (change quotes)")
+  print("  • Sessions: <leader>ss (save session)")
 end, {})
 
 return M
