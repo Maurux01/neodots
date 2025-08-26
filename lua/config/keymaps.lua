@@ -8,13 +8,7 @@ local opts = { noremap = true, silent = true }
 -- File operations
 map("n", "<leader>e", function() require("nvim-tree.api").tree.toggle() end, opts) -- File explorer
 map("n", "<leader>E", ":NvimTreeToggle<CR>", opts) -- File explorer (alternative)
-map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
-map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Live grep" })
-map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Find buffers" })
-map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Help tags" })
-map("n", "<leader>fp", ":Telescope projects<CR>", { desc = "Find projects" })
-map("n", "<leader>fr", ":Telescope frecency<CR>", { desc = "Recent files" })
-map("n", "<leader>fa", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { desc = "Live grep with args" })
+-- Telescope keymaps are now handled by which-key above
 
 -- Buffer navigation (VS Code style)
 map("n", "<C-p>", ":Telescope find_files<CR>", opts) -- Ctrl+P for files
@@ -212,39 +206,98 @@ map("n", "<leader>fr", ":Telescope frecency<CR>", opts) -- Frecency files
 
 -- LSP keymaps are configured in lua/plugins/lsp.lua
 
--- Which-key group descriptions
+-- Which-key configuration (NvChad style)
 local wk = require("which-key")
+
+-- Main groups
 wk.register({
-  ["<leader>f"] = { name = "Find" },
-  ["<leader>g"] = { name = "Git" },
-  ["<leader>l"] = { name = "LSP" },
-  ["<leader>t"] = { name = "Terminal/Toggle" },
-  ["<leader>s"] = { name = "Search/Session" },
-  ["<leader>w"] = { name = "Window/Workspace" },
-  ["<leader>h"] = { name = "Harpoon/Hop" },
-  ["<leader>x"] = { name = "Trouble" },
-  ["<leader>d"] = { name = "Debug" },
-  ["<leader>r"] = { name = "Refactor" },
-  ["<leader>a"] = { name = "Aerial" },
+  ["<leader>f"] = { name = " Find" },
+  ["<leader>g"] = { name = " Git" },
+  ["<leader>l"] = { name = " LSP" },
+  ["<leader>t"] = { name = " Terminal" },
+  ["<leader>b"] = { name = " Buffers" },
+  ["<leader>w"] = { name = " Windows" },
+  ["<leader>s"] = { name = " Search" },
+  ["<leader>d"] = { name = " Debug" },
+  ["<leader>r"] = { name = " Refactor" },
+  ["<leader>n"] = { name = " Notifications" },
+  ["<leader>u"] = { name = " UI" },
+  ["<leader>c"] = { name = " Code" },
+  ["<leader>h"] = { name = " Help" },
 })
 
--- Individual key descriptions
+-- File operations
 wk.register({
-  ["<leader>e"] = { "Toggle File Explorer" },
-  ["<leader>E"] = { "File Explorer (Alt)" },
-  ["<leader>w"] = { "Save File" },
-  ["<leader>W"] = { "Save All Files" },
-  ["<leader>n"] = { "New Empty Buffer" },
-  ["<leader>q"] = { "Quit" },
-  ["<leader>Q"] = { "Force Quit All (No Save)" },
-  ["<leader>x"] = { "Save and Quit" },
-  ["<leader>X"] = { "Save All and Quit" },
-  ["<leader>o"] = { "Symbols Outline" },
-  ["<leader>S"] = { "Global Search/Replace" },
-  ["<leader>cc"] = { "Toggle Comment" },
-  ["<leader>uu"] = { "Toggle Undo Tree" },
-  ["<leader>td"] = { "Toggle Twilight" },
-  ["<leader>nb"] = { "Open Navbuddy" },
+  ["<leader>ff"] = { ":Telescope find_files<CR>", "Find Files" },
+  ["<leader>fg"] = { ":Telescope live_grep<CR>", "Live Grep" },
+  ["<leader>fb"] = { ":Telescope buffers<CR>", "Find Buffers" },
+  ["<leader>fh"] = { ":Telescope help_tags<CR>", "Help Tags" },
+  ["<leader>fr"] = { ":Telescope oldfiles<CR>", "Recent Files" },
+  ["<leader>fp"] = { ":Telescope projects<CR>", "Projects" },
+})
+
+-- Git operations
+wk.register({
+  ["<leader>gg"] = { ":LazyGit<CR>", "LazyGit" },
+  ["<leader>gb"] = { ":Gitsigns toggle_current_line_blame<CR>", "Toggle Blame" },
+  ["<leader>gd"] = { ":Gitsigns diffthis<CR>", "Diff This" },
+  ["<leader>gp"] = { ":Gitsigns preview_hunk<CR>", "Preview Hunk" },
+  ["<leader>gs"] = { ":Gitsigns stage_hunk<CR>", "Stage Hunk" },
+  ["<leader>gu"] = { ":Gitsigns undo_stage_hunk<CR>", "Undo Stage" },
+})
+
+-- Terminal operations
+wk.register({
+  ["<leader>tt"] = { ":ToggleTerm<CR>", "Toggle Terminal" },
+  ["<leader>tf"] = { ":ToggleTerm direction=float<CR>", "Float Terminal" },
+  ["<leader>th"] = { ":ToggleTerm direction=horizontal<CR>", "Horizontal Terminal" },
+  ["<leader>tv"] = { ":ToggleTerm direction=vertical<CR>", "Vertical Terminal" },
+  ["<leader>tg"] = { "LazyGit Terminal" },
+  ["<leader>tn"] = { "Node REPL" },
+  ["<leader>tp"] = { "Python REPL" },
+})
+
+-- Buffer operations
+wk.register({
+  ["<leader>bd"] = { ":bdelete<CR>", "Delete Buffer" },
+  ["<leader>bn"] = { ":bnext<CR>", "Next Buffer" },
+  ["<leader>bp"] = { ":bprevious<CR>", "Previous Buffer" },
+  ["<leader>ba"] = { ":bufdo bd<CR>", "Delete All Buffers" },
+})
+
+-- Window operations
+wk.register({
+  ["<leader>wv"] = { ":vsplit<CR>", "Vertical Split" },
+  ["<leader>ws"] = { ":split<CR>", "Horizontal Split" },
+  ["<leader>wc"] = { ":close<CR>", "Close Window" },
+  ["<leader>wo"] = { ":only<CR>", "Only Window" },
+})
+
+-- UI toggles
+wk.register({
+  ["<leader>ue"] = { ":NvimTreeToggle<CR>", "Toggle Explorer" },
+  ["<leader>ul"] = { ":set number!<CR>", "Toggle Line Numbers" },
+  ["<leader>ur"] = { ":set relativenumber!<CR>", "Toggle Relative Numbers" },
+  ["<leader>uw"] = { ":set wrap!<CR>", "Toggle Word Wrap" },
+  ["<leader>ut"] = { ":Twilight<CR>", "Toggle Twilight" },
+})
+
+-- Notifications
+wk.register({
+  ["<leader>nd"] = { ":lua require('notify').dismiss({ silent = true, pending = true })<CR>", "Dismiss All" },
+  ["<leader>nh"] = { ":Telescope notify<CR>", "History" },
+})
+
+-- Quick actions
+wk.register({
+  ["<leader>e"] = { ":NvimTreeToggle<CR>", "Explorer" },
+  ["<leader>w"] = { ":w<CR>", "Save" },
+  ["<leader>W"] = { ":wa<CR>", "Save All" },
+  ["<leader>q"] = { ":q<CR>", "Quit" },
+  ["<leader>Q"] = { ":qa!<CR>", "Force Quit All" },
+  ["<leader>x"] = { ":x<CR>", "Save & Quit" },
+  ["<leader>X"] = { ":xa<CR>", "Save All & Quit" },
+  ["<leader>n"] = { ":enew<CR>", "New Buffer" },
 })
 
 
