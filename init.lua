@@ -20,6 +20,15 @@ require("config.options")
 require("config.keymaps")
 require("config.autocmds")
 
+-- Load snippets and completion config after plugins are loaded
+vim.api.nvim_create_autocmd("User", {
+  pattern = "LazyDone",
+  callback = function()
+    require("config.snippets")
+    require("config.completion")
+  end,
+})
+
 -- Setup lazy.nvim with performance optimizations
 require("lazy").setup({
   { import = "plugins" },
