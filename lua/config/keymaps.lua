@@ -35,21 +35,12 @@ map("n", "<leader>tc", ":tabclose<CR>", opts) -- Close tab
 map("n", "<leader>to", ":tabonly<CR>", opts) -- Close other tabs
 map("n", "<leader>tm", ":tabmove", opts) -- Move tab
 
--- LSP keymaps
-map("n", "gd", vim.lsp.buf.definition, opts) -- Go to definition
-map("n", "gD", vim.lsp.buf.declaration, opts) -- Go to declaration
-map("n", "gr", vim.lsp.buf.references, opts) -- Find references
-map("n", "gi", vim.lsp.buf.implementation, opts) -- Go to implementation
-map("n", "K", vim.lsp.buf.hover, opts) -- Hover documentation
-map("n", "<C-k>", vim.lsp.buf.signature_help, opts) -- Signature help
-map("n", "<leader>rn", vim.lsp.buf.rename, opts) -- Rename symbol
-map("n", "<leader>ca", vim.lsp.buf.code_action, opts) -- Code actions
-map("n", "<leader>f", vim.lsp.buf.format, opts) -- Format code
+
 
 -- Diagnostic keymaps
 map("n", "[d", vim.diagnostic.goto_prev, opts) -- Previous diagnostic
 map("n", "]d", vim.diagnostic.goto_next, opts) -- Next diagnostic
-map("n", "<leader>q", vim.diagnostic.setloclist, opts) -- Open diagnostics
+map("n", "<leader>ld", vim.diagnostic.setloclist, opts) -- Open diagnostics
 
 -- Git keymaps
 map("n", "<leader>gg", ":LazyGit<CR>", opts) -- LazyGit
@@ -62,7 +53,7 @@ map("n", "<leader>o", ":SymbolsOutline<CR>", opts) -- Symbols outline
 map("n", "<leader>s", ":Telescope lsp_document_symbols<CR>", opts) -- Document symbols
 
 -- Search and replace
-map("n", "<leader>sr", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", opts) -- Search and replace current word
+map("n", "<leader>sr", ":%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>", opts) -- Search and replace current word
 map("n", "<leader>sw", ":Telescope grep_string<CR>", opts) -- Search word under cursor
 
 -- Terminal
@@ -79,9 +70,10 @@ map("n", "<leader>x", ":x<CR>", opts) -- Save and quit
 map("n", "<leader>th", ":lua switch_theme()<CR>", opts) -- Switch theme
 
 -- Toggle options
-map("n", "<leader>tn", ":set number!<CR>", opts) -- Toggle line numbers
+map("n", "<leader>tl", ":set number!<CR>", opts) -- Toggle line numbers
 map("n", "<leader>tr", ":set relativenumber!<CR>", opts) -- Toggle relative numbers
 map("n", "<leader>tw", ":set wrap!<CR>", opts) -- Toggle word wrap
+
 
 -- Plugin specific mappings
 map("n", "<leader>cc", ":CommentToggle<CR>", opts) -- Toggle comment

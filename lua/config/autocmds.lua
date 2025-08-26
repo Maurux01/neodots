@@ -18,7 +18,19 @@ autocmd("BufWritePre", {
   group = "GeneralSettings",
   pattern = "*",
   callback = function()
-    vim.cmd([[%s/\s\+$//e]]) -- Remove trailing whitespace
+    -- Highlight on yank with animation
+augroup("YankHighlight", { clear = true })
+autocmd("TextYankPost", {
+  group = "YankHighlight",
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "IncSearch",
+      timeout = 150,
+      on_visual = true,
+    })
+  end,
+})
   end,
 })
 
@@ -53,16 +65,12 @@ autocmd("FileType", {
 })
 
 -- UI enhancements
+-- UI enhancements
 augroup("UIEnhancements", { clear = true })
-autocmd("VimEnter", {
+autocmd("VimResized", {
   group = "UIEnhancements",
   pattern = "*",
-  callback = function()
-    -- Auto resize windows when Vim is resized
-    vim.cmd([[
-      autocmd VimResized * wincmd =
-    ]])
-  end,
+  command = "wincmd =",
 })
 
 autocmd("BufEnter", {
@@ -73,6 +81,36 @@ autocmd("BufEnter", {
     if vim.bo.filetype == "NvimTree" and #vim.api.nvim_list_wins() == 1 then
       vim.cmd("quit")
     end
+  end,
+})
+
+-- LSP auto commands
+augroup("LSPAutoCommands", { clear = true })
+autocmd("LspAttach", {
+  group = "LSPAutoCommands",
+  pattern = "*",
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client and client.server_capabilities.documentHighlightProvider then
+      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        buffer = args.buf,
+        callback = vim.lsp.buf.document_highlight,
+      })
+      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+        buffer = args.buf,
+        callback = vim.lsp.buf.clear_references,
+      })
+    end
+  end,
+})
+
+-- Auto format on save
+augroup("AutoFormat", { clear = true })
+autocmd("BufWritePre", {
+  group = "AutoFormat",
+  pattern = { "*.lua", "*.py", "*.js", "*.ts", "*.json", "*.css", "*.html" },
+  callback = function()
+    vim.lsp.buf.format({ async = true })
   end,
 })
 
@@ -148,27 +186,6 @@ autocmd("BufWritePre", {
   end,
 })
 
--- Auto close quickfix and location lists when leaving them
-augroup("AutoCloseQuickfix", { clear = true })
-autocmd("WinEnter", {
-  group = "AutoCloseQuickfix",
-  pattern = "*",
-  callback = function()
-    if vim.bo.filetype == "qf" then
-      vim.cmd("cclose")
-    end
-  end,
-})
 
--- Smooth scrolling animation trigger
-augroup("SmoothScrolling", { clear = true })
-autocmd("CursorMoved", {
-  group = "SmoothScrolling",
-  pattern = "*",
-  callback = function()
-    -- This will trigger neoscroll's smooth scrolling
-    vim.cmd("normal! zz")
-  end,
-})
 
 print("✅ Auto commands loaded successfully!")

@@ -5,7 +5,7 @@ return {
   -- Colorscheme - Multiple dark themes
   {
     "folke/tokyonight.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
       require("tokyonight").setup({
@@ -16,7 +16,7 @@ return {
           keywords = { italic = true },
         },
       })
-      vim.cmd("colorscheme tokyonight")
+      
     end,
   },
 
@@ -24,7 +24,7 @@ return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
       require("catppuccin").setup({
@@ -40,7 +40,7 @@ return {
 
   {
     "rebelot/kanagawa.nvim",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
       require("kanagawa").setup({
@@ -61,7 +61,7 @@ return {
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = false,
+    lazy = true,
     priority = 1000,
     config = function()
       require("rose-pine").setup({
@@ -129,13 +129,7 @@ return {
     end,
   },
 
-  -- Smooth scrolling
-  {
-    "karb94/neoscroll.nvim",
-    config = function()
-      require("neoscroll").setup()
-    end,
-  },
+  
 
   -- Indent guides
   {

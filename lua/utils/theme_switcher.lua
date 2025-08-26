@@ -16,24 +16,14 @@ function M.switch_theme()
     local theme_name = themes[current_theme]
     vim.cmd("colorscheme " .. theme_name)
     
-    -- Update lualine theme if it's tokyonight-based
-    if theme_name == "tokyonight" then
-        require("lualine").setup({
-            options = {
-                theme = "tokyonight",
-                component_separators = { left = "", right = "" },
-                section_separators = { left = "", right = "" },
-            },
-        })
-    else
-        require("lualine").setup({
-            options = {
-                theme = "auto",
-                component_separators = { left = "", right = "" },
-                section_separators = { left = "", right = "" },
-            },
-        })
-    end
+    -- Update lualine theme
+    require("lualine").setup({
+        options = {
+            theme = "auto",
+            component_separators = { left = "", right = "" },
+            section_separators = { left = "", right = "" },
+        },
+    })
     
     vim.notify("Switched to theme: " .. theme_name, vim.log.levels.INFO)
 end
