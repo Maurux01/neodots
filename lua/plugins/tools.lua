@@ -28,21 +28,25 @@ return {
     end,
   },
 
-  -- Git integration (disabled temporarily due to callback error)
-  -- {
-  --   "lewis6991/gitsigns.nvim",
-  --   config = function()
-  --     require("gitsigns").setup({
-  --       signs = {
-  --         add = { text = "+" },
-  --         change = { text = "~" },
-  --         delete = { text = "_" },
-  --         topdelete = { text = "‾" },
-  --         changedelete = { text = "~" },
-  --       },
-  --     })
-  --   end,
-  -- },
+  -- Git integration
+  {
+    "lewis6991/gitsigns.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      require("gitsigns").setup({
+        signs = {
+          add = { text = "+" },
+          change = { text = "~" },
+          delete = { text = "_" },
+          topdelete = { text = "‾" },
+          changedelete = { text = "~" },
+        },
+        attach_to_untracked = false,
+        current_line_blame = false,
+        update_debounce = 200,
+      })
+    end,
+  }
 
   -- Auto pairs
   {
