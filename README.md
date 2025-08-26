@@ -2,6 +2,8 @@
 
 A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like functionality with smooth animations and modern UI enhancements. Perfect for developers who want a productive and visually appealing coding environment.
 
+![alt text](image.png)
+
 ## ✨ Features
 
 - **🎨 Beautiful UI**: Multiple dark themes (Tokyo Night, Catppuccin, Kanagawa, Rose Pine) with transparent backgrounds
