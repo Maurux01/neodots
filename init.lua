@@ -1,9 +1,6 @@
 -- Neodots - Modern Neovim Configuration
 -- Fast startup with lazy loading and performance optimizations
 
--- Set colorscheme immediately to avoid flashing
-vim.cmd.colorscheme("tokyonight-night")
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then

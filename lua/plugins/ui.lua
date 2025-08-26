@@ -5,7 +5,7 @@ return {
   -- Colorscheme - Multiple dark themes
   {
     "folke/tokyonight.nvim",
-    lazy = true,
+    lazy = false,
     priority = 1000,
     config = function()
       require("tokyonight").setup({
@@ -16,7 +16,7 @@ return {
           keywords = { italic = true },
         },
       })
-      
+      vim.cmd.colorscheme("tokyonight-night")
     end,
   },
 
