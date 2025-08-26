@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Neodots - Neovim Configuration Installer
-# Script de instalación automática
+# Improved Linux installer script with better error handling and distribution support
 
 set -e
 
-# Colores para output
+# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Función para imprimir mensajes
+# Function to print messages
 print_status() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -29,7 +29,7 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Función para detectar el sistema operativo
+# Function to detect operating system
 detect_os() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
         OS="linux"
@@ -43,212 +43,204 @@ detect_os() {
     echo $OS
 }
 
-# Función para verificar si un comando existe
+# Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Función para instalar dependencias en Linux
-install_linux_deps() {
-    print_status "Instalando dependencias para Linux..."
-    
-    PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
-    
-    # Función de barra de progreso mejorada
-    progress_bar() {
-        local duration=${1}
-        local elapsed=0
-        already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
-        remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
-        percentage() { printf "| %s%%" $(( ($elapsed * 100) / $duration )); }
-        clean_line() { printf "\r"; }
-
-        for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
-            already_done; remaining; percentage
-            sleep 1  # Más tiempo para mejor visibilidad
-            clean_line
-        done
-        clean_line
-    }
-
-    if command_exists apt; then
-        print_status "Instalando dependencias para Ubuntu/Debian..."
-        sudo apt update
-        if ! sudo apt install -y "${PACKAGES[@]}"; then
-            print_error "Error al instalar paquetes con apt"
-            return 1
-        fi
-        progress_bar ${#PACKAGES[@]}
-    elif command_exists dnf; then
-        print_status "Instalando dependencias para Fedora..."
-        if ! sudo dnf install -y "${PACKAGES[@]}"; then
-            print_error "Error al instalar paquetes con dnf"
-            return 1
-        fi
-        progress_bar ${#PACKAGES[@]}
-    elif command_exists pacman; then
-        print_status "Instalando dependencias para Arch Linux..."
-        sudo pacman -Syu --noconfirm
-        if ! sudo pacman -S --noconfirm "${PACKAGES[@]}"; then
-            print_error "Error al instalar paquetes con pacman"
-            return 1
-        fi
-        progress_bar ${#PACKAGES[@]}
-    elif command_exists zypper; then
-        print_status "Instalando dependencias para openSUSE..."
-        if ! sudo zypper install -y "${PACKAGES[@]}"; then
-            print_error "Error al instalar paquetes con zypper"
-            return 1
-        fi
-        progress_bar ${#PACKAGES[@]}
-    elif command_exists emerge; then
-        print_status "Instalando dependencias para Gentoo..."
-        if ! sudo emerge --ask --noreplace "${PACKAGES[@]}"; then
-            print_error "Error al instalar paquetes con emerge"
-            return 1
-        fi
-        progress_bar ${#PACKAGES[@]}
+# Function to detect Linux distribution
+detect_linux_distro() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo "$ID"
+    elif [ -f /etc/redhat-release ]; then
+        echo "rhel"
+    elif [ -f /etc/arch-release ]; then
+        echo "arch"
     else
-        print_error "No se pudo detectar el gestor de paquetes. Instala manualmente..."
-        return 1
-    fi
-
-    # Instalar herramientas adicionales con verificación
-    print_status "Instalando herramientas adicionales..."
-    
-    if command_exists pip3; then
-        if pip3 install debugpy pytest black isort; then
-            print_success "Herramientas Python instaladas correctamente"
-        else
-            print_warning "Error al instalar herramientas Python"
-        fi
-    else
-        print_warning "pip3 no encontrado, omitiendo instalación de herramientas Python"
-    fi
-    
-    if command_exists npm; then
-        if npm install -g prettier; then
-            print_success "Prettier instalado correctamente"
-        else
-            print_warning "Error al instalar Prettier"
-        fi
-    else
-        print_warning "npm no encontrado, omitiendo instalación de Prettier"
-    fi
-    
-    if command_exists rustup; then
-        if rustup component add rustfmt; then
-            print_success "rustfmt instalado correctamente"
-        else
-            print_warning "Error al instalar rustfmt"
-        fi
-    else
-        print_warning "rustup no encontrado, omitiendo instalación de rustfmt"
-    fi
-    
-    if command_exists go; then
-        if go install mvdan.cc/sh/v3/cmd/shfmt@latest; then
-            print_success "shfmt instalado correctamente"
-        else
-            print_warning "Error al instalar shfmt"
-        fi
-    else
-        print_warning "go no encontrado, omitiendo instalación de shfmt"
+        echo "unknown"
     fi
 }
 
-# Función para instalar dependencias en macOS
-install_macos_deps() {
-    print_status "Instalando dependencias para macOS..."
+# Function to install Linux dependencies
+install_linux_deps() {
+    print_status "Installing dependencies for Linux..."
     
+    # Detect specific distribution
+    DISTRO=$(detect_linux_distro)
+    print_status "Detected distribution: $DISTRO"
+    
+    # Define packages based on distribution
+    case $DISTRO in
+        "ubuntu"|"debian")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
+            ;;
+        "fedora"|"rhel"|"centos")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
+            ;;
+        "arch"|"manjaro")
+            PACKAGES=("git" "nodejs" "npm" "python" "python-pip" "rust" "cargo" "fd" "rip极" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
+            ;;
+        "opensuse"|"suse")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "极" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
+            ;;
+        *)
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "make" "cmake")
+            print_warning "Distribution not specifically supported. Installing basic packages."
+            ;;
+    esac
 
+    # Install packages based on available package manager
+    if command_exists apt; then
+        print_status "Installing dependencies for Debian/Ubuntu systems..."
+        sudo apt update
+        for pkg in "${PACKAGES[@]}"; do
+            if sudo apt install -y "$pkg"; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    elif command_exists dnf; then
+        print_status "Installing dependencies for Fedora/RHEL systems..."
+        for pkg in "${PACKAGES[@]}"; do
+            if sudo dnf install -y "$pkg"; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install:极 $pkg"
+            fi
+        done
+    elif command_exists pacman; then
+        print_status "Installing dependencies for Arch systems..."
+        sudo pacman -Syu --noconfirm
+        for pkg in "${PACKAGES[@]}"; do
+            if sudo pacman -S --noconfirm "$pkg"; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    elif command_exists zypper; then
+        print_status "Installing dependencies for openSUSE systems..."
+        for pkg in "${PACKAGES[@]}"; do
+            if sudo zypper install -y "$pkg"; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    else
+        print_error "Could not detect a compatible package manager."
+        print_warning "Please manually install the following packages:"
+        printf '%s\n' "${PACKAGES[@]}"
+        return 1
+    fi
+
+    # Install additional tools with better error handling
+    print_status "Installing additional tools..."
+    
+    # Python tools
+    if command_exists pip3; then
+        PYTHON_TOOLS=("debugpy" "pytest" "black" "isort")
+        for tool in "${PYTHON_TOOLS[@]}"; do
+            if pip3 install "$tool"; then
+                print_success "Python tool installed: $tool"
+            else
+                print_warning "Error installing Python tool: $tool"
+            fi
+        done
+    else
+        print_warning "pip3 not found, skipping Python tools installation"
+    fi
+    
+    # Node.js tools
+    if command_exists npm; then
+        if npm install -g prettier; then
+            print_success "Prettier installed successfully"
+        else
+            print_warning "Error installing Prettier"
+        fi
+    else
+        print_warning "npm not found, skipping Prettier installation"
+    fi
+    
+    # Rust tools
+    if command_exists rustup; then
+        if rustup component add rustfmt; then
+            print_success "rustfmt installed successfully"
+        else
+            print_warning "Error installing rustfmt"
+        fi
+    else
+        print_warning "rustup not found, skipping rustfmt installation"
+    fi
+    
+    print_success "Dependency installation completed"
+}
+
+# Function to install macOS dependencies (unchanged from original)
+install_macos_deps() {
+    print_status "Installing dependencies for macOS..."
+    
     PACKAGES=("git" "node" "python" "rust" "fd" "ripgrep" "fzf" "ffmpeg" "make" "cmake" "ninja")
 
-    # Función de barra de progreso mejorada
-    progress_bar() {
-        local duration=${1}
-        local elapsed=0
-        already_done() { for ((done=0; done<$elapsed; done++)); do printf "#"; done }
-        remaining() { for ((remain=$elapsed; remain<$duration; remain++)); do printf "."; done }
-        percentage() { printf "| %s%%" $(( ($elapsed * 100) / $duration )); }
-        clean_line() { printf "\r"; }
-
-        for (( elapsed=1; elapsed<=$duration; elapsed++ )); do
-            already_done; remaining; percentage
-            sleep 1  # Más tiempo para mejor visibilidad
-            clean_line
-        done
-        clean_line
-    }
-
     if ! command_exists brew; then
-        print_status "Instalando Homebrew..."
+        print_status "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     
     if ! brew install "${PACKAGES[@]}"; then
-        print_error "Error al instalar paquetes con brew"
+        print_error "Error installing packages with brew"
         return 1
     fi
-    progress_bar ${#PACKAGES[@]}
 
-    # Instalar herramientas adicionales con verificación
-    print_status "Instalando herramientas adicionales..."
+    # Install additional tools
+    print_status "Installing additional tools..."
     
     if command_exists pip3; then
-        if pip3 install debugpy pytest black isort; then
-            print_success "Herramientas Python instaladas correctamente"
+        if pip极 install debugpy pytest black isort; then
+            print_success "Python tools installed successfully"
         else
-            print_warning "Error al instalar herramientas Python"
+            print_warning "Error installing Python tools"
         fi
     else
-        print_warning "pip3 no encontrado, omitiendo instalación de herramientas Python"
+        print_warning "pip3 not found, skipping Python tools installation"
     fi
     
     if command_exists npm; then
         if npm install -g prettier; then
-            print_success "Prettier instalado correctamente"
+            print_success "Prettier installed successfully"
         else
-            print_warning "Error al instalar Prettier"
-        fi
+            print_warning "Error installing Prettier"
+       极 fi
     else
-        print_warning "npm no encontrado, omitiendo instalación de Prettier"
+        print_warning "npm not found, skipping Prettier installation"
     fi
     
     if command_exists rustup; then
         if rustup component add rustfmt; then
-            print_success "rustfmt instalado correctamente"
+            print_success "rustfmt installed successfully"
         else
-            print_warning "Error al instalar rustfmt"
+            print_warning "Error installing rustfmt"
         fi
     else
-        print_warning "rustup no encontrado, omitiendo instalación de rustfmt"
-    fi
-    
-    if command_exists go; then
-        if go install mvdan.cc/sh/v3/cmd/shfmt@latest; then
-            print_success "shfmt instalado correctamente"
-        else
-            print_warning "Error al instalar shfmt"
-        fi
-    else
-        print_warning "go no encontrado, omitiendo instalación de shfmt"
+        print_warning "rustup not found, skipping rustfmt installation"
     fi
 }
 
-# Función para instalar dependencias en Windows
+# Function to handle Windows dependencies
 install_windows_deps() {
-    print_warning "Este script no está diseñado para instalar dependencias directamente en Windows."
-    print_status "Por favor, ejecuta el script 'install.ps1' en una terminal de PowerShell con permisos de administrador."
-    echo "Para hacerlo, abre PowerShell y ejecuta:"
+    print_warning "This script is not designed to install dependencies directly on Windows."
+    print_status "Please run the 'install.ps1' script in a PowerShell terminal with administrator privileges."
+    echo "To do this, open PowerShell and run:"
     echo "Set-ExecutionPolicy Unrestricted -Scope Process -Force; .\install.ps1"
     exit 1
 }
 
-# Función para verificar Neovim
+# Function to check Neovim
 check_neovim() {
     if ! command_exists nvim; then
-        print_error "Neovim no está instalado. Por favor, instálalo primero:"
+        print_error "Neovim is not installed. Please install it first:"
         echo "  Ubuntu/Debian: sudo apt install neovim"
         echo "  Arch Linux: sudo pacman -S neovim"
         echo "  Fedora: sudo dnf install neovim"
@@ -259,98 +251,98 @@ check_neovim() {
         exit 1
     fi
     
-    # Verificar versión mínima
+    # Check minimum version
     NVIM_VERSION=$(nvim --version | head -n1 | cut -d' ' -f2)
     REQUIRED_VERSION="0.8.0"
     
     if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$NVIM_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]; then
-        print_error "Neovim versión $NVIM_VERSION detectada. Se requiere versión $REQUIRED_VERSION o superior."
+        print_error "Neovim version $NVIM_VERSION detected. Version $REQUIRED_VERSION or higher is required."
         exit 1
     fi
     
-    print_success "Neovim $NVIM_VERSION detectado"
+    print_success "Neovim $NVIM_VERSION detected"
 }
 
-# Función para crear directorios necesarios
+# Function to create necessary directories
 create_directories() {
-    print_status "Creando directorios necesarios..."
+    print_status "Creating necessary directories..."
     
     mkdir -p ~/Pictures/screenshots
-    mkdir -p ~/Pictures/wallpapers
+    mkdir -p ~/极ictures/wallpapers
     mkdir -p ~/Videos/neovim_recordings
     
-    print_success "Directorios creados"
+    print_success "Directories created"
 }
 
-# Función para configurar variables de entorno
+# Function to setup environment variables
 setup_environment() {
-    print_status "Configurando variables de entorno..."
+    print_status "Setting up environment variables..."
     
-    # Agregar a .bashrc o .zshrc
+    # Add to .bashrc or .zshrc
     SHELL_RC=""
     if [ -f ~/.bashrc ]; then
         SHELL_RC=~/.bashrc
     elif [ -f ~/.zshrc ]; then
-        SHELL_RC=~/.zshrc
+        SHELL极=~/.zshrc
     fi
     
     if [ -n "$SHELL_RC" ]; then
-        # Verificar si ya existe la configuración
-        if ! grep -q "OPENAI_API_KEY" "$SHELL_RC"; then
+        # Check if configuration already exists
+        if ! grep -q "OPENAI_API_KEY" "$SHELL_R极"; then
             echo "" >> "$SHELL_RC"
             echo "# Neodots - Neovim Configuration" >> "$SHELL_RC"
-            echo "export OPENAI_API_KEY=\"tu-api-key-aqui\"" >> "$SHELL_RC"
-            print_success "Variables de entorno agregadas a $SHELL_RC"
+            echo "export OPENAI_API_KEY=\"your-api-key-here\"" >> "$SHELL_RC"
+            print_success "Environment variables added to $SHELL_RC"
         else
-            print_warning "Variables de entorno ya configuradas en $SHELL_RC"
+            print_warning "Environment variables already configured in $SHELL_RC"
         fi
     else
-        print_warning "No se encontró .bashrc o .zshrc. Configura manualmente:"
-        echo "export OPENAI_API_KEY=\"tu-api-key-aqui\""
+        print_warning "No .bashrc or .zshrc found. Configure manually:"
+        echo "export OPENAI_API_KEY=\"your-api-key-here\""
     fi
 }
 
-# Función para sincronizar los archivos de configuración
+# Function to sync configuration files
 sync_config_files() {
-    print_status "Sincronizando archivos de configuración a ~/.config/nvim..."
+    print_status "Syncing configuration files to ~/.config/nvim..."
     CONFIG_DIR="$HOME/.config/nvim"
     SOURCE_DIR="$(pwd)"
 
-    # Crear el directorio si no existe
+    # Create directory if it doesn't exist
     mkdir -p "$CONFIG_DIR"
 
-    # Copiar archivos, excluyendo el control de versiones y los propios instaladores
+    # Copy files, excluding version control and installer files
     if command_exists rsync; then
-        print_status "Usando rsync para sincronización eficiente..."
+        print_status "Using rsync for efficient synchronization..."
         if rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md" --exclude "*.md" --exclude "*.log"; then
-            print_success "Archivos sincronizados correctamente con rsync"
+            print_success "Files synced successfully with rsync"
         else
-            print_warning "Error al usar rsync, intentando con cp..."
+            print_warning "Error using rsync, trying with cp..."
             sync_with_cp
         fi
     else
-        print_warning "rsync no encontrado. Usando 'cp' para copiar archivos..."
+        print_warning "rsync not found. Using 'cp' to copy files..."
         sync_with_cp
     fi
 }
 
-# Función auxiliar para copiar archivos con cp
+# Helper function to copy files with cp
 sync_with_cp() {
     local source_dir="$1"
     local config_dir="$2"
     
-    # Usamos 'shopt -s dotglob' para incluir archivos ocultos (dotfiles) en la copia
+    # Use 'shopt -s dotglob' to include hidden files (dotfiles) in the copy
     shopt -s dotglob
     if cp -r "$source_dir"/* "$config_dir/"; then
-        print_success "Archivos copiados correctamente con cp"
+        print_success "Files copied successfully with cp"
     else
-        print_error "Error al copiar archivos con cp"
+        print_error "Error copying files with cp"
         shopt -u dotglob
         return 1
     fi
     shopt -u dotglob
     
-    # Eliminar archivos que no deberían estar en la configuración
+    # Remove files that shouldn't be in the configuration
     local files_to_remove=("install.sh" "install.ps1" "README.md" ".git" ".github")
     for file in "${files_to_remove[@]}"; do
         if [ -e "$config_dir/$file" ]; then
@@ -359,33 +351,33 @@ sync_with_cp() {
     done
 }
 
-# Función principal
+# Main function
 main() {
     echo -e "${BLUE}"
     echo "╔══════════════════════════════════════════════════════════════╗"
     echo "║                    Neodots - Neovim Setup                   ║"
-    echo "║                Configuración Moderna y Completa             ║"
+    echo "║                Modern and Complete Configuration            ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 
-    read -p "El script instalará todas las dependencias y configurará Neodots. ¿Deseas continuar? (s/n) " -n 1 -r
+    read -p "The script will install all dependencies and configure Neodots. Do you want to continue? (y/n) " -n 1 -r
     echo
-    if [[ ! $REPLY =~ ^[Ss]$ ]]; then
-        print_warning "Instalación cancelada por el usuario."
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        print_warning "Installation cancelled by user."
         exit 1
     fi
     
-    # Sincronizar archivos de configuración primero
+    # Sync configuration files first
     sync_config_files
 
-    # Detectar sistema operativo
+    # Detect operating system
     OS=$(detect_os)
-    print_status "Sistema operativo detectado: $OS"
+    print_status "Detected operating system: $OS"
     
-    # Verificar Neovim
+    # Check Neovim
     check_neovim
     
-    # Instalar dependencias según el OS
+    # Install dependencies based on OS
     case $OS in
         "linux")
             install_linux_deps
@@ -397,30 +389,30 @@ main() {
             install_windows_deps
             ;;
         *)
-            print_error "Sistema operativo no soportado: $OS"
+            print_error "Unsupported operating system: $OS"
             exit 1
             ;;
     esac
     
-    # Crear directorios
+    # Create directories
     create_directories
     
-    # Configurar variables de entorno
+    # Setup environment variables
     setup_environment
     
-    print_success "¡Instalación completada!"
+    print_success "Installation completed!"
     echo ""
-    echo -e "${YELLOW}Próximos pasos:${NC}"
-    echo "1. Configura tu API key de OpenAI en tu archivo de shell (.bashrc, .zshrc, etc.):"
-    echo "   export OPENAI_API_KEY=\"tu-api-key-aqui\""
+    echo -e "${YELLOW}Next steps:${NC}"
+    echo "1. Configure your OpenAI API key in your shell file (.bashrc, .zshrc, etc.):"
+    echo "   export OPENAI_API_KEY=\"your-api-key-here\""
     echo ""
-    echo "2. Inicia Neovim para instalar plugins automáticamente:"
+    echo "2. Start Neovim to automatically install plugins:"
     echo "   nvim"
     echo ""
-    echo "3. Consulta el README.md para más información sobre el uso"
+    echo "3. Check README.md for more usage information"
     echo ""
-    echo -e "${GREEN}¡Disfruta programando con Neodots! 🚀${NC}"
+    echo -e "${GREEN}Happy coding with Neodots! 🚀${NC}"
 }
 
-# Ejecutar función principal
+# Execute main function
 main "$@"

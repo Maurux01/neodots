@@ -1,115 +1,257 @@
-# maurux01's Neovim Configuration
+# Neodots - Modern Neovim Configuration
 
-A minimal, beautiful, and powerful Neovim configuration inspired by kickstart.nvim, featuring VS Code-like functionality with smooth animations and modern UI enhancements.
+A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like functionality with smooth animations and modern UI enhancements. Perfect for developers who want a productive and visually appealing coding environment.
 
 ## ✨ Features
 
-- **🎨 Beautiful UI**: Tokyo Night theme with transparent background
-- **⚡ Fast Performance**: Optimized startup time and lazy loading
-- **🔍 VS Code-like Experience**: Familiar keybindings and workflow
-- **🎭 Smooth Animations**: Animated notifications and transitions
-- **🧩 Modern Plugins**: Latest Neovim plugins for maximum productivity
+- **🎨 Beautiful UI**: Multiple dark themes (Tokyo Night, Catppuccin, Kanagawa, Rose Pine) with transparent backgrounds
+- **⚡ Fast Performance**: Optimized startup time with lazy loading and disabled unused plugins
+- **🔍 VS Code-like Experience**: Familiar keybindings, file explorer, and workflow patterns
+- **🎭 Smooth Animations**: Animated notifications, scrolling, and UI transitions
+- **🧩 Modern Plugin Ecosystem**: Latest Neovim plugins for maximum productivity
+- **🚀 Easy Setup**: Automatic installation scripts for all major platforms
+- **📦 Package Management**: Built-in support for Mason (LSP, DAP, linters, formatters)
 
-## 🚀 Quick Start
+## 🚀 Quick Installation
 
-1. **Backup your current Neovim configuration** (if any):
-   ```bash
-   mv ~/.config/nvim ~/.config/nvim.backup
-   ```
+### Prerequisites
+- **Neovim 0.9.0 or higher**
+- **Git**
+- **Nerd Font** (recommended: FiraCode Nerd Font, JetBrains Mono Nerd Font)
+- **Node.js** (for LSP servers and tools)
+- **Python** (for debugging and additional tools)
 
-2. **Clone this repository**:
-   ```bash
-   git clone https://github.com/maurux01/neodots ~/.config/nvim
-   ```
+### Step 1: Backup (Optional but Recommended)
+```bash
+# Backup your current Neovim configuration if you have one
+mv ~/.config/nvim ~/.config/nvim.backup
+```
 
-Step 2: Run the Automatic Installer
-Choose the installer for your operating system:
+### Step 2: Clone the Repository
+```bash
+git clone https://github.com/maurux01/neodots ~/.config/nvim
+cd ~/.config/nvim
+```
 
-🐧 Linux/macOS:
+### Step 3: Run the Automatic Installer
 
-# Make the script executable and run it
-chmod +x install.sh
-./install.sh
-🪟 Windows (PowerShell):
+#### 🐧 Linux/macOS:
+```bash
+# Use the improved installer script
+./install-fixed.sh
+```
 
+#### 🪟 Windows (PowerShell):
+```powershell
 # Enable script execution and run the installer
 Set-ExecutionPolicy Bypass -Scope Process -Force
 .\install-neodots.ps1
+```
 
-3. **Start Neovim**:
-   ```bash
-   nvim
-   ```
+### Step 4: Start Neovim
+```bash
+nvim
+```
 
-4. **Wait for plugins to install** - Lazy.nvim will automatically install all required plugins.
+The first startup will automatically install all plugins via Lazy.nvim. This may take a few minutes.
 
-## 🛠️ Requirements
+## 📋 System Requirements
 
-- Neovim 0.9.0 or higher
-- Git
-- Nerd Font (recommended: FiraCode Nerd Font)
-- Node.js (for LSP servers)
-- Python (for some plugins)
+### Minimum Requirements
+- **Neovim**: 0.9.0 or higher
+- **RAM**: 4GB+ recommended
+- **Storage**: 2GB+ free space for plugins and tools
 
-## ⌨️ Keybindings
+### Recommended Specifications
+- **Neovim**: Latest stable version
+- **RAM**: 8GB+ for optimal performance
+- **CPU**: Multi-core processor
+- **GPU**: Hardware acceleration support for smooth animations
 
-### File Operations
-- `<leader>e` - Toggle file explorer (NvimTree)
-- `<leader>ff` - Find files (Telescope)
-- `<leader>fg` - Live grep (Telescope)
-- `<leader>fb` - Find buffers (Telescope)
-- `Ctrl+P` - Quick file search (VS Code style)
+## ⌨️ Essential Keybindings
 
-### Navigation
-- `Ctrl+h/j/k/l` - Window navigation
-- `Ctrl+b` - Toggle file explorer
-- `Ctrl+,` - Switch buffers
+### File & Navigation
+| Keybinding | Description |
+|------------|-------------|
+| `<leader>e` | Toggle file explorer (NvimTree) |
+| `<leader>ff` | Find files (Telescope) |
+| `<leader>fg` | Live grep (Telescope) |
+| `<leader>fb` | Find buffers (Telescope) |
+| `Ctrl+P` | Quick file search (VS Code style) |
+| `Ctrl+b` | Toggle file explorer |
+| `Ctrl+,` | Switch buffers |
 
-### LSP & Code
-- `gd` - Go to definition
-- `gr` - Find references
-- `K` - Hover documentation
-- `<leader>rn` - Rename symbol
-- `<leader>f` - Format code
+### Window Management
+| Keybinding | Description |
+|------------|-------------|
+| `Ctrl+h/j/k/l` | Navigate between windows |
+| `<leader>wv` | Split window vertically |
+| `<leader>ws` | Split window horizontally |
+| `<leader>wc` | Close current window |
 
-### Git
-- `<leader>gg` - LazyGit
-- `<leader>gb` - Toggle git blame
-- `<leader>gd` - Git diff
+### LSP & Code Intelligence
+| Keybinding | Description |
+|------------|-------------|
+| `gd` | Go to definition |
+| `gr` | Find references |
+| `K` | Hover documentation |
+| `<leader>rn` | Rename symbol |
+| `<leader>ca` | Code actions |
+| `<leader>f` | Format code |
+| `<leader>d` | Toggle debugger UI |
 
-## 🎯 Plugin Highlights
+### Git Integration
+| Keybinding | Description |
+|------------|-------------|
+| `<leader>gg` | Open LazyGit |
+| `<leader>gb` | Toggle git blame |
+| `<leader>gd` | View git diff |
+| `<leader>gs` | Stage hunk |
+| `<leader>gu` | Undo stage hunk |
 
-- **UI**: tokyonight.nvim, lualine.nvim, nvim-tree.lua
-- **LSP**: nvim-lspconfig, mason.nvim, nvim-cmp
-- **Tools**: telescope.nvim, gitsigns.nvim, nvim-treesitter
-- **Animations**: nvim-notify, neoscroll.nvim
-- **Productivity**: nvim-autopairs, Comment.nvim, indent-blankline.nvim
+### Debugging (DAP)
+| Keybinding | Description |
+|------------|-------------|
+| `<F5>` | Start/continue debugging |
+| `<F9>` | Toggle breakpoint |
+| `<F10>` | Step over |
+| `<F11>` | Step into |
+| `<F12>` | Step out |
+| `<leader>db` | Toggle breakpoint |
+| `<leader>dr` | Open debugger UI |
 
-## 🎨 Customization
+## 🎯 Plugin Ecosystem
 
-The configuration is modular and easy to customize:
+### Core UI & Appearance
+- **tokyonight.nvim** - Beautiful color scheme with multiple variants
+- **lualine.nvim** - Customizable status line
+- **nvim-tree.lua** - File explorer with icons
+- **bufferline.nvim** - Tab-like buffer interface
+- **indent-blankline.nvim** - Indentation guides
 
-- `init.lua` - Main configuration file
-- `lua/config/options.lua` - Neovim options
-- `lua/config/keymaps.lua` - Key mappings
-- `lua/config/autocmds.lua` - Auto commands
+### Language Support
+- **nvim-lspconfig** - Language Server Protocol configuration
+- **mason.nvim** - Package manager for LSP servers, DAP, linters, formatters
+- **nvim-treesitter** - Better syntax highlighting and code parsing
+- **nvim-cmp** - Auto-completion engine
+- **LuaSnip** - Snippet engine
+
+### Productivity Tools
+- **telescope.nvim** - Fuzzy finder for files, grep, and more
+- **gitsigns.nvim** - Git integration in the gutter
+- **Comment.nvim** - Smart commenting
+- **nvim-autopairs** - Auto-pairing of brackets and quotes
+- **which-key.nvim** - Keybinding hints
+
+### Debugging & Testing
+- **nvim-dap** - Debug Adapter Protocol
+- **nvim-dap-ui** - Debugger UI interface
+- **nvim-dap-virtual-text** - Virtual text for debugging
+
+### Animations & Effects
+- **nvim-notify** - Animated notifications
+- **neoscroll.nvim** - Smooth scrolling
+- **mini.animate** - Minimal animations for UI elements
+
+## 🎨 Customization Guide
+
+### Configuration Structure
+```
+~/.config/nvim/
+├── init.lua          # Main entry point
+├── lua/
+│   ├── config/
+│   │   ├── options.lua    # Neovim options
+│   │   ├── keymaps.lua    # Key mappings
+│   │   └── autocmds.lua   # Auto commands
+│   ├── plugins/
+│   │   ├── ui.lua         # UI plugins
+│   │   ├── tools.lua      # Tool plugins
+│   │   └── lsp.lua        # LSP plugins
+│   └── utils/
+│       └── theme_switcher.lua  # Theme utilities
+└── stylua.toml        # Formatting configuration
+```
+
+### Changing Themes
+The configuration includes multiple dark themes. To switch themes:
+
+1. Open `lua/plugins/ui.lua`
+2. Uncomment your preferred theme and comment others
+3. Restart Neovim or run `:colorscheme your-theme-name`
+
+Available themes: `tokyonight`, `catppuccin`, `kanagawa`, `rose-pine`
+
+### Adding New Plugins
+1. Add the plugin to the appropriate file in `lua/plugins/`
+2. Follow the existing pattern for plugin configuration
+3. Run `:Lazy sync` to install the new plugin
+
+### Custom Keybindings
+Edit `lua/config/keymaps.lua` to add or modify keybindings. Follow the existing pattern for consistency.
 
 ## 🔧 Troubleshooting
 
-If you encounter any issues:
+### Common Issues
 
-1. **Update plugins**: `:Lazy update`
-2. **Check health**: `:checkhealth`
-3. **Clear plugin cache**: Delete `~/.local/share/nvim/lazy` and restart Neovim
+#### Plugin Installation Fails
+```bash
+# Clear plugin cache and reinstall
+rm -rf ~/.local/share/nvim/lazy
+nvim  # This will reinstall all plugins
+```
+
+#### LSP Servers Not Working
+```bash
+# Install missing LSP servers via Mason
+:MasonInstall lua_ls pyright tsserver
+```
+
+#### Performance Issues
+```bash
+# Check startup time
+nvim --startuptime startup.log
+# Disable heavy plugins temporarily if needed
+```
+
+#### Debugger Not Working
+Ensure required dependencies are installed:
+```bash
+# For Python debugging
+pip install debugpy
+```
+
+### Health Check
+Run `:checkhealth` in Neovim to diagnose common issues with:
+- LSP servers
+- Treesitter parsers
+- Plugin dependencies
+
+### Getting Help
+1. Check the `:help` documentation in Neovim
+2. Review plugin documentation for specific issues
+3. Open an issue on GitHub with detailed error messages
 
 ## 📝 License
 
-MIT License - feel free to use and modify this configuration!
+MIT License - feel free to use, modify, and distribute this configuration.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to open issues or pull requests for improvements.
+Contributions are welcome! Please feel free to:
+- Open issues for bugs or feature requests
+- Submit pull requests for improvements
+- Share your customizations and tips
+
+### Development Setup
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ---
 
-**Enjoy your new Neovim experience!** 🎉
+**Happy Coding!** 🚀
+
+*If you enjoy this configuration, consider giving it a star on GitHub!*
