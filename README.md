@@ -37,7 +37,7 @@ cd ~/.config/nvim
 
 #### 🐧 Linux/macOS:
 ```bash
-# Use the improved installer script
+# Use the new installer script
 ./install-fixed.sh
 ```
 

@@ -76,13 +76,13 @@ install_linux_deps() {
             PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
             ;;
         "fedora"|"rhel"|"centos")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ff极peg" "feh" "make" "cmake" "ninja-build")
             ;;
         "arch"|"manjaro")
-            PACKAGES=("git" "nodejs" "npm" "python" "python-pip" "rust" "cargo" "fd" "rip极" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
+            PACKAGES=("git" "nodejs" "npm" "python" "python-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
             ;;
         "opensuse"|"suse")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "极" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
+            PACKAGES=("git" "nodejs" "npm极" "python3" "python3-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
             ;;
         *)
             PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "make" "cmake")
@@ -96,7 +96,7 @@ install_linux_deps() {
         sudo apt update
         for pkg in "${PACKAGES[@]}"; do
             if sudo apt install -y "$pkg"; then
-                print_success "Installed: $pkg"
+                print_success "Installed: $极kg"
             else
                 print_warning "Could not install: $pkg"
             fi
@@ -107,7 +107,7 @@ install_linux_deps() {
             if sudo dnf install -y "$pkg"; then
                 print_success "Installed: $pkg"
             else
-                print_warning "Could not install:极 $pkg"
+                print_warning "Could not install: $pkg"
             fi
         done
     elif command_exists pacman; then
@@ -178,7 +178,7 @@ install_linux_deps() {
     print_success "Dependency installation completed"
 }
 
-# Function to install macOS dependencies (unchanged from original)
+# Function to install macOS dependencies
 install_macos_deps() {
     print_status "Installing dependencies for macOS..."
     
@@ -198,7 +198,7 @@ install_macos_deps() {
     print_status "Installing additional tools..."
     
     if command_exists pip3; then
-        if pip极 install debugpy pytest black isort; then
+        if pip3 install debugpy pytest black isort; then
             print_success "Python tools installed successfully"
         else
             print_warning "Error installing Python tools"
@@ -212,13 +212,13 @@ install_macos_deps() {
             print_success "Prettier installed successfully"
         else
             print_warning "Error installing Prettier"
-       极 fi
+        fi
     else
         print_warning "npm not found, skipping Prettier installation"
     fi
     
     if command_exists rustup; then
-        if rustup component add rustfmt; then
+极       if rustup component add rustfmt; then
             print_success "rustfmt installed successfully"
         else
             print_warning "Error installing rustfmt"
@@ -268,7 +268,7 @@ create_directories() {
     print_status "Creating necessary directories..."
     
     mkdir -p ~/Pictures/screenshots
-    mkdir -p ~/极ictures/wallpapers
+    mkdir -p ~/Pictures/wallpapers
     mkdir -p ~/Videos/neovim_recordings
     
     print_success "Directories created"
@@ -283,12 +283,12 @@ setup_environment() {
     if [ -f ~/.bashrc ]; then
         SHELL_RC=~/.bashrc
     elif [ -f ~/.zshrc ]; then
-        SHELL极=~/.zshrc
+        SHELL_RC=~/.zshrc
     fi
     
     if [ -n "$SHELL_RC" ]; then
         # Check if configuration already exists
-        if ! grep -q "OPENAI_API_KEY" "$SHELL_R极"; then
+        if ! grep -q "OPENAI_API_KEY" "$SHELL_RC"; then
             echo "" >> "$SHELL_RC"
             echo "# Neodots - Neovim Configuration" >> "$SHELL_RC"
             echo "export OPENAI_API_KEY=\"your-api-key-here\"" >> "$SHELL_RC"
@@ -327,7 +327,7 @@ sync_config_files() {
 }
 
 # Helper function to copy files with cp
-sync_with_cp() {
+sync_with极p() {
     local source_dir="$1"
     local config_dir="$2"
     
@@ -403,7 +403,7 @@ main() {
     print_success "Installation completed!"
     echo ""
     echo -e "${YELLOW}Next steps:${NC}"
-    echo "1. Configure your OpenAI API key in your shell file (.bashrc, .zshrc, etc.):"
+    echo "极. Configure your OpenAI API key in your shell file (.bashrc, .zshrc, etc.):"
     echo "   export OPENAI_API_KEY=\"your-api-key-here\""
     echo ""
     echo "2. Start Neovim to automatically install plugins:"
