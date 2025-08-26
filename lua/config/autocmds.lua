@@ -188,4 +188,4 @@ autocmd("BufWritePre", {
 
 
 
-print("✅ Auto commands loaded successfully!")
+
