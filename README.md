@@ -11,6 +11,9 @@ A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like f
 - **🧩 Modern Plugin Ecosystem**: Latest Neovim plugins for maximum productivity
 - **🚀 Easy Setup**: Automatic installation scripts for all major platforms
 - **📦 Package Management**: Built-in support for Mason (LSP, DAP, linters, formatters)
+- **🖱️ Multi-cursor Support**: VS Code-like multi-cursor editing with vim-visual-multi
+- **🤖 AI Code Completion**: Inline code suggestions with Codeium (free GitHub Copilot alternative)
+- **💻 Enhanced Terminal**: Floating, horizontal, and vertical terminal with ToggleTerm
 
 ## 🚀 Quick Installation
 
@@ -100,6 +103,34 @@ The first startup will automatically install all plugins via Lazy.nvim. This may
 | `<leader>ca` | Code actions |
 | `<leader>f` | Format code |
 | `<leader>d` | Toggle debugger UI |
+
+### Multi-cursor Editing
+| Keybinding | Description |
+|------------|-------------|
+| `Ctrl+d` | Select word under cursor (add cursor) |
+| `Ctrl+Alt+d` | Select all occurrences of word |
+| `Ctrl+Alt+j/k` | Add cursor up/down |
+
+### AI Code Completion (Codeium)
+| Keybinding | Description |
+|------------|-------------|
+| `Ctrl+g` | Accept AI suggestion |
+| `Ctrl+;` | Next suggestion |
+| `Ctrl+,` | Previous suggestion |
+| `Ctrl+x` | Clear suggestions |
+
+### Enhanced Terminal
+| Keybinding | Description |
+|------------|-------------|
+| `Ctrl+\` | Toggle floating terminal |
+| `<leader>tt` | Toggle terminal |
+| `<leader>tf` | Floating terminal |
+| `<leader>th` | Horizontal terminal |
+| `<leader>tv` | Vertical terminal |
+| `<leader>tg` | LazyGit terminal |
+| `<leader>tn` | Node.js REPL |
+| `<leader>tp` | Python REPL |
+| `<leader>ts` | PowerShell terminal |
 
 ### Git Integration
 | Keybinding | Description |

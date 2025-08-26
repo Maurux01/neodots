@@ -70,6 +70,9 @@ require("config.autocmds")
 -- Load theme switcher utility
 require("utils.theme_switcher")
 
+-- Load health check utility
+require("utils.health_check")
+
 -- Set colorscheme
 vim.cmd("colorscheme tokyonight")
 

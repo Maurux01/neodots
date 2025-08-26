@@ -56,9 +56,15 @@ map("n", "<leader>s", ":Telescope lsp_document_symbols<CR>", opts) -- Document s
 map("n", "<leader>sr", ":%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>", opts) -- Search and replace current word
 map("n", "<leader>sw", ":Telescope grep_string<CR>", opts) -- Search word under cursor
 
--- Terminal
-map("n", "<leader>tt", ":terminal<CR>", opts) -- Open terminal
+-- Terminal (ToggleTerm) - Los keymaps principales están en el plugin
+map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<CR>", opts) -- Floating terminal
+map("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<CR>", opts) -- Horizontal terminal
+map("n", "<leader>tv", "<cmd>ToggleTerm direction=vertical size=80<CR>", opts) -- Vertical terminal
 map("t", "<Esc>", "<C-\\><C-n>", opts) -- Exit terminal mode
+map("t", "<C-h>", "<C-\\><C-n><C-w>h", opts) -- Navigate from terminal
+map("t", "<C-j>", "<C-\\><C-n><C-w>j", opts)
+map("t", "<C-k>", "<C-\\><C-n><C-w>k", opts)
+map("t", "<C-l>", "<C-\\><C-n><C-w>l", opts)
 
 -- Utility mappings
 map("n", "<leader>w", ":w<CR>", opts) -- Save file
@@ -66,8 +72,8 @@ map("n", "<leader>q", ":q<CR>", opts) -- Quit
 map("n", "<leader>Q", ":qa!<CR>", opts) -- Force quit all
 map("n", "<leader>x", ":x<CR>", opts) -- Save and quit
 
--- Theme switching
-map("n", "<leader>th", ":lua switch_theme()<CR>", opts) -- Switch theme
+-- Theme switching (cambio de th a ts para evitar conflicto con terminal)
+map("n", "<leader>ts", ":lua switch_theme()<CR>", opts) -- Switch theme
 
 -- Toggle options
 map("n", "<leader>tl", ":set number!<CR>", opts) -- Toggle line numbers
@@ -79,33 +85,22 @@ map("n", "<leader>tw", ":set wrap!<CR>", opts) -- Toggle word wrap
 map("n", "<leader>cc", ":CommentToggle<CR>", opts) -- Toggle comment
 map("n", "<leader>uu", ":UndotreeToggle<CR>", opts) -- Toggle undo tree
 
--- Which-key like descriptions
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
+-- Multi-cursor mappings (vim-visual-multi)
+-- Ctrl+D para seleccionar palabra bajo cursor (como VS Code)
+-- Ctrl+Alt+D para seleccionar todas las ocurrencias
+-- Ctrl+Alt+J/K para agregar cursores arriba/abajo
 
-    -- Buffer local mappings.
-    local bufopts = { noremap = true, silent = true, buffer = ev.buf }
-    map("n", "gD", vim.lsp.buf.declaration, bufopts)
-    map("n", "gd", vim.lsp.buf.definition, bufopts)
-    map("n", "K", vim.lsp.buf.hover, bufopts)
-    map("n", "gi", vim.lsp.buf.implementation, bufopts)
-    map("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-    map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts)
-    map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, bufopts)
-    map("n", "<leader>wl", function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, bufopts)
-    map("n", "<leader>D", vim.lsp.buf.type_definition, bufopts)
-    map("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
-    map("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
-    map("n", "gr", vim.lsp.buf.references, bufopts)
-    map("n", "<leader>f", function()
-      vim.lsp.buf.format { async = true }
-    end, bufopts)
-  end,
-})
+-- Codeium AI completions
+-- Ctrl+G para aceptar sugerencia
+-- Ctrl+; para siguiente sugerencia
+-- Ctrl+, para sugerencia anterior
+-- Ctrl+X para limpiar sugerencias
+
+-- Autocompletado mejorado (nvim-cmp)
+-- Tab/Shift-Tab para navegar sugerencias
+-- Enter para confirmar
+-- Ctrl+Space para activar completado manual
+
+-- LSP keymaps are configured in lua/plugins/lsp.lua
 
 

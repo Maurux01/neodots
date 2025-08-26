@@ -8,8 +8,10 @@ return {
     branch = "0.1.x",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
+      {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = "make",
+      },
     },
     config = function()
       require("telescope").setup({
@@ -138,4 +140,93 @@ return {
       vim.g["prettier#exec_cmd_path"] = "prettier"
     end,
   },
+
+  -- Multi-cursor support
+  {
+    "mg979/vim-visual-multi",
+    event = "VeryLazy",
+    init = function()
+      vim.g.VM_maps = {
+        ["Find Under"] = "<C-d>",
+        ["Find Subword Under"] = "<C-d>",
+        ["Select All"] = "<C-A-d>",
+        ["Add Cursor Down"] = "<C-A-j>",
+        ["Add Cursor Up"] = "<C-A-k>",
+      }
+    end,
+  },
+
+  -- AI Code completion (Codeium - free alternative to Copilot)
+  {
+    "Exafunction/codeium.vim",
+    event = "BufEnter",
+    init = function()
+      vim.g.codeium_disable_bindings = 1
+    end,
+    config = function()
+      vim.keymap.set("i", "<C-g>", function() return vim.fn["codeium#Accept"]() end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-;>", function() return vim.fn["codeium#CycleCompletions"](1) end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-,>", function() return vim.fn["codeium#CycleCompletions"](-1) end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-x>", function() return vim.fn["codeium#Clear"]() end, { expr = true, silent = true })
+    end,
+  },
+
+  -- Enhanced terminal
+  {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    cmd = { "ToggleTerm", "TermExec" },
+    keys = {
+      { "<C-\>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+    },
+    config = function()
+      require("toggleterm").setup({
+        size = 20,
+        open_mapping = [[<C-\>]],
+        hide_numbers = true,
+        shade_terminals = true,
+        shading_factor = 2,
+        start_in_insert = true,
+        insert_mappings = true,
+        persist_size = true,
+        direction = "float",
+        close_on_exit = true,
+        shell = vim.o.shell,
+        float_opts = {
+          border = "curved",
+          winblend = 0,
+          highlights = {
+            border = "Normal",
+            background = "Normal",
+          },
+        },
+      })
+      
+      -- Setup custom terminals after toggleterm is loaded
+      local Terminal = require("toggleterm.terminal").Terminal
+      
+      local lazygit = Terminal:new({
+        cmd = "lazygit",
+        dir = "git_dir",
+        direction = "float",
+        float_opts = { border = "double" },
+        on_open = function(term)
+          vim.cmd("startinsert!")
+          vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+        end,
+      })
+      
+      local node = Terminal:new({ cmd = "node", direction = "float", float_opts = { border = "double" } })
+      local python = Terminal:new({ cmd = "python", direction = "float", float_opts = { border = "double" } })
+      local powershell = Terminal:new({ cmd = "powershell", direction = "float", float_opts = { border = "double" } })
+      
+      vim.keymap.set("n", "<leader>tg", function() lazygit:toggle() end, { desc = "LazyGit" })
+      vim.keymap.set("n", "<leader>tn", function() node:toggle() end, { desc = "Node REPL" })
+      vim.keymap.set("n", "<leader>tp", function() python:toggle() end, { desc = "Python REPL" })
+      vim.keymap.set("n", "<leader>ts", function() powershell:toggle() end, { desc = "PowerShell" })
+    end,
+  },
+
+
 }
