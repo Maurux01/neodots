@@ -7,7 +7,6 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
       "hrsh7th/nvim-cmp",
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -21,25 +20,14 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       
       require("mason").setup()
-      require("mason-lspconfig").setup()
       
-      local servers = { 
-        "lua_ls", 
-        "pyright", 
-        "ts_ls",
-        "html",
-        "cssls",
-        "jsonls",
-        "bashls",
-        "dockerls",
-        "yamlls"
-      }
-
-      for _, server in ipairs(servers) do
-        require("lspconfig")[server].setup({
-          capabilities = capabilities,
-        })
-      end
+      -- Setup LSP servers directly
+      require("lspconfig").lua_ls.setup({ capabilities = capabilities })
+      require("lspconfig").pyright.setup({ capabilities = capabilities })
+      require("lspconfig").ts_ls.setup({ capabilities = capabilities })
+      require("lspconfig").html.setup({ capabilities = capabilities })
+      require("lspconfig").cssls.setup({ capabilities = capabilities })
+      require("lspconfig").jsonls.setup({ capabilities = capabilities })
 
       -- nvim-cmp setup
       local cmp = require("cmp")

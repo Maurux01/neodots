@@ -24,24 +24,37 @@ vim.opt.rtp:prepend(lazypath)
 require("config.options")
 
 -- Setup lazy.nvim with all plugins
-local plugins = {}
+local plugins = {
+  -- Essential plugins loaded directly
+  { "folke/tokyonight.nvim", priority = 1000, config = function() vim.cmd("colorscheme tokyonight") end },
+  { "nvim-tree/nvim-tree.lua", dependencies = { "nvim-tree/nvim-web-devicons" }, config = function() require("nvim-tree").setup() end },
+  { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" }, config = function() require("lualine").setup() end },
+  { "goolord/alpha-nvim", event = "VimEnter", config = function() require("alpha").setup(require("alpha.themes.dashboard").config) end },
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" }, config = function() require("telescope").setup() end },
+  { "folke/which-key.nvim", config = function() require("which-key").setup() end },
+  { "rcarriga/nvim-notify", config = function() vim.notify = require("notify") end },
+}
 
--- Load UI plugins
-local ui_plugins = require("plugins.ui")
-for _, plugin in ipairs(ui_plugins) do
-  table.insert(plugins, plugin)
+-- Load additional plugins from files
+local ok, ui_plugins = pcall(require, "plugins.ui")
+if ok then
+  for _, plugin in ipairs(ui_plugins) do
+    table.insert(plugins, plugin)
+  end
 end
 
--- Load tools plugins
-local tools_plugins = require("plugins.tools")
-for _, plugin in ipairs(tools_plugins) do
-  table.insert(plugins, plugin)
+local ok, tools_plugins = pcall(require, "plugins.tools")
+if ok then
+  for _, plugin in ipairs(tools_plugins) do
+    table.insert(plugins, plugin)
+  end
 end
 
--- Load LSP plugins
-local lsp_plugins = require("plugins.lsp")
-for _, plugin in ipairs(lsp_plugins) do
-  table.insert(plugins, plugin)
+local ok, lsp_plugins = pcall(require, "plugins.lsp")
+if ok then
+  for _, plugin in ipairs(lsp_plugins) do
+    table.insert(plugins, plugin)
+  end
 end
 
 require("lazy").setup(plugins, {
