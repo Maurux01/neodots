@@ -20,6 +20,7 @@ A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like f
 - **Nerd Font** (recommended: FiraCode Nerd Font, JetBrains Mono Nerd Font)
 - **Node.js** (for LSP servers and tools)
 - **Python** (for debugging and additional tools)
+- **Build tools**: `make`, `npm` (for building some plugins)
 
 ### Step 1: Backup (Optional but Recommended)
 ```bash
@@ -150,7 +151,7 @@ The first startup will automatically install all plugins via Lazy.nvim. This may
 
 ### Animations & Effects
 - **nvim-notify** - Animated notifications
-- **neoscroll.nvim** - Smooth scrolling
+
 - **mini.animate** - Minimal animations for UI elements
 
 ## 🎨 Customization Guide
@@ -174,11 +175,7 @@ The first startup will automatically install all plugins via Lazy.nvim. This may
 ```
 
 ### Changing Themes
-The configuration includes multiple dark themes. To switch themes:
-
-1. Open `lua/plugins/ui.lua`
-2. Uncomment your preferred theme and comment others
-3. Restart Neovim or run `:colorscheme your-theme-name`
+The configuration includes multiple dark themes. To switch themes, use the `<leader>th` keybinding.
 
 Available themes: `tokyonight`, `catppuccin`, `kanagawa`, `rose-pine`
 

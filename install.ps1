@@ -22,6 +22,11 @@ function Write-Success($message) { Write-Host "[+] $message" -ForegroundColor Gr
 function Write-Warning($message) { Write-Host "[!] $message" -ForegroundColor $colors.warning }
 function Write-Error($message) { Write-Host "[✗] $message" -ForegroundColor $colors.error; exit 1 }
 
+# Check if a command is installed
+function Test-CommandInstalled($command) {
+    return (Get-Command $command -ErrorAction SilentlyContinue) -ne $null
+}
+
 # Check if Node.js is installed
 function Test-NodeJsInstalled {
     return (Get-Command node -ErrorAction SilentlyContinue) -or (Get-Command nodejs -ErrorAction SilentlyContinue)
@@ -181,10 +186,14 @@ function Install-Neodots {
     
     # Install in user space
     Write-Info "Installing in user space..."
+
+    # 1. Check for Git
+    if (-not (Test-CommandInstalled "git")) {
+        Write-Error "Git is not installed. Please install it first and run this script again."
+    }
     
-    # 1. Install required packages
+    # 2. Install required packages
     $packages = @(
-        "git",       # Version control
         "nodejs",    # For LSP and other tools (handled specially)
         "python"     # For Python support
     )
