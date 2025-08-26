@@ -58,24 +58,35 @@ return {
   -- Auto pairs
   {
     "windwp/nvim-autopairs",
+    event = "InsertEnter",
     config = function()
       require("nvim-autopairs").setup({
-        check_ts = true, -- Treesitter integration
+        check_ts = true,
         ts_config = {
           lua = { "string", "source" },
           javascript = { "string", "template_string" },
         },
       })
+      
+      -- Integration with nvim-cmp
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      local cmp = require('cmp')
+      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
     end,
   },
 
   -- Auto close HTML/JSX tags
   {
     "windwp/nvim-ts-autotag",
+    ft = { "html", "xml", "javascript", "typescript", "jsx", "tsx", "vue", "svelte" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
       require("nvim-ts-autotag").setup({
-        filetypes = { "html", "xml", "javascript", "typescript", "jsx", "tsx", "vue", "svelte" },
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = false
+        },
       })
     end,
   },
@@ -485,6 +496,29 @@ return {
       require("live-server").setup({
         args = { "--port=8080", "--browser=default" }
       })
+    end,
+  },
+
+  -- Beautiful command line with suggestions
+  {
+    "gelguy/wilder.nvim",
+    event = "CmdlineEnter",
+    config = function()
+      local wilder = require('wilder')
+      wilder.setup({modes = {':', '/', '?'}})
+      
+      wilder.set_option('renderer', wilder.popupmenu_renderer(
+        wilder.popupmenu_border_theme({
+          highlights = {
+            border = 'Normal',
+          },
+          border = 'rounded',
+          max_height = '75%',
+          min_height = 0,
+          prompt_position = 'top',
+          reverse = 0,
+        })
+      ))
     end,
   },
 

@@ -23,6 +23,7 @@ return {
   -- LSP Configuration
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
       "hrsh7th/nvim-cmp",
