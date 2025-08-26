@@ -111,6 +111,45 @@ return {
     end,
   },
 
+  -- TODO/FIXME comments highlighting
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("todo-comments").setup({
+        keywords = {
+          FIX = { icon = " ", color = "error", alt = { "FIXME", "BUG" } },
+          TODO = { icon = " ", color = "info" },
+          HACK = { icon = " ", color = "warning" },
+          WARN = { icon = " ", color = "warning" },
+          NOTE = { icon = " ", color = "hint" },
+        },
+      })
+    end,
+  },
+
+  -- Auto-format on save
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.prettier,
+          null_ls.builtins.formatting.stylua,
+        },
+      })
+      
+      -- Auto-format on save
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        callback = function()
+          vim.lsp.buf.format({ async = false })
+        end,
+      })
+    end,
+  },
+
   -- Better quickfix
   {
     "kevinhwang91/nvim-bqf",

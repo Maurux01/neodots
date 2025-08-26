@@ -5,6 +5,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Terminal colors
+vim.opt.termguicolors = true
+
 -- Enable true colors
 vim.opt.termguicolors = true
 
