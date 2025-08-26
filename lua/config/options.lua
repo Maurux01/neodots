@@ -127,3 +127,38 @@ vim.fn.sign_define("DiagnosticSignInfo", { text = "", texthl = "DiagnosticSig
 vim.fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
 
 
+-- Default commentstring for various file types
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  callback = function()
+    local commentstrings = {
+      lua = "-- %s",
+      python = "# %s",
+      javascript = "// %s",
+      typescript = "// %s",
+      html = "<!-- %s -->",
+      css = "/* %s */",
+      json = "",
+      markdown = "<!-- %s -->",
+      vim = '" %s',
+      bash = "# %s",
+      sh = "# %s",
+      zsh = "# %s",
+      fish = "# %s",
+      yaml = "# %s",
+      toml = "# %s",
+      ini = "; %s",
+      conf = "# %s",
+      dockerfile = "# %s",
+      gitignore = "# %s",
+      gitconfig = "# %s",
+    }
+    
+    local ft = vim.bo.filetype
+    if commentstrings[ft] then
+      vim.bo.commentstring = commentstrings[ft]
+    elseif vim.bo.commentstring == "" then
+      vim.bo.commentstring = "# %s"
+    end
+  end,
+})
