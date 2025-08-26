@@ -9,7 +9,8 @@ vim.g.maplocalleader = " "
 -- Install lazy.nvim if not already installed
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
+  print("Installing lazy.nvim...")
+  local result = vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
@@ -17,16 +18,38 @@ if not vim.loop.fs_stat(lazypath) then
     "--branch=stable",
     lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    print("Error installing lazy.nvim: " .. result)
+    print("Please install Git and try again")
+    return
+  end
+  print("lazy.nvim installed successfully!")
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- Load options
 require("config.options")
 
--- Import plugin configurations
-local ui_plugins = require("plugins.ui")
-local tools_plugins = require("plugins.tools")
-local lsp_plugins = require("plugins.lsp")
+-- Check if lazy.nvim is available
+local lazy_available, lazy = pcall(require, "lazy")
+if not lazy_available then
+  print("lazy.nvim not found. Please install Git and restart Neovim.")
+  return
+end
+
+-- Import plugin configurations with error handling
+local function safe_require(module)
+  local ok, result = pcall(require, module)
+  if not ok then
+    print("Error loading " .. module .. ": " .. result)
+    return {}
+  end
+  return result
+end
+
+local ui_plugins = safe_require("plugins.ui")
+local tools_plugins = safe_require("plugins.tools")
+local lsp_plugins = safe_require("plugins.lsp")
 
 -- Combine all plugins
 local plugins = {}
@@ -41,7 +64,7 @@ for _, plugin in ipairs(lsp_plugins) do
 end
 
 -- Configure plugins
-require("lazy").setup(plugins, {
+lazy.setup(plugins, {
   install = {
     colorscheme = { "tokyonight" },
   },
@@ -61,19 +84,15 @@ require("lazy").setup(plugins, {
   },
 })
 
--- Load keymaps
-require("config.keymaps")
+-- Load configurations with error handling
+pcall(require, "config.keymaps")
+pcall(require, "config.autocmds")
+pcall(require, "utils.theme_switcher")
+pcall(require, "utils.health_check")
 
--- Load auto commands
-require("config.autocmds")
-
--- Load theme switcher utility
-require("utils.theme_switcher")
-
--- Load health check utility
-require("utils.health_check")
-
--- Set colorscheme
-vim.cmd("colorscheme tokyonight")
+-- Set colorscheme with fallback
+pcall(function()
+  vim.cmd("colorscheme tokyonight")
+end)
 
 
