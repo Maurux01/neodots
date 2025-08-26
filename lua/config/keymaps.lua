@@ -17,7 +17,8 @@ map("n", "<F2>", ":NvimTreeToggle<CR>", opts)
 map("n", "<S-l>", ":bnext<CR>", opts)
 map("n", "<S-h>", ":bprevious<CR>", opts)
 map("n", "<C-t>", ":enew<CR>", opts)
-map("n", "<C-w>", ":bdelete<CR>", opts)
+map("n", "<C-q>", ":bdelete<CR>", opts)
+map("n", "<leader>n", ":enew<CR>", opts)
 
 -- Terminal
 map("t", "<Esc>", "<C-\\><C-n>", opts)
