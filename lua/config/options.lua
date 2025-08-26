@@ -18,6 +18,15 @@ vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = false
 
+-- Force line numbers in all buffers
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinEnter" }, {
+  pattern = "*",
+  callback = function()
+    vim.wo.number = true
+    vim.wo.relativenumber = false
+  end,
+})
+
 -- Tab and indentation
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
@@ -44,7 +53,7 @@ vim.opt.cmdheight = 1
 
 -- Show whitespace characters
 vim.opt.list = true
-vim.opt.listchars = { space = "·", tab = "··", trail = "·", nbsp = "␣" }
+vim.opt.listchars = { space = ".", tab = "..", trail = ".", nbsp = "+" }
 
 -- Backspace behavior
 vim.opt.backspace = "indent,eol,start"
