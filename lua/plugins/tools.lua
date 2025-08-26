@@ -126,4 +126,16 @@ return {
     end,
     ft = { "markdown" },
   },
+
+  -- Prettier code formatter
+  {
+    "prettier/vim-prettier",
+    build = "npm install",
+    ft = { "javascript", "typescript", "css", "scss", "json", "html", "vue", "svelte", "yaml", "markdown" },
+    config = function()
+      vim.g["prettier#autoformat"] = 1
+      vim.g["prettier#autoformat_require_pragma"] = 0
+      vim.g["prettier#exec_cmd_path"] = "prettier"
+    end,
+  },
 }
