@@ -20,6 +20,9 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       
       require("mason").setup()
+      
+      -- Configure mason-lspconfig with automatic installation disabled
+      -- to avoid the 'enable' field nil error
       require("mason-lspconfig").setup({
         ensure_installed = { 
           "lua_ls", 
@@ -32,6 +35,7 @@ return {
           "dockerls",
           "yamlls"
         },
+        automatic_installation = false, -- Disable automatic installation to avoid the error
       })
 
       require("mason-lspconfig").setup_handlers({
