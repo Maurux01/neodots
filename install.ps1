@@ -70,7 +70,7 @@ function Install-NodeJs {
     return $false
 }
 
-# Install a package using Chocolatey
+# Install a package using available package managers
 function Install-Package($package) {
     # Special handling for nodejs
     if ($package -eq "nodejs") {
@@ -88,24 +88,45 @@ function Install-Package($package) {
     
     Write-Info "Installing $package..."
     
-    if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-        Write-Warning "Chocolatey not available for installing $package"
-        return $false
+    # Try winget first (built into Windows 10/11)
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        try {
+            # Different package names for winget
+            $wingetPackage = $package
+            if ($package -eq "python") {
+                $wingetPackage = "Python.Python.3"
+            } elseif ($package -eq "git") {
+                $wingetPackage = "Git.Git"
+            }
+            
+            winget install --id $wingetPackage --silent --accept-package-agreements --accept-source-agreements
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "$package installed successfully via winget"
+                return $true
+            }
+        } catch {
+            Write-Warning "Failed to install $package via winget"
+        }
     }
     
-    try {
-        choco install $package -y --no-progress --scope=user
-        if ($LASTEXITCODE -eq 0) {
-            Write-Success "$package installed successfully"
-            return $true
-        } else {
-            Write-Warning "Failed to install $package"
-            return $false
+    # Try Chocolatey if available
+    if (Get-Command choco -ErrorAction SilentlyContinue) {
+        try {
+            choco install $package -y --no-progress --scope=user
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "$package installed successfully via Chocolatey"
+                return $true
+            } else {
+                Write-Warning "Failed to install $package via Chocolatey"
+            }
+        } catch {
+            Write-Warning "Error installing $package via Chocolatey: $_"
         }
-    } catch {
-        Write-Warning "Error installing $package: $_"
-        return $false
     }
+    
+    Write-Warning "Could not install $package automatically"
+    Write-Host "  Please install $package manually or try running the script again" -ForegroundColor Yellow
+    return $false
 }
 
 # Copy configuration files to Neovim directories
