@@ -212,28 +212,43 @@ install_neovim() {
     fi
 }
 
-# Function to backup existing config
-backup_config() {
+# Function to remove existing config
+remove_existing_config() {
     NVIM_CONFIG="$HOME/.config/nvim"
+    NVIM_DATA="$HOME/.local/share/nvim"
+    NVIM_STATE="$HOME/.local/state/nvim"
+    
+    print_status "Removing existing Neovim configuration and data..."
     
     if [ -d "$NVIM_CONFIG" ]; then
-        BACKUP_DIR="$HOME/.config/nvim.backup.$(date +%Y%m%d-%H%M%S)"
-        print_status "Backing up existing Neovim config to $BACKUP_DIR"
-        mv "$NVIM_CONFIG" "$BACKUP_DIR"
-        print_success "Backup created: $BACKUP_DIR"
+        rm -rf "$NVIM_CONFIG"
+        print_success "Removed existing config"
+    fi
+    
+    if [ -d "$NVIM_DATA" ]; then
+        rm -rf "$NVIM_DATA"
+        print_success "Removed existing data"
+    fi
+    
+    if [ -d "$NVIM_STATE" ]; then
+        rm -rf "$NVIM_STATE"
+        print_success "Removed existing state"
     fi
 }
 
 # Function to install Neodots config
 install_neodots() {
-    print_status "Installing Neodots configuration..."
+    print_status "Copying Neodots configuration..."
     
     NVIM_CONFIG="$HOME/.config/nvim"
     
-    # Clone the repository
-    git clone https://github.com/maurux01/neodots.git "$NVIM_CONFIG"
+    # Create config directory
+    mkdir -p "$HOME/.config"
     
-    print_success "Neodots configuration installed!"
+    # Copy current directory to nvim config
+    cp -r "." "$NVIM_CONFIG"
+    
+    print_success "Neodots configuration copied!"
 }
 
 # Function to install Nerd Font
@@ -291,8 +306,8 @@ main() {
     # Install Nerd Font
     install_nerd_font
     
-    # Backup existing config
-    backup_config
+    # Remove existing config
+    remove_existing_config
     
     # Install Neodots
     install_neodots

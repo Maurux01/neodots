@@ -10,14 +10,25 @@ if errorlevel 1 (
     exit /b 1
 )
 
+echo 🗑️ Removing existing Neovim configuration...
+if exist "%LOCALAPPDATA%\nvim" (
+    rmdir /s /q "%LOCALAPPDATA%\nvim"
+    echo ✅ Removed existing config
+)
+if exist "%LOCALAPPDATA%\nvim-data" (
+    rmdir /s /q "%LOCALAPPDATA%\nvim-data"
+    echo ✅ Removed existing data
+)
+
 echo 📦 Installing Scoop and dependencies...
 powershell -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; irm get.scoop.sh | iex"
 
 echo 🔧 Installing tools...
 powershell -ExecutionPolicy Bypass -Command "scoop install git neovim nodejs python make gcc"
 
-echo 📥 Installing Neodots configuration...
-powershell -ExecutionPolicy Bypass -Command "git clone https://github.com/maurux01/neodots.git $env:LOCALAPPDATA\nvim"
+echo 📥 Copying Neodots configuration...
+xcopy /e /i /h /y "." "%LOCALAPPDATA%\nvim"
+echo ✅ Configuration copied
 
 echo.
 echo ✅ Installation complete!
