@@ -271,6 +271,25 @@ rm -rf ~/.local/share/nvim/lazy/nvim-treesitter*
 nvim
 ```
 
+#### Plugin Update Conflicts (Local Changes)
+```bash
+# If plugins have local changes preventing updates:
+# In Lazy.nvim interface:
+# 1. Press 'x' to remove the problematic plugin
+# 2. Press 'I' to install it again
+
+# Or manually remove specific plugins:
+# Windows PowerShell
+rm -Force -Recurse ~\AppData\Local\nvim-data\lazy\markdown-preview.nvim
+rm -Force -Recurse ~\AppData\Local\nvim-data\lazy\nvim-treesitter
+
+# Linux/macOS
+rm -rf ~/.local/share/nvim/lazy/markdown-preview.nvim
+rm -rf ~/.local/share/nvim/lazy/nvim-treesitter
+
+# Then run :Lazy sync in Neovim
+```
+
 #### LSP Servers Not Working
 ```bash
 # Install missing LSP servers via Mason
