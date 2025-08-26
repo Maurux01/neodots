@@ -81,6 +81,9 @@ vim.opt.timeoutlen = 300
 -- Completion
 vim.opt.completeopt = "menuone,noselect"
 
+-- Hide mode text (INSERT, VISUAL, etc.) since lualine shows it
+vim.opt.showmode = false
+
 -- Mouse support
 vim.opt.mouse = "a"
 
