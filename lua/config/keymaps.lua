@@ -123,7 +123,7 @@ map("n", "zr", ":lua require('ufo').openFoldsExceptKinds()<CR>", opts) -- Open f
 map("n", "zm", ":lua require('ufo').closeFoldsWith()<CR>", opts) -- Close folds with
 
 -- Twilight (dim inactive code)
-map("n", "<leader>tw", ":Twilight<CR>", opts) -- Toggle twilight
+map("n", "<leader>td", ":Twilight<CR>", opts) -- Toggle twilight
 
 -- Session management
 map("n", "<leader>ss", ":SessionSave<CR>", opts) -- Save session

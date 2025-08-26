@@ -364,7 +364,7 @@ return {
       vim.keymap.set("n", "<leader>tg", function() lazygit:toggle() end, { desc = "LazyGit" })
       vim.keymap.set("n", "<leader>tn", function() node:toggle() end, { desc = "Node REPL" })
       vim.keymap.set("n", "<leader>tp", function() python:toggle() end, { desc = "Python REPL" })
-      vim.keymap.set("n", "<leader>ts", function() powershell:toggle() end, { desc = "PowerShell" })
+      vim.keymap.set("n", "<leader>tps", function() powershell:toggle() end, { desc = "PowerShell" })
     end,
   },
 
