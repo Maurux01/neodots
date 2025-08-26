@@ -45,6 +45,7 @@ map("n", "N", "Nzzzv", opts)
 local function setup_which_key()
   local ok, wk = pcall(require, "which-key")
   if not ok then
+    print("Which-key not loaded")
     return
   end
 
@@ -57,6 +58,8 @@ local function setup_which_key()
     ["<leader>n"] = { ":enew<CR>", " New File" },
     ["<leader>/"] = { ":lua require('Comment.api').toggle.linewise.current()<CR>", " Comment" },
   })
+  
+  print("Which-key loaded successfully")
 
   -- Group mappings
   wk.register({
@@ -186,5 +189,12 @@ end
 -- Setup which-key after plugins are loaded
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyDone",
-  callback = setup_which_key,
+  callback = function()
+    vim.defer_fn(setup_which_key, 1000)
+  end,
 })
+
+-- Also try to setup immediately if which-key is available
+vim.defer_fn(function()
+  setup_which_key()
+end, 2000)
