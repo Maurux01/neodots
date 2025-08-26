@@ -2,6 +2,16 @@
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+-- Setup nvim-tree keymaps
+vim.api.nvim_create_autocmd("User", {
+  pattern = "LazyDone",
+  callback = function()
+    pcall(function()
+      require("nvim-tree").setup()
+    end)
+  end,
+})
+
 -- Basic navigation
 map("n", "<C-h>", "<C-w>h", opts)
 map("n", "<C-j>", "<C-w>j", opts)
