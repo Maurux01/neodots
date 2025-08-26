@@ -76,13 +76,13 @@ install_linux_deps() {
             PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
             ;;
         "fedora"|"rhel"|"centos")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ff极peg" "feh" "make" "cmake" "ninja-build")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
             ;;
         "arch"|"manjaro")
             PACKAGES=("git" "nodejs" "npm" "python" "python-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
             ;;
         "opensuse"|"suse")
-            PACKAGES=("git" "nodejs" "npm极" "python3" "python3-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
+            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
             ;;
         *)
             PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "make" "cmake")
@@ -96,7 +96,7 @@ install_linux_deps() {
         sudo apt update
         for pkg in "${PACKAGES[@]}"; do
             if sudo apt install -y "$pkg"; then
-                print_success "Installed: $极kg"
+                print_success "Installed: $pkg"
             else
                 print_warning "Could not install: $pkg"
             fi
@@ -136,105 +136,7 @@ install_linux_deps() {
         return 1
     fi
 
-    # Install additional tools with better error handling
-    print_status "Installing additional tools..."
-    
-    # Python tools
-    if command_exists pip3; then
-        PYTHON_TOOLS=("debugpy" "pytest" "black" "isort")
-        for tool in "${PYTHON_TOOLS[@]}"; do
-            if pip3 install "$tool"; then
-                print_success "Python tool installed: $tool"
-            else
-                print_warning "Error installing Python tool: $tool"
-            fi
-        done
-    else
-        print_warning "pip3 not found, skipping Python tools installation"
-    fi
-    
-    # Node.js tools
-    if command_exists npm; then
-        if npm install -g prettier; then
-            print_success "Prettier installed successfully"
-        else
-            print_warning "Error installing Prettier"
-        fi
-    else
-        print_warning "npm not found, skipping Prettier installation"
-    fi
-    
-    # Rust tools
-    if command_exists rustup; then
-        if rustup component add rustfmt; then
-            print_success "rustfmt installed successfully"
-        else
-            print_warning "Error installing rustfmt"
-        fi
-    else
-        print_warning "rustup not found, skipping rustfmt installation"
-    fi
-    
     print_success "Dependency installation completed"
-}
-
-# Function to install macOS dependencies
-install_macos_deps() {
-    print_status "Installing dependencies for macOS..."
-    
-    PACKAGES=("git" "node" "python" "rust" "fd" "ripgrep" "fzf" "ffmpeg" "make" "cmake" "ninja")
-
-    if ! command_exists brew; then
-        print_status "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    
-    if ! brew install "${PACKAGES[@]}"; then
-        print_error "Error installing packages with brew"
-        return 1
-    fi
-
-    # Install additional tools
-    print_status "Installing additional tools..."
-    
-    if command_exists pip3; then
-        if pip3 install debugpy pytest black isort; then
-            print_success "Python tools installed successfully"
-        else
-            print_warning "Error installing Python tools"
-        fi
-    else
-        print_warning "pip3 not found, skipping Python tools installation"
-    fi
-    
-    if command_exists npm; then
-        if npm install -g prettier; then
-            print_success "Prettier installed successfully"
-        else
-            print_warning "Error installing Prettier"
-        fi
-    else
-        print_warning "npm not found, skipping Prettier installation"
-    fi
-    
-    if command_exists rustup; then
-极       if rustup component add rustfmt; then
-            print_success "rustfmt installed successfully"
-        else
-            print_warning "Error installing rustfmt"
-        fi
-    else
-        print_warning "rustup not found, skipping rustfmt installation"
-    fi
-}
-
-# Function to handle Windows dependencies
-install_windows_deps() {
-    print_warning "This script is not designed to install dependencies directly on Windows."
-    print_status "Please run the 'install.ps1' script in a PowerShell terminal with administrator privileges."
-    echo "To do this, open PowerShell and run:"
-    echo "Set-ExecutionPolicy Unrestricted -Scope Process -Force; .\install.ps1"
-    exit 1
 }
 
 # Function to check Neovim
@@ -245,9 +147,6 @@ check_neovim() {
         echo "  Arch Linux: sudo pacman -S neovim"
         echo "  Fedora: sudo dnf install neovim"
         echo "  openSUSE: sudo zypper install neovim"
-        echo "  Gentoo: sudo emerge --ask app-editors/neovim"
-        echo "  macOS: brew install neovim"
-        echo "  Windows: choco install neovim"
         exit 1
     fi
     
@@ -274,83 +173,6 @@ create_directories() {
     print_success "Directories created"
 }
 
-# Function to setup environment variables
-setup_environment() {
-    print_status "Setting up environment variables..."
-    
-    # Add to .bashrc or .zshrc
-    SHELL_RC=""
-    if [ -f ~/.bashrc ]; then
-        SHELL_RC=~/.bashrc
-    elif [ -f ~/.zshrc ]; then
-        SHELL_RC=~/.zshrc
-    fi
-    
-    if [ -n "$SHELL_RC" ]; then
-        # Check if configuration already exists
-        if ! grep -q "OPENAI_API_KEY" "$SHELL_RC"; then
-            echo "" >> "$SHELL_RC"
-            echo "# Neodots - Neovim Configuration" >> "$SHELL_RC"
-            echo "export OPENAI_API_KEY=\"your-api-key-here\"" >> "$SHELL_RC"
-            print_success "Environment variables added to $SHELL_RC"
-        else
-            print_warning "Environment variables already configured in $SHELL_RC"
-        fi
-    else
-        print_warning "No .bashrc or .zshrc found. Configure manually:"
-        echo "export OPENAI_API_KEY=\"your-api-key-here\""
-    fi
-}
-
-# Function to sync configuration files
-sync_config_files() {
-    print_status "Syncing configuration files to ~/.config/nvim..."
-    CONFIG_DIR="$HOME/.config/nvim"
-    SOURCE_DIR="$(pwd)"
-
-    # Create directory if it doesn't exist
-    mkdir -p "$CONFIG_DIR"
-
-    # Copy files, excluding version control and installer files
-    if command_exists rsync; then
-        print_status "Using rsync for efficient synchronization..."
-        if rsync -av --delete "$SOURCE_DIR/" "$CONFIG_DIR/" --exclude ".git" --exclude ".github" --exclude "install.sh" --exclude "install.ps1" --exclude "README.md" --exclude "*.md" --exclude "*.log"; then
-            print_success "Files synced successfully with rsync"
-        else
-            print_warning "Error using rsync, trying with cp..."
-            sync_with_cp
-        fi
-    else
-        print_warning "rsync not found. Using 'cp' to copy files..."
-        sync_with_cp
-    fi
-}
-
-# Helper function to copy files with cp
-sync_with极p() {
-    local source_dir="$1"
-    local config_dir="$2"
-    
-    # Use 'shopt -s dotglob' to include hidden files (dotfiles) in the copy
-    shopt -s dotglob
-    if cp -r "$source_dir"/* "$config_dir/"; then
-        print_success "Files copied successfully with cp"
-    else
-        print_error "Error copying files with cp"
-        shopt -u dotglob
-        return 1
-    fi
-    shopt -u dotglob
-    
-    # Remove files that shouldn't be in the configuration
-    local files_to_remove=("install.sh" "install.ps1" "README.md" ".git" ".github")
-    for file in "${files_to_remove[@]}"; do
-        if [ -e "$config_dir/$file" ]; then
-            rm -rf "$config_dir/$file"
-        fi
-    done
-}
-
 # Main function
 main() {
     echo -e "${BLUE}"
@@ -367,49 +189,22 @@ main() {
         exit 1
     fi
     
-    # Sync configuration files first
-    sync_config_files
-
-    # Detect operating system
-    OS=$(detect_os)
-    print_status "Detected operating system: $OS"
-    
     # Check Neovim
     check_neovim
     
-    # Install dependencies based on OS
-    case $OS in
-        "linux")
-            install_linux_deps
-            ;;
-        "macos")
-            install_macos_deps
-            ;;
-        "windows")
-            install_windows_deps
-            ;;
-        *)
-            print_error "Unsupported operating system: $OS"
-            exit 1
-            ;;
-    esac
+    # Install Linux dependencies
+    install_linux_deps
     
     # Create directories
     create_directories
     
-    # Setup environment variables
-    setup_environment
-    
     print_success "Installation completed!"
     echo ""
     echo -e "${YELLOW}Next steps:${NC}"
-    echo "极. Configure your OpenAI API key in your shell file (.bashrc, .zshrc, etc.):"
-    echo "   export OPENAI_API_KEY=\"your-api-key-here\""
-    echo ""
-    echo "2. Start Neovim to automatically install plugins:"
+    echo "1. Start Neovim to automatically install plugins:"
     echo "   nvim"
     echo ""
-    echo "3. Check README.md for more usage information"
+    echo "2. Check README.md for more usage information"
     echo ""
     echo -e "${GREEN}Happy coding with Neodots! 🚀${NC}"
 }
