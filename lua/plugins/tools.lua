@@ -472,13 +472,13 @@ return {
     version = "*",
     cmd = { "ToggleTerm", "TermExec" },
     keys = {
-      { "<C-\>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
+      { "<C-\\>", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
       { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "Toggle Terminal" },
     },
     config = function()
       require("toggleterm").setup({
         size = 20,
-        open_mapping = [[<C-\>]],
+        open_mapping = [[<C-\\>]],
         hide_numbers = true,
         shade_terminals = true,
         shading_factor = 2,
