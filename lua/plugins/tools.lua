@@ -6,6 +6,13 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
+    cmd = "Telescope",
+    keys = {
+      { "<leader>ff", "<cmd>Telescope find_files<cr>" },
+      { "<leader>fg", "<cmd>Telescope live_grep<cr>" },
+      { "<leader>fb", "<cmd>Telescope buffers<cr>" },
+      { "<C-p>", "<cmd>Telescope find_files<cr>" },
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       {
@@ -113,6 +120,7 @@ return {
   -- Symbols outline
   {
     "simrat39/symbols-outline.nvim",
+    cmd = "SymbolsOutline",
     config = function()
       require("symbols-outline").setup()
     end,
@@ -121,6 +129,7 @@ return {
   -- Undo tree visualization
   {
     "mbbill/undotree",
+    cmd = "UndotreeToggle",
     config = function()
       vim.g.undotree_SetFocusWhenToggle = 1
     end,
@@ -129,6 +138,8 @@ return {
   -- LazyGit integration
   {
     "kdheepak/lazygit.nvim",
+    cmd = "LazyGit",
+    keys = { { "<leader>gg", "<cmd>LazyGit<cr>" } },
     config = function()
       vim.g.lazygit_floating_window_winblend = 0
       vim.g.lazygit_floating_window_scaling_factor = 0.9
@@ -141,18 +152,13 @@ return {
   -- Which-key like popups
   {
     "folke/which-key.nvim",
+    event = "VeryLazy",
     config = function()
       require("which-key").setup()
     end,
   },
 
-  -- Auto-save
-  {
-    "Pocco81/auto-save.nvim",
-    config = function()
-      require("auto-save").setup()
-    end,
-  },
+
 
   -- TODO/FIXME comments highlighting
   {
@@ -214,6 +220,7 @@ return {
   -- Global search and replace
   {
     "nvim-pack/nvim-spectre",
+    cmd = "Spectre",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("spectre").setup()
@@ -223,6 +230,7 @@ return {
   -- Problems panel (like VS Code)
   {
     "folke/trouble.nvim",
+    cmd = { "Trouble", "TroubleToggle" },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("trouble").setup({
@@ -285,6 +293,7 @@ return {
   -- Color highlighter
   {
     "norcalli/nvim-colorizer.lua",
+    cmd = "ColorizerToggle",
     config = function()
       require("colorizer").setup()
     end,
@@ -304,6 +313,7 @@ return {
   -- Testing framework
   {
     "nvim-neotest/neotest",
+    cmd = { "Neotest" },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -428,6 +438,7 @@ return {
   -- Better quickfix
   {
     "kevinhwang91/nvim-bqf",
+    ft = "qf",
     config = function()
       require("bqf").setup()
     end,

@@ -5,10 +5,13 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Terminal colors
-vim.opt.termguicolors = true
+-- Performance optimizations
+vim.loader.enable()
+vim.opt.lazyredraw = true
+vim.opt.ttyfast = true
+vim.opt.regexpengine = 1
 
--- Enable true colors
+-- Terminal colors
 vim.opt.termguicolors = true
 
 -- Line numbers
@@ -81,7 +84,7 @@ end
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
--- Disable some built-in plugins for performance
+-- Disable built-in plugins for performance
 vim.g.loaded_gzip = 1
 vim.g.loaded_tar = 1
 vim.g.loaded_tarPlugin = 1
@@ -98,10 +101,17 @@ vim.g.loaded_logiPat = 1
 vim.g.loaded_rrhelper = 1
 vim.g.loaded_netrwSettings = 1
 vim.g.loaded_netrwFileHandlers = 1
+vim.g.loaded_tutor_mode_plugin = 1
+vim.g.loaded_remote_plugins = 1
+vim.g.loaded_spellfile_plugin = 1
+vim.g.loaded_man = 1
+vim.g.loaded_shada_plugin = 1
 
 -- Performance optimizations
 vim.opt.redrawtime = 1000
 vim.opt.ttimeoutlen = 0
+vim.opt.synmaxcol = 200
+vim.opt.maxmempattern = 2000
 
 -- Wildmenu and completion
 vim.opt.wildmenu = true

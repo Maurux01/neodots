@@ -78,6 +78,8 @@ return {
   -- File explorer
   {
     "nvim-tree/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+    keys = { { "<leader>e", "<cmd>NvimTreeToggle<cr>" } },
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("nvim-tree").setup({
@@ -129,22 +131,16 @@ return {
   -- Animated notifications
   {
     "rcarriga/nvim-notify",
+    event = "VeryLazy",
     config = function()
       require("notify").setup({
         background_colour = "#000000",
-        fps = 30,
-        icons = {
-          DEBUG = "",
-          ERROR = "",
-          INFO = "",
-          TRACE = "✎",
-          WARN = "",
-        },
+        fps = 15,
         level = 2,
         minimum_width = 50,
-        render = "default",
-        stages = "fade_in_slide_out",
-        timeout = 5000,
+        render = "minimal",
+        stages = "static",
+        timeout = 3000,
         top_down = true,
       })
       vim.notify = require("notify")
@@ -217,6 +213,7 @@ return {
   -- Bufferline (tab-like interface)
   {
     "akinsho/bufferline.nvim",
+    event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("bufferline").setup({
@@ -230,111 +227,32 @@ return {
     end,
   },
 
-  -- Minimal animations
-  {
-    "echasnovski/mini.animate",
-    event = "VeryLazy",
-    config = function()
-      require("mini.animate").setup({
-        cursor = {
-          enable = true,
-        },
-        scroll = {
-          enable = true,
-        },
-        resize = {
-          enable = true,
-        },
-        open = {
-          enable = true,
-        },
-        close = {
-          enable = true,
-        },
-      })
-    end,
-  },
 
-  -- Modern UI for messages and popups
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
-    },
-    config = function()
-      require("noice").setup({
-        lsp = {
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-          },
-        },
-        presets = {
-          bottom_search = true,
-          command_palette = true,
-          long_message_to_split = true,
-          inc_rename = false,
-          lsp_doc_border = false,
-        },
-      })
-    end,
-  },
+
+
 
   -- Better input/select UI
   {
     "stevearc/dressing.nvim",
+    event = "VeryLazy",
     config = function()
       require("dressing").setup({
         input = {
           enabled = true,
-          default_prompt = "Input:",
-          prompt_align = "left",
-          insert_only = true,
-          start_in_insert = true,
           border = "rounded",
           relative = "cursor",
         },
         select = {
           enabled = true,
-          backend = { "telescope", "fzf_lua", "fzf", "builtin", "nui" },
-          trim_prompt = true,
+          backend = { "builtin" },
         },
       })
     end,
   },
 
-  -- Dim inactive code
-  {
-    "folke/twilight.nvim",
-    config = function()
-      require("twilight").setup({
-        dimming = {
-          alpha = 0.25,
-          color = { "Normal", "#ffffff" },
-          term_bg = "#000000",
-          inactive = false,
-        },
-        context = 10,
-        treesitter = true,
-      })
-    end,
-  },
 
-  -- Which-key for keybinding hints
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("which-key").setup({
-        window = {
-          border = "rounded",
-        },
-      })
-    end,
-  },
+
+
 
   -- Tmux integration
   {
