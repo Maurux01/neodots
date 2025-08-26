@@ -6,15 +6,19 @@ local opts = { noremap = true, silent = true }
 
 -- Leader key mappings
 -- File operations
-map("n", "<leader>e", ":NvimTreeToggle<CR>", opts) -- File explorer
-map("n", "<leader>ff", ":Telescope find_files<CR>", opts) -- Find files
-map("n", "<leader>fg", ":Telescope live_grep<CR>", opts) -- Live grep
-map("n", "<leader>fb", ":Telescope buffers<CR>", opts) -- Find buffers
-map("n", "<leader>fh", ":Telescope help_tags<CR>", opts) -- Help tags
+map("n", "<leader>e", function() require("nvim-tree.api").tree.toggle() end, opts) -- File explorer
+map("n", "<leader>E", ":NvimTreeToggle<CR>", opts) -- File explorer (alternative)
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Find files" })
+map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Live grep" })
+map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Find buffers" })
+map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Help tags" })
+map("n", "<leader>fp", ":Telescope projects<CR>", { desc = "Find projects" })
+map("n", "<leader>fr", ":Telescope frecency<CR>", { desc = "Recent files" })
+map("n", "<leader>fa", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { desc = "Live grep with args" })
 
 -- Buffer navigation (VS Code style)
 map("n", "<C-p>", ":Telescope find_files<CR>", opts) -- Ctrl+P for files
-map("n", "<C-b>", ":NvimTreeToggle<CR>", opts) -- Ctrl+B for explorer
+map("n", "<C-b>", function() require("nvim-tree.api").tree.toggle() end, opts) -- Ctrl+B for explorer
 map("n", "<C-,>", ":Telescope buffers<CR>", opts) -- Ctrl+, for buffers
 
 -- Window navigation
@@ -68,9 +72,12 @@ map("t", "<C-l>", "<C-\\><C-n><C-w>l", opts)
 
 -- Utility mappings
 map("n", "<leader>w", ":w<CR>", opts) -- Save file
+map("n", "<leader>W", ":wa<CR>", opts) -- Save all files
+map("n", "<leader>n", ":enew<CR>", opts) -- New empty buffer
 map("n", "<leader>q", ":q<CR>", opts) -- Quit
-map("n", "<leader>Q", ":qa!<CR>", opts) -- Force quit all
+map("n", "<leader>Q", ":qa!<CR>", opts) -- Force quit all without saving
 map("n", "<leader>x", ":x<CR>", opts) -- Save and quit
+map("n", "<leader>X", ":xa<CR>", opts) -- Save all and quit
 
 -- Theme switching (cambio de th a ts para evitar conflicto con terminal)
 map("n", "<leader>ts", ":lua switch_theme()<CR>", opts) -- Switch theme
@@ -124,6 +131,10 @@ map("n", "zm", ":lua require('ufo').closeFoldsWith()<CR>", opts) -- Close folds 
 
 -- Twilight (dim inactive code)
 map("n", "<leader>td", ":Twilight<CR>", opts) -- Toggle twilight
+
+-- Notification keymaps
+map("n", "<leader>nd", ":lua require('notify').dismiss({ silent = true, pending = true })<CR>", opts) -- Dismiss all notifications
+map("n", "<leader>nh", ":Telescope notify<CR>", opts) -- Show notification history
 
 -- Session management
 map("n", "<leader>ss", ":SessionSave<CR>", opts) -- Save session
@@ -200,5 +211,40 @@ map("n", "<leader>fr", ":Telescope frecency<CR>", opts) -- Frecency files
 -- Ctrl+Space para activar completado manual
 
 -- LSP keymaps are configured in lua/plugins/lsp.lua
+
+-- Which-key group descriptions
+local wk = require("which-key")
+wk.register({
+  ["<leader>f"] = { name = "Find" },
+  ["<leader>g"] = { name = "Git" },
+  ["<leader>l"] = { name = "LSP" },
+  ["<leader>t"] = { name = "Terminal/Toggle" },
+  ["<leader>s"] = { name = "Search/Session" },
+  ["<leader>w"] = { name = "Window/Workspace" },
+  ["<leader>h"] = { name = "Harpoon/Hop" },
+  ["<leader>x"] = { name = "Trouble" },
+  ["<leader>d"] = { name = "Debug" },
+  ["<leader>r"] = { name = "Refactor" },
+  ["<leader>a"] = { name = "Aerial" },
+})
+
+-- Individual key descriptions
+wk.register({
+  ["<leader>e"] = { "Toggle File Explorer" },
+  ["<leader>E"] = { "File Explorer (Alt)" },
+  ["<leader>w"] = { "Save File" },
+  ["<leader>W"] = { "Save All Files" },
+  ["<leader>n"] = { "New Empty Buffer" },
+  ["<leader>q"] = { "Quit" },
+  ["<leader>Q"] = { "Force Quit All (No Save)" },
+  ["<leader>x"] = { "Save and Quit" },
+  ["<leader>X"] = { "Save All and Quit" },
+  ["<leader>o"] = { "Symbols Outline" },
+  ["<leader>S"] = { "Global Search/Replace" },
+  ["<leader>cc"] = { "Toggle Comment" },
+  ["<leader>uu"] = { "Toggle Undo Tree" },
+  ["<leader>td"] = { "Toggle Twilight" },
+  ["<leader>nb"] = { "Open Navbuddy" },
+})
 
 

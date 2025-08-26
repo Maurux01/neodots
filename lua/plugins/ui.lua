@@ -156,13 +156,20 @@ return {
   -- Indent guides
   {
     "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
     config = function()
-      require("indent_blankline").setup({
-        show_current_context = true,
-        show_current_context_start = true,
+      require("ibl").setup({
+        indent = {
+          char = "│",
+        },
+        scope = {
+          enabled = true,
+          show_start = true,
+          show_end = false,
+        },
       })
     end,
-  },
+  }
 
   -- Minimalist startup screen (alpha-nvim)
   {
@@ -344,5 +351,24 @@ return {
         },
       })
     end,
+  },
+
+  -- Tmux integration
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+    },
+    keys = {
+      { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+      { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+      { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+      { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+    },
   },
 }

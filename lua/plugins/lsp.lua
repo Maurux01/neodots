@@ -22,27 +22,28 @@ return {
       
       require("mason").setup()
       
+      local servers = { 
+        "lua_ls", 
+        "pyright", 
+        "tsserver",
+        "html",
+        "cssls",
+        "jsonls",
+        "bashls",
+        "dockerls",
+        "yamlls"
+      }
+      
       require("mason-lspconfig").setup({
-        ensure_installed = { 
-          "lua_ls", 
-          "pyright", 
-          "tsserver",
-          "html",
-          "cssls",
-          "jsonls",
-          "bashls",
-          "dockerls",
-          "yamlls"
-        },
+        ensure_installed = servers,
+        automatic_installation = true,
       })
 
-      require("mason-lspconfig").setup_handlers({
-        function(server_name)
-          require("lspconfig")[server_name].setup({
-            capabilities = capabilities,
-          })
-        end,
-      })
+      for _, server in ipairs(servers) do
+        require("lspconfig")[server].setup({
+          capabilities = capabilities,
+        })
+      end
 
       -- nvim-cmp setup
       local cmp = require("cmp")
@@ -121,64 +122,6 @@ return {
             vim.lsp.buf.format { async = true }
           end, bufopts)
         end,
-      })
-    end,
-  },
-
-  -- Treesitter for better syntax highlighting
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = { 
-          "lua", 
-          "python", 
-          "javascript", 
-          "typescript", 
-          "html", 
-          "css",
-          "json",
-          "yaml",
-          "markdown",
-          "bash",
-          "dockerfile",
-          "jsx",
-          "tsx",
-          "vue",
-          "svelte"
-        },
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-        indent = {
-          enable = true,
-        },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
-          },
-        },
-        autotag = {
-          enable = true,
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-            },
-          },
-        },
       })
     end,
   },

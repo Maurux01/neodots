@@ -14,6 +14,7 @@ A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like f
 - **🖱️ Multi-cursor Support**: VS Code-like multi-cursor editing with vim-visual-multi
 - **🤖 AI Code Completion**: Inline code suggestions with Codeium (free GitHub Copilot alternative)
 - **💻 Enhanced Terminal**: Floating, horizontal, and vertical terminal with ToggleTerm
+- **🔄 Tmux Integration**: Seamless navigation between Neovim windows and tmux panes
 
 ## 🚀 Quick Installation
 
@@ -103,7 +104,8 @@ The first startup will automatically install all plugins via Lazy.nvim. This may
 ### Window Management
 | Keybinding | Description |
 |------------|-------------|
-| `Ctrl+h/j/k/l` | Navigate between windows |
+| `Ctrl+h/j/k/l` | Navigate between windows/tmux panes |
+| `Ctrl+\` | Navigate to previous window/pane |
 | `<leader>wv` | Split window vertically |
 | `<leader>ws` | Split window horizontally |
 | `<leader>wc` | Close current window |
@@ -189,6 +191,7 @@ The first startup will automatically install all plugins via Lazy.nvim. This may
 - **Comment.nvim** - Smart commenting
 - **nvim-autopairs** - Auto-pairing of brackets and quotes
 - **which-key.nvim** - Keybinding hints
+- **vim-tmux-navigator** - Seamless tmux integration
 
 ### Debugging & Testing
 - **nvim-dap** - Debug Adapter Protocol
@@ -237,11 +240,35 @@ Edit `lua/config/keymaps.lua` to add or modify keybindings. Follow the existing 
 
 ### Common Issues
 
-#### Plugin Installation Fails
+#### Plugin Installation Fails or Lazy.nvim Errors
 ```bash
-# Clear plugin cache and reinstall
-rm -rf ~/.local/share/nvim/lazy
-nvim  # This will reinstall all plugins
+# Linux/macOS - Clear all Neovim data
+rm -rf ~/.local/share/nvim
+rm -rf ~/.local/state/nvim
+rm -rf ~/.cache/nvim
+
+# Windows PowerShell - Clear all Neovim data
+rm -Force -Recurse ~\AppData\Local\nvim-data
+rm -Force -Recurse ~\AppData\Local\Temp\nvim
+
+# Then restart Neovim to reinstall everything
+nvim
+```
+
+#### Treesitter Module Errors
+```bash
+# If you get treesitter.configs not found errors:
+# 1. Clear all data (commands above)
+# 2. Or manually remove treesitter plugins:
+
+# Windows PowerShell
+rm -Force -Recurse ~\AppData\Local\nvim-data\lazy\nvim-treesitter*
+
+# Linux/macOS
+rm -rf ~/.local/share/nvim/lazy/nvim-treesitter*
+
+# Then restart Neovim
+nvim
 ```
 
 #### LSP Servers Not Working
