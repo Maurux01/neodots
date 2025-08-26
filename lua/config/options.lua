@@ -51,9 +51,8 @@ vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.cmdheight = 1
 
--- Show whitespace characters
-vim.opt.list = true
-vim.opt.listchars = { space = ".", tab = "..", trail = ".", nbsp = "+" }
+-- Show whitespace characters (disabled)
+vim.opt.list = false
 
 -- Backspace behavior
 vim.opt.backspace = "indent,eol,start"
