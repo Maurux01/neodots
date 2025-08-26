@@ -169,7 +169,7 @@ return {
         },
       })
     end,
-  }
+  },
 
   -- Minimalist startup screen (alpha-nvim)
   {

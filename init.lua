@@ -23,12 +23,28 @@ vim.opt.rtp:prepend(lazypath)
 -- Load options
 require("config.options")
 
--- Setup lazy.nvim
-require("lazy").setup({
-  { import = "plugins.ui" },
-  { import = "plugins.tools" },
-  { import = "plugins.lsp" },
-}, {
+-- Setup lazy.nvim with all plugins
+local plugins = {}
+
+-- Load UI plugins
+local ui_plugins = require("plugins.ui")
+for _, plugin in ipairs(ui_plugins) do
+  table.insert(plugins, plugin)
+end
+
+-- Load tools plugins
+local tools_plugins = require("plugins.tools")
+for _, plugin in ipairs(tools_plugins) do
+  table.insert(plugins, plugin)
+end
+
+-- Load LSP plugins
+local lsp_plugins = require("plugins.lsp")
+for _, plugin in ipairs(lsp_plugins) do
+  table.insert(plugins, plugin)
+end
+
+require("lazy").setup(plugins, {
   install = {
     colorscheme = { "tokyonight" },
   },

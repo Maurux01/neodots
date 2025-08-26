@@ -21,6 +21,7 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       
       require("mason").setup()
+      require("mason-lspconfig").setup()
       
       local servers = { 
         "lua_ls", 
@@ -33,11 +34,6 @@ return {
         "dockerls",
         "yamlls"
       }
-      
-      require("mason-lspconfig").setup({
-        ensure_installed = servers,
-        automatic_installation = true,
-      })
 
       for _, server in ipairs(servers) do
         require("lspconfig")[server].setup({

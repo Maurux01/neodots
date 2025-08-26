@@ -46,7 +46,7 @@ return {
         update_debounce = 200,
       })
     end,
-  }
+  },
 
   -- Auto pairs
   {
