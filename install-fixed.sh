@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Neodots - Neovim Configuration Installer
-# Improved Linux installer script with better error handling and distribution support
+# Neodots - Modern Neovim Configuration Installer
+# Fast and reliable installer for Linux/macOS systems
 
 set -e
 
@@ -62,33 +62,55 @@ detect_linux_distro() {
     fi
 }
 
-# Function to install Linux dependencies
-install_linux_deps() {
-    print_status "Installing dependencies for Linux..."
+# Function to install dependencies
+install_deps() {
+    print_status "Installing dependencies..."
     
-    # Detect specific distribution
-    DISTRO=$(detect_linux_distro)
-    print_status "Detected distribution: $DISTRO"
+    OS=$(detect_os)
     
-    # Define packages based on distribution
-    case $DISTRO in
-        "ubuntu"|"debian")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rustc" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
-            ;;
-        "fedora"|"rhel"|"centos")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd-find" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja-build")
-            ;;
-        "arch"|"manjaro")
-            PACKAGES=("git" "nodejs" "npm" "python" "python-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
-            ;;
-        "opensuse"|"suse")
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "rust" "cargo" "fd" "ripgrep" "fzf" "ffmpeg" "feh" "make" "cmake" "ninja")
-            ;;
-        *)
-            PACKAGES=("git" "nodejs" "npm" "python3" "python3-pip" "make" "cmake")
-            print_warning "Distribution not specifically supported. Installing basic packages."
-            ;;
-    esac
+    if [[ "$OS" == "linux" ]]; then
+        # Detect specific distribution
+        DISTRO=$(detect_linux_distro)
+        print_status "Detected distribution: $DISTRO"
+        
+        # Essential packages for Neodots
+        case $DISTRO in
+            "ubuntu"|"debian")
+                PACKAGES=("git" "curl" "nodejs" "npm" "python3" "python3-pip" "build-essential" "ripgrep" "fd-find" "fzf" "unzip")
+                ;;
+            "fedora"|"rhel"|"centos")
+                PACKAGES=("git" "curl" "nodejs" "npm" "python3" "python3-pip" "gcc" "gcc-c++" "make" "ripgrep" "fd-find" "fzf" "unzip")
+                ;;
+            "arch"|"manjaro")
+                PACKAGES=("git" "curl" "nodejs" "npm" "python" "python-pip" "base-devel" "ripgrep" "fd" "fzf" "unzip")
+                ;;
+            "opensuse"|"suse")
+                PACKAGES=("git" "curl" "nodejs" "npm" "python3" "python3-pip" "gcc" "gcc-c++" "make" "ripgrep" "fd" "fzf" "unzip")
+                ;;
+            *)
+                PACKAGES=("git" "curl" "nodejs" "npm" "python3" "build-essential" "unzip")
+                print_warning "Distribution not specifically supported. Installing basic packages."
+                ;;
+        esac
+    elif [[ "$OS" == "macos" ]]; then
+        print_status "Installing dependencies for macOS..."
+        # Check if Homebrew is installed
+        if ! command_exists brew; then
+            print_status "Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        
+        PACKAGES=("git" "node" "python3" "ripgrep" "fd" "fzf")
+        
+        for pkg in "${PACKAGES[@]}"; do
+            if brew install "$pkg"; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+        return 0
+    fi
 
     # Install packages based on available package manager
     if command_exists apt; then
@@ -139,38 +161,109 @@ install_linux_deps() {
     print_success "Dependency installation completed"
 }
 
-# Function to check Neovim
-check_neovim() {
-    if ! command_exists nvim; then
-        print_error "Neovim is not installed. Please install it first:"
-        echo "  Ubuntu/Debian: sudo apt install neovim"
-        echo "  Arch Linux: sudo pacman -S neovim"
-        echo "  Fedora: sudo dnf install neovim"
-        echo "  openSUSE: sudo zypper install neovim"
-        exit 1
+# Function to install Neovim
+install_neovim() {
+    if command_exists nvim; then
+        NVIM_VERSION=$(nvim --version | head -n1 | cut -d' ' -f2)
+        print_success "Neovim $NVIM_VERSION already installed"
+        return 0
     fi
     
-    # Check minimum version
-    NVIM_VERSION=$(nvim --version | head -n1 | cut -d' ' -f2)
-    REQUIRED_VERSION="0.8.0"
+    print_status "Installing Neovim..."
     
-    if [ "$(printf '%s\n' "$REQUIRED_VERSION" "$NVIM_VERSION" | sort -V | head -n1)" != "$REQUIRED_VERSION" ]; then
-        print_error "Neovim version $NVIM_VERSION detected. Version $REQUIRED_VERSION or higher is required."
-        exit 1
+    OS=$(detect_os)
+    
+    if [[ "$OS" == "linux" ]]; then
+        DISTRO=$(detect_linux_distro)
+        
+        case $DISTRO in
+            "ubuntu"|"debian")
+                # Install latest Neovim from PPA for Ubuntu/Debian
+                sudo add-apt-repository ppa:neovim-ppa/unstable -y
+                sudo apt update
+                sudo apt install -y neovim
+                ;;
+            "fedora"|"rhel"|"centos")
+                sudo dnf install -y neovim
+                ;;
+            "arch"|"manjaro")
+                sudo pacman -S --noconfirm neovim
+                ;;
+            "opensuse"|"suse")
+                sudo zypper install -y neovim
+                ;;
+            *)
+                # Fallback: download AppImage
+                print_status "Downloading Neovim AppImage..."
+                curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+                chmod u+x nvim.appimage
+                sudo mv nvim.appimage /usr/local/bin/nvim
+                ;;
+        esac
+    elif [[ "$OS" == "macos" ]]; then
+        brew install neovim
     fi
     
-    print_success "Neovim $NVIM_VERSION detected"
+    if command_exists nvim; then
+        print_success "Neovim installed successfully!"
+    else
+        print_error "Failed to install Neovim"
+        exit 1
+    fi
 }
 
-# Function to create necessary directories
-create_directories() {
-    print_status "Creating necessary directories..."
+# Function to backup existing config
+backup_config() {
+    NVIM_CONFIG="$HOME/.config/nvim"
     
-    mkdir -p ~/Pictures/screenshots
-    mkdir -p ~/Pictures/wallpapers
-    mkdir -p ~/Videos/neovim_recordings
+    if [ -d "$NVIM_CONFIG" ]; then
+        BACKUP_DIR="$HOME/.config/nvim.backup.$(date +%Y%m%d-%H%M%S)"
+        print_status "Backing up existing Neovim config to $BACKUP_DIR"
+        mv "$NVIM_CONFIG" "$BACKUP_DIR"
+        print_success "Backup created: $BACKUP_DIR"
+    fi
+}
+
+# Function to install Neodots config
+install_neodots() {
+    print_status "Installing Neodots configuration..."
     
-    print_success "Directories created"
+    NVIM_CONFIG="$HOME/.config/nvim"
+    
+    # Clone the repository
+    git clone https://github.com/maurux01/neodots.git "$NVIM_CONFIG"
+    
+    print_success "Neodots configuration installed!"
+}
+
+# Function to install Nerd Font
+install_nerd_font() {
+    print_status "Installing JetBrains Mono Nerd Font..."
+    
+    FONT_DIR="$HOME/.local/share/fonts"
+    mkdir -p "$FONT_DIR"
+    
+    # Download and install JetBrains Mono Nerd Font
+    FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
+    
+    if command_exists curl; then
+        curl -fLo "/tmp/JetBrainsMono.zip" "$FONT_URL"
+    elif command_exists wget; then
+        wget -O "/tmp/JetBrainsMono.zip" "$FONT_URL"
+    else
+        print_warning "Neither curl nor wget found. Skipping font installation."
+        return 1
+    fi
+    
+    unzip -o "/tmp/JetBrainsMono.zip" -d "$FONT_DIR"
+    rm "/tmp/JetBrainsMono.zip"
+    
+    # Refresh font cache
+    if command_exists fc-cache; then
+        fc-cache -fv
+    fi
+    
+    print_success "JetBrains Mono Nerd Font installed!"
 }
 
 # Main function
@@ -189,14 +282,20 @@ main() {
         exit 1
     fi
     
-    # Check Neovim
-    check_neovim
+    # Install Neovim
+    install_neovim
     
-    # Install Linux dependencies
-    install_linux_deps
+    # Install dependencies
+    install_deps
     
-    # Create directories
-    create_directories
+    # Install Nerd Font
+    install_nerd_font
+    
+    # Backup existing config
+    backup_config
+    
+    # Install Neodots
+    install_neodots
     
     print_success "Installation completed!"
     echo ""
