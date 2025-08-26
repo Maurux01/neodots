@@ -45,7 +45,7 @@ cd ~/.config/nvim
 ```powershell
 # Enable script execution and run the installer
 Set-ExecutionPolicy Bypass -Scope Process -Force
-.\install-neodots.ps1
+.\install.ps1
 ```
 
 ### Step 4: Start Neovim
