@@ -48,7 +48,38 @@ return {
   {
     "windwp/nvim-autopairs",
     config = function()
-      require("nvim-autopairs").setup()
+      require("nvim-autopairs").setup({
+        check_ts = true, -- Treesitter integration
+        ts_config = {
+          lua = { "string", "source" },
+          javascript = { "string", "template_string" },
+        },
+      })
+    end,
+  },
+
+  -- Auto close HTML/JSX tags
+  {
+    "windwp/nvim-ts-autotag",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("nvim-ts-autotag").setup({
+        filetypes = { "html", "xml", "javascript", "typescript", "jsx", "tsx", "vue", "svelte" },
+      })
+    end,
+  },
+
+  -- Better syntax highlighting
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+  },
+
+  -- Rainbow brackets
+  {
+    "HiPhish/rainbow-delimiters.nvim",
+    config = function()
+      require("rainbow-delimiters.setup").setup()
     end,
   },
 

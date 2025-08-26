@@ -144,7 +144,11 @@ return {
           "yaml",
           "markdown",
           "bash",
-          "dockerfile"
+          "dockerfile",
+          "jsx",
+          "tsx",
+          "vue",
+          "svelte"
         },
         highlight = {
           enable = true,
@@ -160,6 +164,21 @@ return {
             node_incremental = "grn",
             scope_incremental = "grc",
             node_decremental = "grm",
+          },
+        },
+        autotag = {
+          enable = true,
+        },
+        textobjects = {
+          select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+            },
           },
         },
       })
