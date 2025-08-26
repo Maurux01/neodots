@@ -20,6 +20,10 @@ map("n", "<C-t>", ":enew<CR>", opts)
 map("n", "<C-q>", ":bdelete<CR>", opts)
 map("n", "<leader>n", ":enew<CR>", opts)
 
+-- Live Server
+map("n", "<F5>", ":LiveServerStart<CR>", opts)
+map("n", "<S-F5>", ":LiveServerStop<CR>", opts)
+
 -- Terminal
 map("t", "<Esc>", "<C-\\><C-n>", opts)
 map("n", "<A-i>", ":ToggleTerm direction=float<CR>", opts)
@@ -145,6 +149,11 @@ local function setup_which_key()
       s = { ":lua require('spectre').open()<CR>", "Spectre" },
       w = { ":lua require('spectre').open_visual({select_word=true})<CR>", "Word" },
       f = { ":lua require('spectre').open_file_search()<CR>", "File" },
+    },
+    ["<leader>v"] = {
+      name = " Live Server",
+      s = { ":LiveServerStart<CR>", "Start Server" },
+      x = { ":LiveServerStop<CR>", "Stop Server" },
     },
     ["<leader>u"] = {
       name = " UI",
