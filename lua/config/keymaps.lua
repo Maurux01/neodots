@@ -5,15 +5,22 @@ local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- Leader key mappings
--- File operations
-map("n", "<leader>e", function() require("nvim-tree.api").tree.toggle() end, opts) -- File explorer
-map("n", "<leader>E", ":NvimTreeToggle<CR>", opts) -- File explorer (alternative)
+-- File operations & NvimTree
+map("n", "<leader>e", ":NvimTreeToggle<CR>", opts) -- Toggle file explorer
+map("n", "<leader>E", ":NvimTreeFocus<CR>", opts) -- Focus file explorer
+map("n", "<leader>ef", ":NvimTreeFindFile<CR>", opts) -- Find current file in tree
+map("n", "<leader>ec", ":NvimTreeCollapse<CR>", opts) -- Collapse all folders
+map("n", "<leader>er", ":NvimTreeRefresh<CR>", opts) -- Refresh tree
 -- Telescope keymaps are now handled by which-key above
 
 -- Buffer navigation (VS Code style)
 map("n", "<C-p>", ":Telescope find_files<CR>", opts) -- Ctrl+P for files
-map("n", "<C-b>", function() require("nvim-tree.api").tree.toggle() end, opts) -- Ctrl+B for explorer
+map("n", "<C-b>", ":NvimTreeToggle<CR>", opts) -- Ctrl+B for explorer
 map("n", "<C-,>", ":Telescope buffers<CR>", opts) -- Ctrl+, for buffers
+
+-- Alternative simple keybinds for file explorer
+map("n", "<F2>", ":NvimTreeToggle<CR>", opts) -- F2 for explorer
+map("n", "<leader>\\e", ":NvimTreeToggle<CR>", opts) -- Backup keybind
 
 -- Window navigation
 map("n", "<C-h>", "<C-w>h", opts) -- Move to left window
@@ -206,6 +213,9 @@ map("n", "<leader>fr", ":Telescope frecency<CR>", opts) -- Frecency files
 
 -- LSP keymaps are configured in lua/plugins/lsp.lua
 
+-- Test if leader key is working
+map("n", "<leader>test", ":echo 'Leader key works!'<CR>", opts) -- Test leader key
+
 -- Which-key configuration (NvChad style)
 local wk = require("which-key")
 
@@ -276,6 +286,7 @@ wk.register({
 -- UI toggles
 wk.register({
   ["<leader>ue"] = { ":NvimTreeToggle<CR>", "Toggle Explorer" },
+  ["<leader>uf"] = { ":NvimTreeFindFile<CR>", "Find File in Explorer" },
   ["<leader>ul"] = { ":set number!<CR>", "Toggle Line Numbers" },
   ["<leader>ur"] = { ":set relativenumber!<CR>", "Toggle Relative Numbers" },
   ["<leader>uw"] = { ":set wrap!<CR>", "Toggle Word Wrap" },
@@ -290,14 +301,23 @@ wk.register({
 
 -- Quick actions
 wk.register({
-  ["<leader>e"] = { ":NvimTreeToggle<CR>", "Explorer" },
-  ["<leader>w"] = { ":w<CR>", "Save" },
-  ["<leader>W"] = { ":wa<CR>", "Save All" },
-  ["<leader>q"] = { ":q<CR>", "Quit" },
-  ["<leader>Q"] = { ":qa!<CR>", "Force Quit All" },
-  ["<leader>x"] = { ":x<CR>", "Save & Quit" },
-  ["<leader>X"] = { ":xa<CR>", "Save All & Quit" },
-  ["<leader>n"] = { ":enew<CR>", "New Buffer" },
+  ["<leader>w"] = { ":w<CR>", " Save" },
+  ["<leader>W"] = { ":wa<CR>", " Save All" },
+  ["<leader>q"] = { ":q<CR>", " Quit" },
+  ["<leader>Q"] = { ":qa!<CR>", " Force Quit All" },
+  ["<leader>x"] = { ":x<CR>", " Save & Quit" },
+  ["<leader>X"] = { ":xa<CR>", " Save All & Quit" },
+  ["<leader>n"] = { ":enew<CR>", " New Buffer" },
+})
+
+-- Explorer group
+wk.register({
+  ["<leader>e"] = { ":NvimTreeToggle<CR>", " Explorer" },
+  ["<leader>ef"] = { ":NvimTreeFindFile<CR>", "Find Current File" },
+  ["<leader>ec"] = { ":NvimTreeCollapse<CR>", "Collapse All" },
+  ["<leader>er"] = { ":NvimTreeRefresh<CR>", "Refresh" },
+  ["<leader>es"] = { ":NvimTreeResize +5<CR>", "Increase Size" },
+  ["<leader>eS"] = { ":NvimTreeResize -5<CR>", "Decrease Size" },
 })
 
 
