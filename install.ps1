@@ -90,48 +90,6 @@ function Install-Package($package) {
         Write-Success "$package is already installed"
         return $true
     }
-    
-    Write-Info "Installing $package..."
-    
-    # Try winget first (built into Windows 10/11)
-    if (Get-Command winget -ErrorAction SilentlyContinue) {
-        try {
-            # Different package names for winget
-            $wingetPackage = $package
-            if ($package -eq "python") {
-                $wingetPackage = "Python.Python.3"
-            } elseif ($package -eq "git") {
-                $wingetPackage = "Git.Git"
-            }
-            
-            winget install --id $wingetPackage --silent --accept-package-agreements --accept-source-agreements
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "$package installed successfully via winget"
-                return $true
-            }
-        } catch {
-            Write-Warning "Failed to install $package via winget"
-        }
-    }
-    
-    # Try Chocolatey if available
-    if (Get-Command choco -ErrorAction SilentlyContinue) {
-        try {
-            choco install $package -y --no-progress --scope=user
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "$package installed successfully via Chocolatey"
-                return $true
-            } else {
-                Write-Warning "Failed to install $package via Chocolatey"
-            }
-        } catch {
-            Write-Warning "Error installing $package via Chocolatey: $_"
-        }
-    }
-    
-    Write-Warning "Could not install $package automatically"
-    Write-Host "  Please install $package manually or try running the script again" -ForegroundColor Yellow
-    return $false
 }
 
 # Copy configuration files to Neovim directories
@@ -240,12 +198,8 @@ function Install-Neodots {
             # Ensure Mason binaries are in PATH
             $env:PATH = "$env:LOCALAPPDATA\nvim-data\mason\bin;" + $env:PATH
             
-            # First run to install plugins
-            Write-Info "Running initial plugin installation..."
-            nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
-            
-            # Second run to ensure everything is properly set up
-            Write-Info "Verifying plugin installation..."
+            # Run plugin installation
+            Write-Info "Running plugin installation..."
             nvim --headless -c 'autocmd User LazyInstall quitall' -c 'Lazy install' 2>&1 | Out-Null
             
             Write-Success "Plugins installed successfully"
