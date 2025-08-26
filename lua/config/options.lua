@@ -16,7 +16,7 @@ vim.opt.termguicolors = true
 
 -- Line numbers
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
 
 -- Tab and indentation
 vim.opt.tabstop = 2
@@ -41,6 +41,10 @@ vim.opt.signcolumn = "yes"
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8
 vim.opt.cmdheight = 1
+
+-- Show whitespace characters
+vim.opt.list = true
+vim.opt.listchars = { space = "·", tab = "··", trail = "·", nbsp = "␣" }
 
 -- Backspace behavior
 vim.opt.backspace = "indent,eol,start"
