@@ -25,10 +25,25 @@ A minimal, beautiful, and powerful Neovim configuration featuring VS Code-like f
 - **Python** (for debugging and additional tools)
 - **Build tools**: `make`, `npm` (for building some plugins)
 
-### Step 1: Backup (Optional but Recommended)
+### Step 1: Clean Previous Installation (Recommended)
 ```bash
-# Backup your current Neovim configuration if you have one
-mv ~/.config/nvim ~/.config/nvim.backup
+# Linux / MacOS (unix)
+rm -rf ~/.config/nvim
+rm -rf ~/.local/state/nvim
+rm -rf ~/.local/share/nvim
+
+# Flatpak (linux)
+rm -rf ~/.var/app/io.neovim.nvim/config/nvim
+rm -rf ~/.var/app/io.neovim.nvim/data/nvim
+rm -rf ~/.var/app/io.neovim.nvim/.local/state/nvim
+
+# Windows CMD
+rd -r ~\AppData\Local\nvim
+rd -r ~\AppData\Local\nvim-data
+
+# Windows PowerShell
+rm -Force ~\AppData\Local\nvim
+rm -Force ~\AppData\Local\nvim-data
 ```
 
 ### Step 2: Clone the Repository
