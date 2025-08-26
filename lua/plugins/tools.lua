@@ -282,6 +282,130 @@ return {
     end,
   },
 
+  -- Testing framework
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+      "nvim-neotest/neotest-jest",
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-python"),
+          require("neotest-jest"),
+        },
+      })
+    end,
+  },
+
+  -- Refactoring tools
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+    end,
+  },
+
+  -- Linting
+  {
+    "mfussenegger/nvim-lint",
+    config = function()
+      require("lint").linters_by_ft = {
+        javascript = { "eslint" },
+        typescript = { "eslint" },
+        python = { "pylint" },
+        lua = { "luacheck" },
+      }
+      
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        callback = function()
+          require("lint").try_lint()
+        end,
+      })
+    end,
+  },
+
+  -- Better navigation (replaces hop)
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("flash").setup()
+    end,
+  },
+
+  -- Smart text objects
+  {
+    "echasnovski/mini.ai",
+    event = "VeryLazy",
+    config = function()
+      require("mini.ai").setup()
+    end,
+  },
+
+  -- Better word movement
+  {
+    "chrisgrieser/nvim-spider",
+    config = function()
+      require("spider").setup()
+    end,
+  },
+
+  -- Better substitute/replace
+  {
+    "gbprod/substitute.nvim",
+    config = function()
+      require("substitute").setup()
+    end,
+  },
+
+  -- Project management
+  {
+    "ahmedkhalf/project.nvim",
+    config = function()
+      require("project_nvim").setup({
+        detection_methods = { "lsp", "pattern" },
+        patterns = { ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json" },
+      })
+    end,
+  },
+
+  -- Workspaces
+  {
+    "natecraddock/workspaces.nvim",
+    config = function()
+      require("workspaces").setup({
+        hooks = {
+          open = "Telescope find_files",
+        },
+      })
+    end,
+  },
+
+  -- Enhanced telescope extensions
+  {
+    "nvim-telescope/telescope-live-grep-args.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  },
+
+  {
+    "nvim-telescope/telescope-frecency.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  },
+
+  {
+    "nvim-telescope/telescope-project.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  },
+
   -- Better quickfix
   {
     "kevinhwang91/nvim-bqf",

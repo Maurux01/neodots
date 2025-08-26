@@ -130,6 +130,59 @@ map("n", "<leader>ss", ":SessionSave<CR>", opts) -- Save session
 map("n", "<leader>sr", ":SessionRestore<CR>", opts) -- Restore session
 map("n", "<leader>sd", ":SessionDelete<CR>", opts) -- Delete session
 
+-- Debugging (DAP)
+map("n", "<F5>", ":lua require('dap').continue()<CR>", opts) -- Start/Continue
+map("n", "<F9>", ":lua require('dap').toggle_breakpoint()<CR>", opts) -- Toggle breakpoint
+map("n", "<F10>", ":lua require('dap').step_over()<CR>", opts) -- Step over
+map("n", "<F11>", ":lua require('dap').step_into()<CR>", opts) -- Step into
+map("n", "<F12>", ":lua require('dap').step_out()<CR>", opts) -- Step out
+map("n", "<leader>db", ":lua require('dap').toggle_breakpoint()<CR>", opts) -- Toggle breakpoint
+map("n", "<leader>dr", ":lua require('dapui').toggle()<CR>", opts) -- Toggle DAP UI
+
+-- Testing (Neotest)
+map("n", "<leader>tr", ":lua require('neotest').run.run()<CR>", opts) -- Run nearest test
+map("n", "<leader>tf", ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", opts) -- Run file tests
+map("n", "<leader>ts", ":lua require('neotest').summary.toggle()<CR>", opts) -- Toggle test summary
+map("n", "<leader>to", ":lua require('neotest').output.open({ enter = true })<CR>", opts) -- Open test output
+
+-- Refactoring
+map("v", "<leader>re", ":lua require('refactoring').refactor('Extract Function')<CR>", opts) -- Extract function
+map("v", "<leader>rf", ":lua require('refactoring').refactor('Extract Function To File')<CR>", opts) -- Extract to file
+map("v", "<leader>rv", ":lua require('refactoring').refactor('Extract Variable')<CR>", opts) -- Extract variable
+map("v", "<leader>ri", ":lua require('refactoring').refactor('Inline Variable')<CR>", opts) -- Inline variable
+
+-- Flash navigation (replaces hop)
+map("n", "s", ":lua require('flash').jump()<CR>", opts) -- Flash jump
+map("n", "S", ":lua require('flash').treesitter()<CR>", opts) -- Flash treesitter
+map("o", "r", ":lua require('flash').remote()<CR>", opts) -- Flash remote
+map("x", "R", ":lua require('flash').treesitter_search()<CR>", opts) -- Flash treesitter search
+
+-- Spider (better word movement)
+map("n", "w", ":lua require('spider').motion('w')<CR>", opts) -- Next word
+map("n", "e", ":lua require('spider').motion('e')<CR>", opts) -- End word
+map("n", "b", ":lua require('spider').motion('b')<CR>", opts) -- Previous word
+
+-- Substitute
+map("n", "s", ":lua require('substitute').operator()<CR>", opts) -- Substitute operator
+map("n", "ss", ":lua require('substitute').line()<CR>", opts) -- Substitute line
+map("n", "S", ":lua require('substitute').eol()<CR>", opts) -- Substitute to end of line
+map("x", "s", ":lua require('substitute').visual()<CR>", opts) -- Substitute visual
+
+-- Project management
+map("n", "<leader>fp", ":Telescope projects<CR>", opts) -- Find projects
+
+-- Workspaces
+map("n", "<leader>wa", ":WorkspacesAdd<CR>", opts) -- Add workspace
+map("n", "<leader>wr", ":WorkspacesRemove<CR>", opts) -- Remove workspace
+map("n", "<leader>wl", ":WorkspacesList<CR>", opts) -- List workspaces
+
+-- Navigation
+map("n", "<leader>nb", ":Navbuddy<CR>", opts) -- Open navbuddy
+
+-- Enhanced telescope
+map("n", "<leader>fa", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", opts) -- Live grep with args
+map("n", "<leader>fr", ":Telescope frecency<CR>", opts) -- Frecency files
+
 -- Multi-cursor mappings (vim-visual-multi)
 -- Ctrl+D para seleccionar palabra bajo cursor (como VS Code)
 -- Ctrl+Alt+D para seleccionar todas las ocurrencias

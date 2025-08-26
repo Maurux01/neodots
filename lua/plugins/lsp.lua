@@ -209,21 +209,219 @@ return {
   -- Debug adapter protocol
   {
     "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      "nvim-neotest/nvim-nio",
+      "theHamsta/nvim-dap-virtual-text",
+    },
     config = function()
-      -- Basic DAP configuration
-      require("dap").set_log_level("INFO")
+      local dap = require("dap")
+      local dapui = require("dapui")
+      
+      dapui.setup()
+      require("nvim-dap-virtual-text").setup()
+      
+      -- Auto open/close DAP UI
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+      
+      -- Python debugging
+      dap.adapters.python = {
+        type = "executable",
+        command = "python",
+        args = { "-m", "debugpy.adapter" },
+      }
+      
+      dap.configurations.python = {
+        {
+          type = "python",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          pythonPath = function()
+            return "/usr/bin/python"
+          end,
+        },
+      }
     end,
   },
 
-  -- DAP UI
+  -- Breadcrumbs in statusline
   {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { 
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio"
+    "SmiteshP/nvim-navic",
+    dependencies = { "neovim/nvim-lspconfig" },
+    config = function()
+      require("nvim-navic").setup({
+        icons = {
+          File = " ",
+          Module = " ",
+          Namespace = " ",
+          Package = " ",
+          Class = " ",
+          Method = " ",
+          Property = " ",
+          Field = " ",
+          Constructor = " ",
+          Enum = " ",
+          Interface = " ",
+          Function = " ",
+          Variable = " ",
+          Constant = " ",
+          String = " ",
+          Number = " ",
+          Boolean = " ",
+          Array = " ",
+          Object = " ",
+          Key = " ",
+          Null = " ",
+          EnumMember = " ",
+          Struct = " ",
+          Event = " ",
+          Operator = " ",
+          TypeParameter = " ",
+        },
+        highlight = true,
+        separator = " > ",
+        depth_limit = 0,
+        depth_limit_indicator = "..",
+      })
+    end,
+  },
+
+  -- Symbol navigation
+  {
+    "SmiteshP/nvim-navbuddy",
+    dependencies = {
+      "neovim/nvim-lspconfig",
+      "SmiteshP/nvim-navic",
+      "MunifTanjim/nui.nvim",
     },
     config = function()
-      require("dapui").setup()
+      require("nvim-navbuddy").setup({
+        lsp = { auto_attach = true },
+      })
+    end,
+  },
+
+  -- LSP progress
+  {
+    "j-hui/fidget.nvim",
+    config = function()
+      require("fidget").setup({
+        progress = {
+          display = {
+            render_limit = 16,
+            done_ttl = 3,
+            done_icon = "✔",
+          },
+        },
+        notification = {
+          window = {
+            winblend = 100,
+          },
+        },
+      })
+    end,
+  },
+
+  -- Scrollbar with diagnostics
+  {
+    "petertriho/nvim-scrollbar",
+    config = function()
+      require("scrollbar").setup({
+        show = true,
+        show_in_active_only = false,
+        set_highlights = true,
+        folds = 1000,
+        max_lines = false,
+        handle = {
+          text = " ",
+          color = nil,
+          cterm = nil,
+          highlight = "CursorColumn",
+          hide_if_all_visible = true,
+        },
+        marks = {
+          Search = {
+            text = { "-", "=" },
+            priority = 0,
+            color = nil,
+            cterm = nil,
+            highlight = "Search",
+          },
+          Error = {
+            text = { "-", "=" },
+            priority = 1,
+            color = nil,
+            cterm = nil,
+            highlight = "DiagnosticVirtualTextError",
+          },
+          Warn = {
+            text = { "-", "=" },
+            priority = 2,
+            color = nil,
+            cterm = nil,
+            highlight = "DiagnosticVirtualTextWarn",
+          },
+          Info = {
+            text = { "-", "=" },
+            priority = 3,
+            color = nil,
+            cterm = nil,
+            highlight = "DiagnosticVirtualTextInfo",
+          },
+          Hint = {
+            text = { "-", "=" },
+            priority = 4,
+            color = nil,
+            cterm = nil,
+            highlight = "DiagnosticVirtualTextHint",
+          },
+          Misc = {
+            text = { "-", "=" },
+            priority = 5,
+            color = nil,
+            cterm = nil,
+            highlight = "Normal",
+          },
+        },
+        excluded_buftypes = {
+          "terminal",
+        },
+        excluded_filetypes = {
+          "prompt",
+          "TelescopePrompt",
+        },
+        autocmd = {
+          render = {
+            "BufWinEnter",
+            "TabEnter",
+            "TermEnter",
+            "WinEnter",
+            "CmdwinLeave",
+            "TextChanged",
+            "VimResized",
+            "WinScrolled",
+          },
+          clear = {
+            "BufWinLeave",
+            "TabLeave",
+            "TermLeave",
+            "WinLeave",
+          },
+        },
+        handlers = {
+          diagnostic = true,
+          search = false,
+        },
+      })
     end,
   },
 
