@@ -21,48 +21,45 @@ vim.opt.termguicolors = true
 -- Enable transparency support
 vim.g.transparent_enabled = true
 
--- Transparency settings
-vim.api.nvim_create_autocmd("ColorScheme", {
+-- Force transparency function
+local function force_transparency()
+  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+  vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+  vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
+  vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
+  vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none" })
+  vim.api.nvim_set_hl(0, "Folded", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NonText", { bg = "none" })
+  vim.api.nvim_set_hl(0, "SpecialKey", { bg = "none" })
+  vim.api.nvim_set_hl(0, "VertSplit", { bg = "none" })
+  vim.api.nvim_set_hl(0, "WinSeparator", { bg = "none" })
+  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+  vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
+  vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#3e4451" })
+  vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = "none" })
+  vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
+  vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TabLine", { bg = "none" })
+  vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
+end
+
+-- Apply transparency on colorscheme change and after UI loads
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter", "UIEnter" }, {
   pattern = "*",
-  callback = function()
-    -- Make background transparent
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-    vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
-    vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
-    vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none" })
-    vim.api.nvim_set_hl(0, "Folded", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NonText", { bg = "none" })
-    vim.api.nvim_set_hl(0, "SpecialKey", { bg = "none" })
-    vim.api.nvim_set_hl(0, "VertSplit", { bg = "none" })
-    vim.api.nvim_set_hl(0, "WinSeparator", { bg = "none" })
-    
-    -- Transparent floating windows
-    vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-    vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
-    vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#3e4451" })
-    
-    -- Transparent telescope
-    vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "none" })
-    
-    -- Transparent nvim-tree
-    vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = "none" })
-    
-    -- Transparent statusline and tabline
-    vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
-    vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TabLine", { bg = "none" })
-    vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
-  end,
+  callback = force_transparency,
 })
+
+-- Force transparency after a delay to ensure it applies
+vim.defer_fn(force_transparency, 100)
 
 -- Line numbers
 vim.opt.number = true

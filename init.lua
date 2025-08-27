@@ -20,6 +20,9 @@ require("config.options")
 require("config.keymaps")
 require("config.autocmds")
 
+-- Load transparency fix
+require("config.transparency-fix").setup()
+
 -- Load snippets and completion config after plugins are loaded
 vim.api.nvim_create_autocmd("User", {
   pattern = "LazyDone",

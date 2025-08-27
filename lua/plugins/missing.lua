@@ -6,8 +6,39 @@ return {
     event = "InsertEnter",
     config = function()
       require("better_escape").setup({
-        mapping = {"jk", "jj"},
-        timeout = 200,
+        default_mappings = true,
+        mappings = {
+          i = {
+            j = {
+              k = "<Esc>",
+              j = "<Esc>",
+            },
+          },
+          c = {
+            j = {
+              k = "<Esc>",
+              j = "<Esc>",
+            },
+          },
+          t = {
+            j = {
+              k = "<Esc>",
+            },
+          },
+          v = {
+            j = {
+              k = "<Esc>",
+            },
+          },
+          s = {
+            j = {
+              k = "<Esc>",
+            },
+          },
+        },
+        timeout = vim.o.timeoutlen,
+        clear_empty_lines = false,
+        keys = "<Esc>",
       })
     end,
   },
