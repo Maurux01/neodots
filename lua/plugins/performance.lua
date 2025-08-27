@@ -1,38 +1,5 @@
 -- Performance and optimization plugins
 return {
-  -- Startup time optimization
-  {
-    "lewis6991/impatient.nvim",
-    config = function()
-      require("impatient")
-    end,
-  },
-
-  -- Better filetype detection
-  {
-    "nathom/filetype.nvim",
-    config = function()
-      require("filetype").setup({
-        overrides = {
-          extensions = {
-            h = "c",
-            hpp = "cpp",
-            jsx = "javascriptreact",
-            tsx = "typescriptreact",
-          },
-          literal = {
-            [".gitignore"] = "gitignore",
-            [".env"] = "sh",
-          },
-          complex = {
-            [".*git/config"] = "gitconfig",
-            [".*%.env%..*"] = "sh",
-          },
-        },
-      })
-    end,
-  },
-
   -- Better syntax highlighting performance
   {
     "nvim-treesitter/nvim-treesitter",

@@ -33,11 +33,32 @@ vim.api.nvim_create_autocmd("User", {
 require("lazy").setup({
   { import = "plugins" },
 }, {
-  defaults = { lazy = true },
+  defaults = { 
+    lazy = true,
+    version = false,
+  },
+  install = {
+    missing = true,
+    colorscheme = { "tokyonight" },
+  },
+  checker = {
+    enabled = false,
+    notify = false,
+  },
+  change_detection = {
+    enabled = false,
+    notify = false,
+  },
   performance = {
-    cache = { enabled = true },
+    cache = { 
+      enabled = true,
+      path = vim.fn.stdpath("cache") .. "/lazy/cache",
+      ttl = 3600 * 24 * 5,
+    },
     reset_packpath = true,
     rtp = {
+      reset = true,
+      paths = {},
       disabled_plugins = {
         "gzip",
         "matchit",
@@ -47,7 +68,20 @@ require("lazy").setup({
         "tohtml",
         "tutor",
         "zipPlugin",
+        "2html_plugin",
+        "getscript",
+        "getscriptPlugin",
+        "logipat",
+        "rrhelper",
+        "spellfile_plugin",
+        "vimball",
+        "vimballPlugin",
       },
     },
+  },
+  ui = {
+    size = { width = 0.8, height = 0.8 },
+    wrap = true,
+    border = "rounded",
   },
 })

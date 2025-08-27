@@ -7,6 +7,7 @@ return {
     "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
+    name = "tokyonight",
     config = function()
       require("tokyonight").setup({
         style = "night",
@@ -36,7 +37,8 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = true,
-    priority = 1000,
+    priority = 900,
+    cmd = "Catppuccin",
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
@@ -60,7 +62,8 @@ return {
   {
     "rebelot/kanagawa.nvim",
     lazy = true,
-    priority = 1000,
+    priority = 900,
+    cmd = "Kanagawa",
     config = function()
       require("kanagawa").setup({
         compile = false,
@@ -103,7 +106,8 @@ return {
     "rose-pine/neovim",
     name = "rose-pine",
     lazy = true,
-    priority = 1000,
+    priority = 900,
+    cmd = "Rosepine",
     config = function()
       require("rose-pine").setup({
         variant = "main", -- auto, main, moon, dawn
@@ -166,7 +170,7 @@ return {
   -- Status line
   {
     "nvim-lualine/lualine.nvim",
-    lazy = false,
+    event = "VeryLazy",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("lualine").setup({
@@ -292,7 +296,7 @@ return {
   -- Bufferline (tab-like interface)
   {
     "akinsho/bufferline.nvim",
-    event = "VeryLazy",
+    event = "BufReadPost",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("bufferline").setup({

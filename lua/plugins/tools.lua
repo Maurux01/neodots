@@ -13,6 +13,7 @@ return {
       { "<leader>fb", "<cmd>Telescope buffers<cr>" },
       { "<C-p>", "<cmd>Telescope find_files<cr>" },
     },
+    module = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
       {
