@@ -69,8 +69,6 @@ map("n", "<leader>w", ":w<CR>", { desc = "Save" })
 map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
 map("n", "<leader>x", ":x<CR>", { desc = "Save & Quit" })
 map("n", "<leader>/", ":lua require('Comment.api').toggle.linewise.current()<CR>", { desc = "Comment" })
-map("n", "<leader>th", ":lua require('utils.theme_manager').telescope_themes()<CR>", { desc = "Change Theme" })
-map("n", "<leader>tT", ":lua require('utils.theme_manager').switch_theme()<CR>", { desc = "Next Theme" })
 
 -- Find/File mappings
 map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Files" })
@@ -86,7 +84,7 @@ map("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Blam
 map("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Diff" })
 map("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage Hunk" })
 map("n", "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", { desc = "Undo Stage" })
- 
+
 -- Terminal mappings
 map("n", "<leader>tt", ":ToggleTerm<CR>", { desc = "Toggle" })
 map("n", "<leader>tf", ":ToggleTerm direction=float<CR>", { desc = "Float" })
@@ -107,6 +105,23 @@ map("n", "<leader>wc", ":close<CR>", { desc = "Close" })
 map("n", "gd", vim.lsp.buf.definition, { desc = "Definition" })
 map("n", "gr", vim.lsp.buf.references, { desc = "References" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
-map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Actions" })
-map("n", "<leader>f", vim.lsp.buf.format, { desc = "Format" })
+map("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename" })
+map("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code Actions" })
+map("n", "<leader>lf", vim.lsp.buf.format, { desc = "Format" })
+
+-- Debug mappings
+map("n", "<leader>db", ":lua require('dap').toggle_breakpoint()<CR>", { desc = "Breakpoint" })
+map("n", "<leader>dc", ":lua require('dap').continue()<CR>", { desc = "Continue" })
+map("n", "<leader>di", ":lua require('dap').step_into()<CR>", { desc = "Step Into" })
+map("n", "<leader>do", ":lua require('dap').step_over()<CR>", { desc = "Step Over" })
+map("n", "<leader>du", ":lua require('dapui').toggle()<CR>", { desc = "UI" })
+
+-- Code mappings
+map("n", "<leader>cc", ":lua require('Comment.api').toggle.linewise.current()<CR>", { desc = "Comment" })
+map("n", "<leader>cf", ":lua require('conform').format()<CR>", { desc = "Format" })
+
+-- UI mappings
+map("n", "<leader>uz", ":ZenMode<CR>", { desc = "Zen Mode" })
+map("n", "<leader>ut", ":Twilight<CR>", { desc = "Twilight" })
+map("n", "<leader>uth", ":lua require('utils.theme_manager').telescope_themes()<CR>", { desc = "Change Theme" })
+map("n", "<leader>utt", ":lua require('utils.theme_manager').switch_theme()<CR>", { desc = "Next Theme" })
