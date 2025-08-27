@@ -107,6 +107,8 @@ local function setup_which_key()
       s = { ":Gitsigns stage_hunk<CR>", "Stage Hunk" },
       u = { ":Gitsigns undo_stage_hunk<CR>", "Undo Stage" },
       p = { ":Gitsigns preview_hunk<CR>", "Preview Hunk" },
+      w = { ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", "Worktrees" },
+      W = { ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>", "Create Worktree" },
     },
     ["<leader>t"] = {
       name = " Terminal",
@@ -174,6 +176,8 @@ local function setup_which_key()
       w = { ":lua require('spectre').open_visual({select_word=true})<CR>", "Replace Word" },
       f = { ":lua require('spectre').open_file_search()<CR>", "Replace in File" },
       u = { ":Telescope undo<CR>", "Undo History" },
+      c = { ":Telescope neoclip<CR>", "Clipboard History" },
+      h = { ":lua require('hlslens').start()<CR>", "Highlight Search" },
     },
     ["<leader>v"] = {
       name = " Web Dev",
@@ -181,6 +185,8 @@ local function setup_which_key()
       x = { ":LiveServerStop<CR>", "Stop Server" },
       r = { ":RestNvim<CR>", "Run REST" },
       p = { ":PackageInfoShow<CR>", "Package Info" },
+      m = { ":MarkdownPreviewToggle<CR>", "Markdown Preview" },
+      d = { ":DBUI<CR>", "Database UI" },
     },
     ["<leader>u"] = {
       name = " UI",
@@ -217,6 +223,9 @@ local function setup_which_key()
       a = { ":AerialToggle<CR>", "Aerial" },
       o = { ":SymbolsOutline<CR>", "Outline" },
       f = { ":lua require('conform').format()<CR>", "Format" },
+      r = { ":RunCode<CR>", "Run Code" },
+      R = { ":RunFile<CR>", "Run File" },
+      p = { ":RunProject<CR>", "Run Project" },
     },
     ["<leader>r"] = {
       name = " Refactor",
