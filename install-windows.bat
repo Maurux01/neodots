@@ -33,9 +33,8 @@ echo ✅ Configuration copied
 echo.
 echo ✅ Installation complete!
 echo.
-echo Next steps:
-echo 1. Restart your terminal
-echo 2. Run: nvim
-echo 3. Wait for plugins to install
+echo 🚀 Starting Neovim automatically...
 echo.
-pause
+
+REM Start Neovim automatically
+nvim

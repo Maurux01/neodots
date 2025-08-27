@@ -346,13 +346,11 @@ main() {
     
     print_success "Installation completed!"
     echo ""
-    echo -e "${YELLOW}Next steps:${NC}"
-    echo "1. Start Neovim to automatically install plugins:"
-    echo "   nvim"
+    echo -e "${GREEN}Starting Neovim automatically...${NC}"
     echo ""
-    echo "2. Check README.md for more usage information"
-    echo ""
-    echo -e "${GREEN}Happy coding with Neodots! 🚀${NC}"
+    
+    # Start Neovim automatically
+    nvim
 }
 
 # Execute main function

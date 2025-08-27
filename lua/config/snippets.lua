@@ -424,7 +424,7 @@ ls.add_snippets("sql", {
     t({"", "    email VARCHAR(255) UNIQUE NOT NULL,"}),
     t({"", "    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"}),
     t({"", "    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"}),
-    t({"", "});"}),
+    t({"", ");"}),
     t({"", ""}),
     t({"", "CREATE INDEX idx_"}), i(1), t("_email ON "), i(1), t("(email);"), i(0)
   }),

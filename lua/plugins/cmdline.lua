@@ -56,21 +56,6 @@ return {
     end,
   },
 
-  -- Better code suggestions with Copilot alternative
-  {
-    "Exafunction/codeium.nvim",
-    event = "BufEnter",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeium").setup({
-        enable_chat = true,
-      })
-    end,
-  },
-
   -- Enhanced LSP signature help
   {
     "ray-x/lsp_signature.nvim",
