@@ -19,16 +19,21 @@ return {
           sidebars = "transparent",
           floats = "transparent",
         },
-        on_colors = function(colors)
-          colors.bg = "none"
-          colors.bg_dark = "none"
-          colors.bg_float = "none"
-          colors.bg_popup = "none"
-          colors.bg_sidebar = "none"
-          colors.bg_statusline = "none"
-        end,
       })
       vim.cmd.colorscheme("tokyonight-night")
+      
+      -- Apply transparency after any colorscheme loads
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = function()
+          vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+          vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+          vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+          vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
+          vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
+          vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none" })
+          vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+        end,
+      })
     end,
   },
 
@@ -91,13 +96,7 @@ return {
             }
           }
         },
-        overrides = function(colors)
-          return {
-            NormalFloat = { bg = "none" },
-            FloatBorder = { bg = "none" },
-            FloatTitle = { bg = "none" },
-          }
-        end,
+        -- Transparency handled by autocmd
       })
     end,
   },
@@ -152,11 +151,7 @@ return {
       require("dracula").setup({
         transparent_bg = true,
         italic_comment = true,
-        overrides = {
-          Normal = { bg = "none" },
-          NormalFloat = { bg = "none" },
-          FloatBorder = { bg = "none" },
-        },
+        -- Transparency handled by autocmd
       })
     end,
   },
