@@ -54,6 +54,7 @@ require("lazy").setup({
     enabled = false,
     notify = false,
   },
+  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json",
   performance = {
     cache = { 
       enabled = true,
