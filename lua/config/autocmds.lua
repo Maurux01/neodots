@@ -75,6 +75,16 @@ autocmd("BufEnter", {
   end,
 })
 
+autocmd("FileType", {
+  group = "UIEnhancements",
+  pattern = "NvimTree",
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.signcolumn = "no"
+  end,
+})
+
 -- LSP auto commands
 augroup("LSPAutoCommands", { clear = true })
 autocmd("LspAttach", {

@@ -139,6 +139,8 @@ return {
       require("nvim-tree").setup({
         view = {
           width = 30,
+          number = false,
+          relativenumber = false,
         },
         renderer = {
           icons = {
