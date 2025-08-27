@@ -189,3 +189,12 @@ map("n", "<leader>ut", ":ForceTransparency<CR>", { desc = "Force Transparency" }
 map("n", "<leader>vi", ":lua require('image').clear()<CR>", { desc = "Clear Images" })
 map("n", "<leader>vp", ":!start <cfile><CR>", { desc = "Open PDF externally" })
 map("n", "<leader>vo", ":!start <cfile><CR>", { desc = "Open file externally" })
+
+-- Markdown preview mappings
+map("n", "<leader>mp", ":MarkdownPreview<CR>", { desc = "Markdown Preview" })
+map("n", "<leader>ms", ":MarkdownPreviewStop<CR>", { desc = "Markdown Preview Stop" })
+map("n", "<leader>mt", ":MarkdownPreviewToggle<CR>", { desc = "Markdown Preview Toggle" })
+
+-- CodeSnap mappings
+map("x", "<leader>cs", ":CodeSnap<CR>", { desc = "Code Snapshot to Clipboard" })
+map("x", "<leader>css", ":CodeSnapSave<CR>", { desc = "Save Code Snapshot" })

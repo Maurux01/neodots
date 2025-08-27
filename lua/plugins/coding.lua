@@ -160,14 +160,34 @@ return {
   -- Code screenshots
   {
     "mistricky/codesnap.nvim",
-    build = "make",
-    cmd = { "CodeSnap", "CodeSnapSave" },
+    build = function()
+      if vim.fn.has("win32") == 1 then
+        vim.fn.system("powershell -Command \"if (Get-Command cargo -ErrorAction SilentlyContinue) { cargo build --release } else { Write-Host 'Rust/Cargo not found. Please install Rust.' }\"") 
+      else
+        vim.fn.system("make")
+      end
+    end,
+    cmd = { "CodeSnap", "CodeSnapSave", "CodeSnapHighlight", "CodeSnapSaveHighlight" },
+    keys = {
+      { "<leader>cs", "<cmd>CodeSnap<cr>", mode = "x", desc = "Save selected code snapshot into clipboard" },
+      { "<leader>css", "<cmd>CodeSnapSave<cr>", mode = "x", desc = "Save selected code snapshot in ~/Pictures/" },
+    },
     config = function()
       require("codesnap").setup({
-        save_path = "~/Pictures/CodeSnaps",
+        save_path = os.getenv("USERPROFILE") and (os.getenv("USERPROFILE") .. "\\Pictures\\CodeSnaps") or "~/Pictures/CodeSnaps",
         has_breadcrumbs = true,
+        show_workspace = false,
         bg_theme = "default",
+        bg_color = "#535c68",
+        bg_x_padding = 122,
+        bg_y_padding = 82,
+        has_line_number = false,
+        watermark_font_family = "Pacifico",
         watermark = "",
+        title = "CodeSnap.nvim",
+        code_font_family = "CaskaydiaCove Nerd Font",
+        breadcrumbs_separator = "/",
+        mac_window_bar = true,
       })
     end,
   },
