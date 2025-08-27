@@ -180,8 +180,45 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
+    },
     config = function()
-      require("which-key").setup()
+      local wk = require("which-key")
+      wk.setup({
+        preset = "modern",
+        delay = 200,
+        expand = 1,
+        notify = false,
+        triggers = {
+          { "<auto>", mode = "nixsotc" },
+          { "<leader>", mode = { "n", "v" } },
+        },
+        spec = {
+          { "<leader>b", group = "buffers" },
+          { "<leader>c", group = "code" },
+          { "<leader>d", group = "debug" },
+          { "<leader>f", group = "find/file" },
+          { "<leader>g", group = "git" },
+          { "<leader>h", group = "harpoon" },
+          { "<leader>l", group = "lsp" },
+          { "<leader>m", group = "multicursor" },
+          { "<leader>p", group = "discord" },
+          { "<leader>q", group = "session" },
+          { "<leader>r", group = "refactor" },
+          { "<leader>s", group = "search" },
+          { "<leader>t", group = "terminal" },
+          { "<leader>u", group = "ui" },
+          { "<leader>v", group = "web dev" },
+          { "<leader>w", group = "windows" },
+        },
+      })
     end,
   },
 

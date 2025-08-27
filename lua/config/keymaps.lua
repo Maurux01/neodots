@@ -27,8 +27,15 @@ map("n", "<F2>", ":NvimTreeToggle<CR>", opts)
 map("n", "<S-l>", ":bnext<CR>", opts)
 map("n", "<S-h>", ":bprevious<CR>", opts)
 map("n", "<C-t>", ":enew<CR>", opts)
-map("n", "<C-q>", ":bdelete<CR>", opts)
+map("n", "<C-q>", ":Bdelete<CR>", opts)
 map("n", "<leader>n", ":enew<CR>", opts)
+map("n", "<C-Tab>", ":CybuNext<CR>", opts)
+map("n", "<C-S-Tab>", ":CybuPrev<CR>", opts)
+map("n", "<A-1>", ":BufferLineGoToBuffer 1<CR>", opts)
+map("n", "<A-2>", ":BufferLineGoToBuffer 2<CR>", opts)
+map("n", "<A-3>", ":BufferLineGoToBuffer 3<CR>", opts)
+map("n", "<A-4>", ":BufferLineGoToBuffer 4<CR>", opts)
+map("n", "<A-5>", ":BufferLineGoToBuffer 5<CR>", opts)
 
 -- Live Server
 map("n", "<F5>", ":LiveServerStart<CR>", opts)
@@ -56,101 +63,85 @@ map("n", "<C-u>", "<C-u>zz", opts)
 map("n", "n", "nzzzv", opts)
 map("n", "N", "Nzzzv", opts)
 
--- Which-key setup
-local function setup_which_key()
-  local ok, wk = pcall(require, "which-key")
-  if not ok then
-    print("Which-key not loaded")
-    return
-  end
+-- Simple keymaps for which-key
+map("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Explorer" })
+map("n", "<leader>w", ":w<CR>", { desc = "Save" })
+map("n", "<leader>q", ":q<CR>", { desc = "Quit" })
+map("n", "<leader>x", ":x<CR>", { desc = "Save & Quit" })
+map("n", "<leader>/", ":lua require('Comment.api').toggle.linewise.current()<CR>", { desc = "Comment" })
+map("n", "<leader>th", ":lua require('utils.theme_manager').telescope_themes()<CR>", { desc = "Change Theme" })
+map("n", "<leader>tT", ":lua require('utils.theme_manager').switch_theme()<CR>", { desc = "Next Theme" })
 
-  -- Single mappings
-  wk.register({
-    ["<leader>e"] = { ":NvimTreeToggle<CR>", " Explorer" },
-    ["<leader>w"] = { ":w<CR>", " Save" },
-    ["<leader>q"] = { ":q<CR>", " Quit" },
-    ["<leader>x"] = { ":x<CR>", " Save & Quit" },
-    ["<leader>n"] = { ":enew<CR>", " New File" },
-    ["<leader>/"] = { ":lua require('Comment.api').toggle.linewise.current()<CR>", " Comment" },
-  })
-  
-  print("Which-key loaded successfully")
+-- Group mappings with descriptions
+local group_mappings = {
+-- Find/File mappings
+map("n", "<leader>ff", ":Telescope find_files<CR>", { desc = "Files" })
+map("n", "<leader>fg", ":Telescope live_grep<CR>", { desc = "Grep" })
+map("n", "<leader>fb", ":Telescope buffers<CR>", { desc = "Buffers" })
+map("n", "<leader>fr", ":Telescope oldfiles<CR>", { desc = "Recent" })
+map("n", "<leader>fh", ":Telescope help_tags<CR>", { desc = "Help" })
+map("n", "<leader>fk", ":Telescope keymaps<CR>", { desc = "Keymaps" })
+map("n", "<leader>fp", ":Telescope projects<CR>", { desc = "Projects" })
+map("n", "<leader>ft", ":TodoTelescope<CR>", { desc = "TODOs" })
+map("n", "<leader>fm", ":Telescope marks<CR>", { desc = "Marks" })
+map("n", "<leader>fe", ":Telescope file_browser<CR>", { desc = "File Browser" })
+map("n", "<leader>fc", ":Telescope commands<CR>", { desc = "Commands" })
+map("n", "<leader>fn", ":lua require('genghis').createNewFile()<CR>", { desc = "New File" })
+map("n", "<leader>fd", ":lua require('genghis').duplicateFile()<CR>", { desc = "Duplicate File" })
+map("n", "<leader>fR", ":lua require('genghis').renameFile()<CR>", { desc = "Rename File" })
+map("n", "<leader>fx", ":lua require('genghis').chmodx()<CR>", { desc = "Make Executable" })
+-- Git mappings
+map("n", "<leader>gg", ":LazyGit<CR>", { desc = "LazyGit" })
+map("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Blame" })
+map("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Diff" })
+map("n", "<leader>gv", ":DiffviewOpen<CR>", { desc = "Diff View" })
+map("n", "<leader>gc", ":DiffviewClose<CR>", { desc = "Close Diff View" })
+map("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage Hunk" })
+map("n", "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", { desc = "Undo Stage" })
+map("n", "<leader>gp", ":Gitsigns preview_hunk<CR>", { desc = "Preview Hunk" })
+map("n", "<leader>gw", ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", { desc = "Worktrees" })
+map("n", "<leader>gW", ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>", { desc = "Create Worktree" })
+-- Terminal mappings
+map("n", "<leader>tt", ":ToggleTerm<CR>", { desc = "Toggle" })
+map("n", "<leader>tf", ":ToggleTerm direction=float<CR>", { desc = "Float" })
+map("n", "<leader>th", ":ToggleTerm direction=horizontal<CR>", { desc = "Horizontal" })
+map("n", "<leader>tv", ":ToggleTerm direction=vertical size=80<CR>", { desc = "Vertical" })
+map("n", "<leader>tg", ":lua _LAZYGIT_TOGGLE()<CR>", { desc = "LazyGit" })
+map("n", "<leader>tn", ":lua _NODE_TOGGLE()<CR>", { desc = "Node" })
+map("n", "<leader>tp", ":lua _PYTHON_TOGGLE()<CR>", { desc = "Python" })
 
-  -- Group mappings
-  wk.register({
-    ["<leader>f"] = {
-      name = " Find/File",
-      f = { ":Telescope find_files<CR>", "Files" },
-      g = { ":Telescope live_grep<CR>", "Grep" },
-      b = { ":Telescope buffers<CR>", "Buffers" },
-      r = { ":Telescope oldfiles<CR>", "Recent" },
-      h = { ":Telescope help_tags<CR>", "Help" },
-      k = { ":Telescope keymaps<CR>", "Keymaps" },
-      p = { ":Telescope projects<CR>", "Projects" },
-      w = { ":Telescope workspaces<CR>", "Workspaces" },
-      t = { ":TodoTelescope<CR>", "TODOs" },
-      m = { ":Telescope marks<CR>", "Marks" },
-      e = { ":Telescope file_browser<CR>", "File Browser" },
-      c = { ":Telescope commands<CR>", "Commands" },
-      n = { ":lua require('genghis').createNewFile()<CR>", "New File" },
-      d = { ":lua require('genghis').duplicateFile()<CR>", "Duplicate File" },
-      R = { ":lua require('genghis').renameFile()<CR>", "Rename File" },
-      x = { ":lua require('genghis').chmodx()<CR>", "Make Executable" },
-    },
-    ["<leader>g"] = {
-      name = " Git",
-      g = { ":LazyGit<CR>", "LazyGit" },
-      b = { ":Gitsigns toggle_current_line_blame<CR>", "Blame" },
-      d = { ":Gitsigns diffthis<CR>", "Diff" },
-      v = { ":DiffviewOpen<CR>", "Diff View" },
-      c = { ":DiffviewClose<CR>", "Close Diff View" },
-      s = { ":Gitsigns stage_hunk<CR>", "Stage Hunk" },
-      u = { ":Gitsigns undo_stage_hunk<CR>", "Undo Stage" },
-      p = { ":Gitsigns preview_hunk<CR>", "Preview Hunk" },
-      w = { ":lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", "Worktrees" },
-      W = { ":lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>", "Create Worktree" },
-    },
-    ["<leader>t"] = {
-      name = " Terminal",
-      t = { ":ToggleTerm<CR>", "Toggle" },
-      f = { ":ToggleTerm direction=float<CR>", "Float" },
-      h = { ":ToggleTerm direction=horizontal<CR>", "Horizontal" },
-      v = { ":ToggleTerm direction=vertical size=80<CR>", "Vertical" },
-      g = { ":lua _LAZYGIT_TOGGLE()<CR>", "LazyGit" },
-      n = { ":lua _NODE_TOGGLE()<CR>", "Node" },
-      p = { ":lua _PYTHON_TOGGLE()<CR>", "Python" },
-    },
-    ["<leader>b"] = {
-      name = " Buffers",
-      b = { ":Telescope buffers<CR>", "List" },
-      d = { ":Bdelete<CR>", "Delete" },
-      D = { ":Bwipeout<CR>", "Wipeout" },
-      n = { ":bnext<CR>", "Next" },
-      p = { ":bprevious<CR>", "Previous" },
-      f = { ":bfirst<CR>", "First" },
-      l = { ":blast<CR>", "Last" },
-      c = { ":enew<CR>", "Create" },
-      a = { ":%bd|e#<CR>", "Delete All" },
-      s = { ":w<CR>", "Save" },
-      w = { ":w<CR>:Bdelete<CR>", "Save & Close" },
-    },
-    ["<leader>w"] = {
-      name = " Windows",
-      v = { ":vsplit<CR>", "Vertical Split" },
-      s = { ":split<CR>", "Horizontal Split" },
-      c = { ":close<CR>", "Close" },
-      o = { ":only<CR>", "Only" },
-      m = { ":WindowsMaximize<CR>", "Maximize" },
-      h = { "<C-w>h", "Left" },
-      j = { "<C-w>j", "Down" },
-      k = { "<C-w>k", "Up" },
-      l = { "<C-w>l", "Right" },
-      ["="] = { "<C-w>=", "Equal" },
-      ["+"] = { ":resize +5<CR>", "Height +" },
-      ["-"] = { ":resize -5<CR>", "Height -" },
-      [">"] = { ":vertical resize +5<CR>", "Width +" },
-      ["<"] = { ":vertical resize -5<CR>", "Width -" },
-    },
+-- Buffer mappings
+map("n", "<leader>bb", ":lua require('snipe').open_buffer_menu()<CR>", { desc = "Buffer Menu" })
+map("n", "<leader>bl", ":Telescope buffers<CR>", { desc = "List" })
+map("n", "<leader>bd", ":Bdelete<CR>", { desc = "Delete" })
+map("n", "<leader>bD", ":Bwipeout<CR>", { desc = "Wipeout" })
+map("n", "<leader>bn", ":bnext<CR>", { desc = "Next" })
+map("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous" })
+map("n", "<leader>bf", ":bfirst<CR>", { desc = "First" })
+map("n", "<leader>bL", ":blast<CR>", { desc = "Last" })
+map("n", "<leader>bc", ":enew<CR>", { desc = "Create" })
+map("n", "<leader>ba", ":%bd|e#<CR>", { desc = "Delete All" })
+map("n", "<leader>bs", ":w<CR>", { desc = "Save" })
+map("n", "<leader>bw", ":w<CR>:Bdelete<CR>", { desc = "Save & Close" })
+map("n", "<leader>bo", ":lua require('cybu').cycle('next')<CR>", { desc = "Cycle Next" })
+map("n", "<leader>bi", ":lua require('cybu').cycle('prev')<CR>", { desc = "Cycle Prev" })
+map("n", "<leader>bt", ":tabnew<CR>", { desc = "New Tab" })
+map("n", "<leader>bT", ":tabclose<CR>", { desc = "Close Tab" })
+-- Window mappings
+map("n", "<leader>wv", ":vsplit<CR>", { desc = "Vertical Split" })
+map("n", "<leader>ws", ":split<CR>", { desc = "Horizontal Split" })
+map("n", "<leader>wc", ":close<CR>", { desc = "Close" })
+map("n", "<leader>wo", ":only<CR>", { desc = "Only" })
+map("n", "<leader>wm", ":WindowsMaximize<CR>", { desc = "Maximize" })
+map("n", "<leader>wh", "<C-w>h", { desc = "Left" })
+map("n", "<leader>wj", "<C-w>j", { desc = "Down" })
+map("n", "<leader>wk", "<C-w>k", { desc = "Up" })
+map("n", "<leader>wl", "<C-w>l", { desc = "Right" })
+map("n", "<leader>w=", "<C-w>=", { desc = "Equal" })
+map("n", "<leader>w+", ":resize +5<CR>", { desc = "Height +" })
+map("n", "<leader>w-", ":resize -5<CR>", { desc = "Height -" })
+map("n", "<leader>w>", ":vertical resize +5<CR>", { desc = "Width +" })
+map("n", "<leader>w<", ":vertical resize -5<CR>", { desc = "Width -" })
     ["<leader>l"] = {
       name = " LSP",
       d = { ":lua vim.lsp.buf.definition()<CR>", "Definition" },
@@ -248,18 +239,3 @@ local function setup_which_key()
       ["3"] = { ":lua require('harpoon'):list():select(3)<CR>", "File 3" },
       ["4"] = { ":lua require('harpoon'):list():select(4)<CR>", "File 4" },
     },
-  })
-end
-
--- Setup which-key after plugins are loaded
-vim.api.nvim_create_autocmd("User", {
-  pattern = "LazyDone",
-  callback = function()
-    vim.defer_fn(setup_which_key, 1000)
-  end,
-})
-
--- Also try to setup immediately if which-key is available
-vim.defer_fn(function()
-  setup_which_key()
-end, 2000)
