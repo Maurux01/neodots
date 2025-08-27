@@ -5,22 +5,74 @@ local themes = {
   {
     name = "tokyonight",
     colorscheme = "tokyonight-night",
-    variants = { "night", "storm", "day", "moon" }
+    variants = { "night", "storm", "day", "moon" },
+    description = "Beautiful Tokyo Night theme"
   },
   {
     name = "catppuccin",
-    colorscheme = "catppuccin",
-    variants = { "mocha", "macchiato", "frappe", "latte" }
+    colorscheme = "catppuccin-mocha",
+    variants = { "mocha", "macchiato", "frappe", "latte" },
+    description = "Soothing pastel theme"
   },
   {
     name = "kanagawa",
-    colorscheme = "kanagawa",
-    variants = { "wave", "dragon", "lotus" }
+    colorscheme = "kanagawa-wave",
+    variants = { "wave", "dragon", "lotus" },
+    description = "Inspired by Katsushika Hokusai"
   },
   {
     name = "rose-pine",
     colorscheme = "rose-pine",
-    variants = { "main", "moon", "dawn" }
+    variants = { "main", "moon", "dawn" },
+    description = "All natural pine, faux fur and a bit of soho vibes"
+  },
+  {
+    name = "gruvbox-material",
+    colorscheme = "gruvbox-material",
+    variants = { "hard", "medium", "soft" },
+    description = "Gruvbox with Material Design palette"
+  },
+  {
+    name = "dracula",
+    colorscheme = "dracula",
+    variants = { "default" },
+    description = "Dark theme inspired by Dracula"
+  },
+  {
+    name = "onedark",
+    colorscheme = "onedark",
+    variants = { "dark", "darker", "cool", "deep", "warm", "warmer" },
+    description = "Atom One Dark inspired theme"
+  },
+  {
+    name = "nightfox",
+    colorscheme = "nightfox",
+    variants = { "nightfox", "dayfox", "dawnfox", "duskfox", "nordfox", "terafox", "carbonfox" },
+    description = "Highly customizable theme"
+  },
+  {
+    name = "sonokai",
+    colorscheme = "sonokai",
+    variants = { "default", "atlantis", "andromeda", "shusia", "maia", "espresso" },
+    description = "High contrast & vivid color scheme"
+  },
+  {
+    name = "everforest",
+    colorscheme = "everforest",
+    variants = { "hard", "medium", "soft" },
+    description = "Green based color scheme"
+  },
+  {
+    name = "oxocarbon",
+    colorscheme = "oxocarbon",
+    variants = { "default" },
+    description = "IBM's dark theme"
+  },
+  {
+    name = "cyberdream",
+    colorscheme = "cyberdream",
+    variants = { "default" },
+    description = "High contrast cyberpunk theme"
   }
 }
 
@@ -82,13 +134,13 @@ function M.telescope_themes()
   local action_state = require("telescope.actions.state")
 
   pickers.new({}, {
-    prompt_title = "Select Theme",
+    prompt_title = "🎨 Select Dark Theme",
     finder = finders.new_table({
       results = themes,
       entry_maker = function(entry)
         return {
           value = entry,
-          display = entry.name,
+          display = string.format("%-20s %s", entry.name, entry.description or ""),
           ordinal = entry.name,
         }
       end,

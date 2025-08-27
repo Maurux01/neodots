@@ -125,3 +125,31 @@ map("n", "<leader>uz", ":ZenMode<CR>", { desc = "Zen Mode" })
 map("n", "<leader>ut", ":Twilight<CR>", { desc = "Twilight" })
 map("n", "<leader>uth", ":lua require('utils.theme_manager').telescope_themes()<CR>", { desc = "Change Theme" })
 map("n", "<leader>utt", ":lua require('utils.theme_manager').switch_theme()<CR>", { desc = "Next Theme" })
+
+-- Quick theme switching
+map("n", "<leader>th", ":lua require('utils.theme_manager').telescope_themes()<CR>", { desc = "Theme Picker" })
+map("n", "<leader>tn", ":lua require('utils.theme_manager').switch_theme()<CR>", { desc = "Next Theme" })
+
+-- Direct theme shortcuts (optional)
+map("n", "<leader>t1", ":colorscheme tokyonight-night<CR>", { desc = "Tokyo Night" })
+map("n", "<leader>t2", ":colorscheme catppuccin-mocha<CR>", { desc = "Catppuccin" })
+map("n", "<leader>t3", ":colorscheme kanagawa-wave<CR>", { desc = "Kanagawa" })
+map("n", "<leader>t4", ":colorscheme rose-pine<CR>", { desc = "Rose Pine" })
+map("n", "<leader>t5", ":colorscheme gruvbox-material<CR>", { desc = "Gruvbox Material" })
+map("n", "<leader>t6", ":colorscheme dracula<CR>", { desc = "Dracula" })
+map("n", "<leader>t7", ":colorscheme onedark<CR>", { desc = "One Dark" })
+map("n", "<leader>t8", ":colorscheme nightfox<CR>", { desc = "Nightfox" })
+map("n", "<leader>t9", ":colorscheme cyberdream<CR>", { desc = "Cyberdream" })
+
+-- Create user commands for theme switching
+vim.api.nvim_create_user_command('ThemePicker', function()
+  require('utils.theme_manager').telescope_themes()
+end, { desc = 'Open theme picker' })
+
+vim.api.nvim_create_user_command('NextTheme', function()
+  require('utils.theme_manager').switch_theme()
+end, { desc = 'Switch to next theme' })
+
+vim.api.nvim_create_user_command('SetTheme', function(opts)
+  require('utils.theme_manager').set_theme(opts.args)
+end, { nargs = 1, desc = 'Set specific theme' })

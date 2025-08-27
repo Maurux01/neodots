@@ -129,6 +129,133 @@ return {
     end,
   },
 
+  -- Gruvbox Material - Popular dark theme
+  {
+    "sainnhe/gruvbox-material",
+    lazy = true,
+    priority = 900,
+    config = function()
+      vim.g.gruvbox_material_style = "material"
+      vim.g.gruvbox_material_background = "hard"
+      vim.g.gruvbox_material_transparent_background = 1
+      vim.g.gruvbox_material_enable_italic = 1
+      vim.g.gruvbox_material_disable_italic_comment = 0
+    end,
+  },
+
+  -- Dracula - Classic dark theme
+  {
+    "Mofiqul/dracula.nvim",
+    lazy = true,
+    priority = 900,
+    config = function()
+      require("dracula").setup({
+        transparent_bg = true,
+        italic_comment = true,
+        overrides = {
+          Normal = { bg = "none" },
+          NormalFloat = { bg = "none" },
+          FloatBorder = { bg = "none" },
+        },
+      })
+    end,
+  },
+
+  -- Onedark - Atom One Dark inspired
+  {
+    "navarasu/onedark.nvim",
+    lazy = true,
+    priority = 900,
+    config = function()
+      require("onedark").setup({
+        style = "dark",
+        transparent = true,
+        term_colors = true,
+        ending_tildes = false,
+        cmp_itemkind_reverse = false,
+        code_style = {
+          comments = "italic",
+          keywords = "none",
+          functions = "none",
+          strings = "none",
+          variables = "none",
+        },
+      })
+    end,
+  },
+
+  -- Nightfox - Modern dark theme family
+  {
+    "EdenEast/nightfox.nvim",
+    lazy = true,
+    priority = 900,
+    config = function()
+      require("nightfox").setup({
+        options = {
+          transparent = true,
+          terminal_colors = true,
+          styles = {
+            comments = "italic",
+            keywords = "bold",
+            types = "italic,bold",
+          },
+        },
+      })
+    end,
+  },
+
+  -- Sonokai - High contrast dark theme
+  {
+    "sainnhe/sonokai",
+    lazy = true,
+    priority = 900,
+    config = function()
+      vim.g.sonokai_style = "atlantis"
+      vim.g.sonokai_transparent_background = 1
+      vim.g.sonokai_enable_italic = 1
+      vim.g.sonokai_disable_italic_comment = 0
+    end,
+  },
+
+  -- Everforest - Green-based dark theme
+  {
+    "sainnhe/everforest",
+    lazy = true,
+    priority = 900,
+    config = function()
+      vim.g.everforest_style = "hard"
+      vim.g.everforest_background = "hard"
+      vim.g.everforest_transparent_background = 1
+      vim.g.everforest_enable_italic = 1
+      vim.g.everforest_disable_italic_comment = 0
+    end,
+  },
+
+  -- Oxocarbon - IBM's dark theme
+  {
+    "nyoom-engineering/oxocarbon.nvim",
+    lazy = true,
+    priority = 900,
+    config = function()
+      vim.opt.background = "dark"
+    end,
+  },
+
+  -- Cyberdream - Cyberpunk inspired
+  {
+    "scottmckendry/cyberdream.nvim",
+    lazy = true,
+    priority = 900,
+    config = function()
+      require("cyberdream").setup({
+        transparent = true,
+        italic_comments = true,
+        hide_fillchars = true,
+        borderless_telescope = true,
+      })
+    end,
+  },
+
   -- File explorer
   {
     "nvim-tree/nvim-tree.lua",

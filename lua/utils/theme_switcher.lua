@@ -2,10 +2,20 @@
 local M = {}
 
 local themes = {
-    "tokyonight",
-    "catppuccin",
-    "kanagawa",
-    "rose-pine"
+    "tokyonight-night",
+    "catppuccin-mocha",
+    "kanagawa-wave",
+    "rose-pine",
+    "gruvbox-material",
+    "dracula",
+    "onedark",
+    "nightfox",
+    "carbonfox",
+    "duskfox",
+    "sonokai",
+    "everforest",
+    "oxocarbon",
+    "cyberdream"
 }
 
 function M.switch_theme()
