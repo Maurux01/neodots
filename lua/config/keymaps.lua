@@ -86,7 +86,7 @@ map("n", "<leader>gb", ":Gitsigns toggle_current_line_blame<CR>", { desc = "Blam
 map("n", "<leader>gd", ":Gitsigns diffthis<CR>", { desc = "Diff" })
 map("n", "<leader>gs", ":Gitsigns stage_hunk<CR>", { desc = "Stage Hunk" })
 map("n", "<leader>gu", ":Gitsigns undo_stage_hunk<CR>", { desc = "Undo Stage" })
-
+ 
 -- Terminal mappings
 map("n", "<leader>tt", ":ToggleTerm<CR>", { desc = "Toggle" })
 map("n", "<leader>tf", ":ToggleTerm direction=float<CR>", { desc = "Float" })
