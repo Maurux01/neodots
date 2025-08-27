@@ -29,6 +29,8 @@ vim.api.nvim_create_autocmd("User", {
   callback = function()
     require("config.snippets")
     require("config.completion")
+    require("config.cmdline-keymaps")
+    require("config.enhanced-suggestions").setup()
   end,
 })
 

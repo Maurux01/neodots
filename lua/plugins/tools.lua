@@ -176,13 +176,19 @@ return {
 
 
 
-  -- Which-key like popups
+  -- Which-key popup menus
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
     config = function()
       local wk = require("which-key")
       wk.setup({
+        preset = "modern",
+        delay = 200,
         plugins = {
           marks = true,
           registers = true,
@@ -191,7 +197,7 @@ return {
             suggestions = 20,
           },
           presets = {
-            operators = false,
+            operators = true,
             motions = true,
             text_objects = true,
             windows = true,
@@ -200,53 +206,45 @@ return {
             g = true,
           },
         },
-        operators = { gc = "Comments" },
-        key_labels = {},
-        icons = {
-          breadcrumb = "»",
-          separator = "➜",
-          group = "+",
+        win = {
+          border = "rounded",
+          padding = { 1, 2 },
+          wo = {
+            winblend = 10,
+          },
         },
-        popup_mappings = {
+        layout = {
+          width = { min = 20 },
+          spacing = 3,
+        },
+        keys = {
           scroll_down = "<c-d>",
           scroll_up = "<c-u>",
         },
-        window = {
-          border = "rounded",
-          position = "bottom",
-          margin = { 1, 0, 1, 0 },
-          padding = { 2, 2, 2, 2 },
-          winblend = 0,
-        },
-        layout = {
-          height = { min = 4, max = 25 },
-          width = { min = 20, max = 50 },
-          spacing = 3,
-          align = "left",
-        },
-        ignore_missing = true,
-        hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " },
         show_help = true,
-        triggers = "auto",
-        triggers_blacklist = {
-          i = { "j", "k" },
-          v = { "j", "k" },
+        show_keys = true,
+        disable = {
+          buftypes = {},
+          filetypes = {},
         },
       })
       
-      wk.register({
-        b = { name = "buffers" },
-        c = { name = "code" },
-        d = { name = "debug" },
-        f = { name = "find/file" },
-        g = { name = "git" },
-        l = { name = "lsp" },
-        m = { name = "markdown" },
-        q = { name = "session" },
-        t = { name = "terminal/themes" },
-        u = { name = "ui" },
-        w = { name = "windows" },
-      }, { prefix = "<leader>" })
+      -- Register key groups
+      wk.add({
+        { "<leader>b", group = "buffers" },
+        { "<leader>c", group = "code" },
+        { "<leader>d", group = "debug" },
+        { "<leader>f", group = "find/file" },
+        { "<leader>g", group = "git" },
+        { "<leader>l", group = "lsp" },
+        { "<leader>m", group = "markdown" },
+        { "<leader>q", group = "session" },
+        { "<leader>t", group = "terminal/themes" },
+        { "<leader>u", group = "ui" },
+        { "<leader>w", group = "windows" },
+        { "<leader>s", group = "search" },
+        { "<leader>x", group = "diagnostics" },
+      })
     end,
   },
 
@@ -623,14 +621,15 @@ return {
         cmdline = {
           enabled = true,
           view = "cmdline_popup",
+          opts = {},
           format = {
-            cmdline = { pattern = "^:", icon = "", lang = "vim" },
-            search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex" },
-            search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex" },
+            cmdline = { pattern = "^:", icon = "⚡", lang = "vim" },
+            search_down = { kind = "search", pattern = "^/", icon = "🔍 ", lang = "regex" },
+            search_up = { kind = "search", pattern = "^%?", icon = "🔍 ", lang = "regex" },
             filter = { pattern = "^:%s*!", icon = "$", lang = "bash" },
-            lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
-            help = { pattern = "^:%s*he?l?p?%s+", icon = "" },
-            input = {},
+            lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "🌙", lang = "lua" },
+            help = { pattern = "^:%s*he?l?p?%s+", icon = "❓" },
+            input = { view = "cmdline_input", icon = "📝" },
           },
         },
         messages = {
@@ -645,45 +644,6 @@ return {
           enabled = true,
           backend = "nui",
           kind_icons = {},
-        },
-        redirect = {
-          view = "popup",
-          filter = { event = "msg_show" },
-        },
-        commands = {
-          history = {
-            view = "split",
-            opts = { enter = true, format = "details" },
-            filter = {
-              any = {
-                { event = "notify" },
-                { error = true },
-                { warning = true },
-                { event = "msg_show", kind = { "" } },
-                { event = "lsp", kind = "message" },
-              },
-            },
-          },
-          last = {
-            view = "popup",
-            opts = { enter = true, format = "details" },
-            filter = {
-              any = {
-                { event = "notify" },
-                { error = true },
-                { warning = true },
-                { event = "msg_show", kind = { "" } },
-                { event = "lsp", kind = "message" },
-              },
-            },
-            filter_opts = { count = 1 },
-          },
-          errors = {
-            view = "popup",
-            opts = { enter = true, format = "details" },
-            filter = { error = true },
-            filter_opts = { reverse = true },
-          },
         },
         notify = {
           enabled = true,
@@ -700,8 +660,6 @@ return {
           hover = {
             enabled = true,
             silent = false,
-            view = nil,
-            opts = {},
           },
           signature = {
             enabled = true,
@@ -711,13 +669,10 @@ return {
               luasnip = true,
               throttle = 50,
             },
-            view = nil,
-            opts = {},
           },
           message = {
             enabled = true,
             view = "notify",
-            opts = {},
           },
           documentation = {
             view = "hover",
@@ -730,37 +685,10 @@ return {
             },
           },
         },
-        markdown = {
-          hover = {
-            ["|(%S-)|"} = vim.cmd.help,
-            ["%[.-%]%((%S-)%)"] = require("noice.util").open,
-          },
-          highlights = {
-            ["|%S-|"] = "@text.reference",
-            ["@%S+"] = "@parameter",
-            ["^%s*(Parameters:)"] = "@text.title",
-            ["^%s*(Return:)"] = "@text.title",
-            ["^%s*(See also:)"] = "@text.title",
-            ["{%S-}"] = "@parameter",
-          },
-        },
         health = {
           checker = false,
         },
       })
-    end,
-  },
-
-  -- AI Code Completion (Codeium)
-  {
-    "Exafunction/codeium.nvim",
-    event = "BufEnter",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeium").setup({})
     end,
   },
 

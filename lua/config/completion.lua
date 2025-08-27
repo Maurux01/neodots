@@ -1,22 +1,53 @@
--- Configuración adicional para mejorar el autocompletado
+-- Enhanced completion configuration
 local cmp = require("cmp")
 
--- Configurar autocompletado para la línea de comandos
+-- Command line completion for search
 cmp.setup.cmdline({ '/', '?' }, {
   mapping = cmp.mapping.preset.cmdline(),
   sources = {
-    { name = 'buffer' }
-  }
+    { name = 'buffer' },
+    { name = 'nvim_lsp_document_symbol' }
+  },
+  formatting = {
+    format = function(entry, vim_item)
+      vim_item.kind = "🔍 " .. vim_item.kind
+      return vim_item
+    end,
+  },
 })
 
--- Configurar autocompletado para comandos
+-- Command line completion for commands
 cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
+  mapping = cmp.mapping.preset.cmdline({
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        fallback()
+      end
+    end, { 'c' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      else
+        fallback()
+      end
+    end, { 'c' }),
+  }),
   sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
+    { name = 'path', priority = 1000 },
+    { name = 'cmdline', priority = 900 }
+  }),
+  formatting = {
+    format = function(entry, vim_item)
+      if entry.source.name == 'path' then
+        vim_item.kind = "📁 Path"
+      elseif entry.source.name == 'cmdline' then
+        vim_item.kind = "⚡ Cmd"
+      end
+      return vim_item
+    end,
+  },
 })
 
 -- Configurar colores para los highlights de rainbow brackets

@@ -343,7 +343,7 @@ ls.add_snippets("rust", {
     t({"", ""}),
     t({"", "#[tokio::main]"}),
     t({"", "async fn main() -> Result<(), Box<dyn std::error::Error>> {"}),
-    t({"", "    let data = "}), i(1), t("(\""), i(2, "https://api.example.com"), t("\").await?;"),
+    t({"", "    let data = fetch_data(\""}), i(2, "https://api.example.com"), t("\").await?;"),
     t({"", "    println!(\"{}\", data);"}),
     t({"", "    Ok(())"}),
     t({"", "}"}), i(0)
