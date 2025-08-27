@@ -181,21 +181,30 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     config = function()
-      require("which-key").setup({
+      local wk = require("which-key")
+      wk.setup({
+        preset = "modern",
         delay = 300,
-        triggers = "auto",
-        spec = {
-          { "<leader>b", group = "buffers" },
-          { "<leader>c", group = "code" },
-          { "<leader>d", group = "debug" },
-          { "<leader>f", group = "find/file" },
-          { "<leader>g", group = "git" },
-          { "<leader>l", group = "lsp" },
-          { "<leader>q", group = "session" },
-          { "<leader>t", group = "terminal/themes" },
-          { "<leader>u", group = "ui" },
-          { "<leader>w", group = "windows" },
+        expand = 1,
+        notify = true,
+        triggers = {
+          { "<auto>", mode = "nxsot" },
         },
+      })
+      
+      wk.add({
+        { "<leader>b", group = "buffers" },
+        { "<leader>c", group = "code" },
+        { "<leader>cs", group = "codesnap" },
+        { "<leader>d", group = "debug" },
+        { "<leader>f", group = "find/file" },
+        { "<leader>g", group = "git" },
+        { "<leader>l", group = "lsp" },
+        { "<leader>m", group = "markdown" },
+        { "<leader>q", group = "session" },
+        { "<leader>t", group = "terminal/themes" },
+        { "<leader>u", group = "ui" },
+        { "<leader>w", group = "windows" },
       })
     end,
   },
