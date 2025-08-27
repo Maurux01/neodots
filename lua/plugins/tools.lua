@@ -29,9 +29,28 @@ return {
               ["<C-d>"] = false,
             },
           },
+          file_ignore_patterns = {
+            "node_modules",
+            ".git/",
+            "dist/",
+            "build/",
+            "*.lock",
+          },
+        },
+        extensions = {
+          file_browser = {
+            theme = "ivy",
+            hijack_netrw = true,
+          },
+          ["ui-select"] = {
+            require("telescope.themes").get_dropdown({})
+          },
         },
       })
       pcall(require("telescope").load_extension, "fzf")
+      pcall(require("telescope").load_extension, "file_browser")
+      pcall(require("telescope").load_extension, "ui-select")
+      pcall(require("telescope").load_extension, "live_grep_args")
     end,
   },
 
@@ -188,24 +207,39 @@ return {
     end,
   },
 
-  -- Auto-format on save
+  -- Modern formatting with conform.nvim
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      local null_ls = require("null-ls")
-      null_ls.setup({
-        sources = {
-          null_ls.builtins.formatting.prettier,
-          null_ls.builtins.formatting.stylua,
-        },
-      })
-      
-      -- Auto-format on save
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        callback = function()
-          vim.lsp.buf.format({ async = false })
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    keys = {
+      {
+        "<leader>f",
+        function()
+          require("conform").format({ async = true, lsp_fallback = true })
         end,
+        mode = "",
+        desc = "Format buffer",
+      },
+    },
+    config = function()
+      require("conform").setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+          python = { "isort", "black" },
+          javascript = { { "prettierd", "prettier" } },
+          typescript = { { "prettierd", "prettier" } },
+          javascriptreact = { { "prettierd", "prettier" } },
+          typescriptreact = { { "prettierd", "prettier" } },
+          json = { { "prettierd", "prettier" } },
+          html = { { "prettierd", "prettier" } },
+          css = { { "prettierd", "prettier" } },
+          markdown = { { "prettierd", "prettier" } },
+        },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_fallback = true,
+        },
       })
     end,
   },
@@ -219,12 +253,19 @@ return {
     end,
   },
 
-  -- Jump to any location (like Ace Jump)
+  -- Better navigation with flash
   {
-    "phaazon/hop.nvim",
-    branch = "v2",
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+    },
     config = function()
-      require("hop").setup()
+      require("flash").setup()
     end,
   },
 
@@ -310,13 +351,20 @@ return {
     end,
   },
 
-  -- Better session management
+  -- Better session management with persistence
   {
-    "rmagatti/auto-session",
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    keys = {
+      { "<leader>qs", function() require("persistence").load() end, desc = "Restore Session" },
+      { "<leader>ql", function() require("persistence").load({ last = true }) end, desc = "Restore Last Session" },
+      { "<leader>qd", function() require("persistence").stop() end, desc = "Don't Save Current Session" },
+    },
     config = function()
-      require("auto-session").setup({
-        log_level = "error",
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+      require("persistence").setup({
+        dir = vim.fn.expand(vim.fn.stdpath("state") .. "/sessions/"),
+        options = { "buffers", "curdir", "tabpages", "winsize" },
+        pre_save = nil,
       })
     end,
   },
@@ -430,19 +478,19 @@ return {
     end,
   },
 
-  -- Enhanced telescope extensions
+  -- Enhanced telescope with better extensions
+  {
+    "nvim-telescope/telescope-file-browser.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+  },
+
+  {
+    "nvim-telescope/telescope-ui-select.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  },
+
   {
     "nvim-telescope/telescope-live-grep-args.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-  },
-
-  {
-    "nvim-telescope/telescope-frecency.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-  },
-
-  {
-    "nvim-telescope/telescope-project.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
   },
 
@@ -509,6 +557,95 @@ return {
     end,
   },
 
+  -- AI Code Completion (Codeium)
+  {
+    "Exafunction/codeium.nvim",
+    event = "BufEnter",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function()
+      require("codeium").setup({})
+    end,
+  },
+
+  -- Smooth scrolling
+  {
+    "karb94/neoscroll.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("neoscroll").setup({
+        mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>', '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
+        hide_cursor = true,
+        stop_eof = true,
+        respect_scrolloff = false,
+        cursor_scrolls_alone = true,
+        easing_function = "quadratic",
+        pre_hook = nil,
+        post_hook = nil,
+      })
+    end,
+  },
+
+  -- Zen mode for focused coding
+  {
+    "folke/zen-mode.nvim",
+    cmd = "ZenMode",
+    config = function()
+      require("zen-mode").setup({
+        window = {
+          backdrop = 0.95,
+          width = 120,
+          height = 1,
+          options = {
+            signcolumn = "no",
+            number = false,
+            relativenumber = false,
+            cursorline = false,
+            cursorcolumn = false,
+            foldcolumn = "0",
+            list = false,
+          },
+        },
+        plugins = {
+          options = {
+            enabled = true,
+            ruler = false,
+            showcmd = false,
+          },
+          twilight = { enabled = true },
+          gitsigns = { enabled = false },
+          tmux = { enabled = false },
+        },
+      })
+    end,
+  },
+
+  -- Dim inactive portions of code
+  {
+    "folke/twilight.nvim",
+    cmd = "Twilight",
+    config = function()
+      require("twilight").setup({
+        dimming = {
+          alpha = 0.25,
+          color = { "Normal", "#ffffff" },
+          term_bg = "#000000",
+          inactive = false,
+        },
+        context = 10,
+        treesitter = true,
+        expand = {
+          "function",
+          "method",
+          "table",
+          "if_statement",
+        },
+      })
+    end,
+  },
+
   -- Enhanced terminal
   {
     "akinsho/toggleterm.nvim",
@@ -566,5 +703,42 @@ return {
     end,
   },
 
+  -- Enhanced diff view
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose" },
+    config = function()
+      require("diffview").setup()
+    end,
+  },
+
+  -- Better marks
+  {
+    "chentoast/marks.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("marks").setup()
+    end,
+  },
+
+  -- Better increment/decrement
+  {
+    "monaqa/dial.nvim",
+    keys = {
+      { "<C-a>", function() require("dial.map").manipulate("increment", "normal") end },
+      { "<C-x>", function() require("dial.map").manipulate("decrement", "normal") end },
+    },
+    config = function()
+      local augend = require("dial.augend")
+      require("dial.config").augends:register_group({
+        default = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.date.alias["%Y/%m/%d"],
+          augend.constant.alias.bool,
+        },
+      })
+    end,
+  },
 
 }
