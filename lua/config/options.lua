@@ -232,3 +232,19 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
+
+-- Auto-detect media files
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.pdf", "*.PDF" },
+  callback = function()
+    vim.bo.filetype = "pdf"
+    vim.notify("PDF detected. Use <leader>vp to open externally", vim.log.levels.INFO)
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.bmp" },
+  callback = function()
+    vim.notify("Image detected. Use <leader>vo to open externally", vim.log.levels.INFO)
+  end,
+})

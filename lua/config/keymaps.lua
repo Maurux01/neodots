@@ -184,3 +184,8 @@ vim.api.nvim_create_user_command('ForceTransparency', function()
 end, { desc = 'Force transparency on current theme' })
 
 map("n", "<leader>ut", ":ForceTransparency<CR>", { desc = "Force Transparency" })
+
+-- Media viewer mappings
+map("n", "<leader>vi", ":lua require('image').clear()<CR>", { desc = "Clear Images" })
+map("n", "<leader>vp", ":!start <cfile><CR>", { desc = "Open PDF externally" })
+map("n", "<leader>vo", ":!start <cfile><CR>", { desc = "Open file externally" })
