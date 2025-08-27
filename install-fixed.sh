@@ -32,15 +32,14 @@ print_error() {
 # Function to detect operating system
 detect_os() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        OS="linux"
+        echo "linux"
     elif [[ "$OSTYPE" == "darwin"* ]]; then
-        OS="macos"
+        echo "macos"
     elif [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "cygwin" ]]; then
-        OS="windows"
+        echo "windows"
     else
-        OS="unknown"
+        echo "unknown"
     fi
-    echo $OS
 }
 
 # Function to check if a command exists
@@ -50,6 +49,7 @@ command_exists() {
 
 # Function to detect Linux distribution
 detect_linux_distro() {
+    # shellcheck disable=SC1091
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         echo "$ID"
@@ -62,19 +62,74 @@ detect_linux_distro() {
     fi
 }
 
+# Function to install packages with detected package manager
+install_packages_with_manager() {
+    local packages=("$@")
+    
+    if command_exists apt; then
+        print_status "Installing dependencies for Debian/Ubuntu systems..."
+        if ! sudo apt update; then
+            print_error "Failed to update package list"
+            return 1
+        fi
+        for pkg in "${packages[@]}"; do
+            if sudo apt install -y "$pkg" 2>/dev/null; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    elif command_exists dnf; then
+        print_status "Installing dependencies for Fedora/RHEL systems..."
+        for pkg in "${packages[@]}"; do
+            if sudo dnf install -y "$pkg" 2>/dev/null; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    elif command_exists pacman; then
+        print_status "Installing dependencies for Arch systems..."
+        if ! sudo pacman -Syu --noconfirm; then
+            print_error "Failed to update package database"
+            return 1
+        fi
+        for pkg in "${packages[@]}"; do
+            if sudo pacman -S --noconfirm "$pkg" 2>/dev/null; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    elif command_exists zypper; then
+        print_status "Installing dependencies for openSUSE systems..."
+        for pkg in "${packages[@]}"; do
+            if sudo zypper install -y "$pkg" 2>/dev/null; then
+                print_success "Installed: $pkg"
+            else
+                print_warning "Could not install: $pkg"
+            fi
+        done
+    else
+        print_error "Could not detect a compatible package manager."
+        print_warning "Please manually install the following packages:"
+        printf '%s\n' "${packages[@]}"
+        return 1
+    fi
+}
+
 # Function to install dependencies
 install_deps() {
+    local os="$1"
+    local distro="$2"
+    
     print_status "Installing dependencies..."
     
-    OS=$(detect_os)
-    
-    if [[ "$OS" == "linux" ]]; then
-        # Detect specific distribution
-        DISTRO=$(detect_linux_distro)
-        print_status "Detected distribution: $DISTRO"
+    if [[ "$os" == "linux" ]]; then
+        print_status "Detected distribution: $distro"
         
         # Essential packages for Neodots
-        case $DISTRO in
+        case $distro in
             "ubuntu"|"debian")
                 PACKAGES=("git" "curl" "nodejs" "npm" "python3" "python3-pip" "build-essential" "ripgrep" "fd-find" "fzf" "unzip")
                 ;;
@@ -92,70 +147,29 @@ install_deps() {
                 print_warning "Distribution not specifically supported. Installing basic packages."
                 ;;
         esac
-    elif [[ "$OS" == "macos" ]]; then
+        
+        install_packages_with_manager "${PACKAGES[@]}"
+        
+    elif [[ "$os" == "macos" ]]; then
         print_status "Installing dependencies for macOS..."
         # Check if Homebrew is installed
         if ! command_exists brew; then
             print_status "Installing Homebrew..."
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            if ! /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; then
+                print_error "Failed to install Homebrew"
+                return 1
+            fi
         fi
         
         PACKAGES=("git" "node" "python3" "ripgrep" "fd" "fzf")
         
         for pkg in "${PACKAGES[@]}"; do
-            if brew install "$pkg"; then
+            if brew install "$pkg" 2>/dev/null; then
                 print_success "Installed: $pkg"
             else
                 print_warning "Could not install: $pkg"
             fi
         done
-        return 0
-    fi
-
-    # Install packages based on available package manager
-    if command_exists apt; then
-        print_status "Installing dependencies for Debian/Ubuntu systems..."
-        sudo apt update
-        for pkg in "${PACKAGES[@]}"; do
-            if sudo apt install -y "$pkg"; then
-                print_success "Installed: $pkg"
-            else
-                print_warning "Could not install: $pkg"
-            fi
-        done
-    elif command_exists dnf; then
-        print_status "Installing dependencies for Fedora/RHEL systems..."
-        for pkg in "${PACKAGES[@]}"; do
-            if sudo dnf install -y "$pkg"; then
-                print_success "Installed: $pkg"
-            else
-                print_warning "Could not install: $pkg"
-            fi
-        done
-    elif command_exists pacman; then
-        print_status "Installing dependencies for Arch systems..."
-        sudo pacman -Syu --noconfirm
-        for pkg in "${PACKAGES[@]}"; do
-            if sudo pacman -S --noconfirm "$pkg"; then
-                print_success "Installed: $pkg"
-            else
-                print_warning "Could not install: $pkg"
-            fi
-        done
-    elif command_exists zypper; then
-        print_status "Installing dependencies for openSUSE systems..."
-        for pkg in "${PACKAGES[@]}"; do
-            if sudo zypper install -y "$pkg"; then
-                print_success "Installed: $pkg"
-            else
-                print_warning "Could not install: $pkg"
-            fi
-        done
-    else
-        print_error "Could not detect a compatible package manager."
-        print_warning "Please manually install the following packages:"
-        printf '%s\n' "${PACKAGES[@]}"
-        return 1
     fi
 
     print_success "Dependency installation completed"
@@ -163,6 +177,9 @@ install_deps() {
 
 # Function to install Neovim
 install_neovim() {
+    local os="$1"
+    local distro="$2"
+    
     if command_exists nvim; then
         NVIM_VERSION=$(nvim --version | head -n1 | cut -d' ' -f2)
         print_success "Neovim $NVIM_VERSION already installed"
@@ -171,12 +188,8 @@ install_neovim() {
     
     print_status "Installing Neovim..."
     
-    OS=$(detect_os)
-    
-    if [[ "$OS" == "linux" ]]; then
-        DISTRO=$(detect_linux_distro)
-        
-        case $DISTRO in
+    if [[ "$os" == "linux" ]]; then
+        case $distro in
             "ubuntu"|"debian")
                 # Install latest Neovim from PPA for Ubuntu/Debian
                 sudo add-apt-repository ppa:neovim-ppa/unstable -y
@@ -195,13 +208,19 @@ install_neovim() {
             *)
                 # Fallback: download AppImage
                 print_status "Downloading Neovim AppImage..."
-                curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+                if ! curl -fLO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage; then
+                    print_error "Failed to download Neovim AppImage"
+                    return 1
+                fi
                 chmod u+x nvim.appimage
                 sudo mv nvim.appimage /usr/local/bin/nvim
                 ;;
         esac
-    elif [[ "$OS" == "macos" ]]; then
-        brew install neovim
+    elif [[ "$os" == "macos" ]]; then
+        if ! brew install neovim; then
+            print_error "Failed to install Neovim via Homebrew"
+            return 1
+        fi
     fi
     
     if command_exists nvim; then
@@ -262,9 +281,15 @@ install_nerd_font() {
     FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
     
     if command_exists curl; then
-        curl -fLo "/tmp/JetBrainsMono.zip" "$FONT_URL"
+        if ! curl -fLo "/tmp/JetBrainsMono.zip" "$FONT_URL"; then
+            print_error "Failed to download font with curl"
+            return 1
+        fi
     elif command_exists wget; then
-        wget -O "/tmp/JetBrainsMono.zip" "$FONT_URL"
+        if ! wget -O "/tmp/JetBrainsMono.zip" "$FONT_URL"; then
+            print_error "Failed to download font with wget"
+            return 1
+        fi
     else
         print_warning "Neither curl nor wget found. Skipping font installation."
         return 1
@@ -297,11 +322,18 @@ main() {
         exit 1
     fi
     
+    # Cache OS and distro detection
+    local os distro
+    os=$(detect_os)
+    if [[ "$os" == "linux" ]]; then
+        distro=$(detect_linux_distro)
+    fi
+    
     # Install Neovim
-    install_neovim
+    install_neovim "$os" "$distro"
     
     # Install dependencies
-    install_deps
+    install_deps "$os" "$distro"
     
     # Install Nerd Font
     install_nerd_font
