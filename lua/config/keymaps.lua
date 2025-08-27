@@ -117,7 +117,8 @@ local function setup_which_key()
     ["<leader>b"] = {
       name = " Buffers",
       b = { ":Telescope buffers<CR>", "List" },
-      d = { ":bdelete<CR>", "Delete" },
+      d = { ":Bdelete<CR>", "Delete" },
+      D = { ":Bwipeout<CR>", "Wipeout" },
       n = { ":bnext<CR>", "Next" },
       p = { ":bprevious<CR>", "Previous" },
       f = { ":bfirst<CR>", "First" },
@@ -125,7 +126,7 @@ local function setup_which_key()
       c = { ":enew<CR>", "Create" },
       a = { ":%bd|e#<CR>", "Delete All" },
       s = { ":w<CR>", "Save" },
-      w = { ":w<CR>:bdelete<CR>", "Save & Close" },
+      w = { ":w<CR>:Bdelete<CR>", "Save & Close" },
     },
     ["<leader>w"] = {
       name = " Windows",
@@ -133,6 +134,7 @@ local function setup_which_key()
       s = { ":split<CR>", "Horizontal Split" },
       c = { ":close<CR>", "Close" },
       o = { ":only<CR>", "Only" },
+      m = { ":WindowsMaximize<CR>", "Maximize" },
       h = { "<C-w>h", "Left" },
       j = { "<C-w>j", "Down" },
       k = { "<C-w>k", "Up" },
@@ -164,9 +166,10 @@ local function setup_which_key()
     },
     ["<leader>s"] = {
       name = " Search",
-      s = { ":lua require('spectre').open()<CR>", "Spectre" },
-      w = { ":lua require('spectre').open_visual({select_word=true})<CR>", "Word" },
-      f = { ":lua require('spectre').open_file_search()<CR>", "File" },
+      r = { ":lua require('spectre').open()<CR>", "Replace in Files" },
+      w = { ":lua require('spectre').open_visual({select_word=true})<CR>", "Replace Word" },
+      f = { ":lua require('spectre').open_file_search()<CR>", "Replace in File" },
+      u = { ":Telescope undo<CR>", "Undo History" },
     },
     ["<leader>v"] = {
       name = " Live Server",

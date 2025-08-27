@@ -263,7 +263,7 @@ return {
     },
     keys = {
       {
-        "<leader>u",
+        "<leader>su",
         "<cmd>Telescope undo<cr>",
         desc = "undo history",
       },
@@ -271,6 +271,44 @@ return {
     config = function(_, opts)
       require("telescope").setup(opts)
       require("telescope").load_extension("undo")
+    end,
+  },
+
+  -- Better word motions
+  {
+    "chaoren/vim-wordmotion",
+    event = "VeryLazy",
+  },
+
+  -- Highlight word under cursor
+  {
+    "RRethy/vim-illuminate",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      require("illuminate").configure({
+        delay = 200,
+        large_file_cutoff = 2000,
+        large_file_overrides = {
+          providers = { "lsp" },
+        },
+      })
+    end,
+  },
+
+  -- Better quickfix
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
+    config = function()
+      require("bqf").setup({
+        auto_enable = true,
+        preview = {
+          win_height = 12,
+          win_vheight = 12,
+          delay_syntax = 80,
+          border_chars = { "┃", "━", "┏", "┓", "┗", "┛", "┣", "┫", "┳", "┻" },
+        },
+      })
     end,
   },
 }

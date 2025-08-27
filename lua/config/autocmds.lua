@@ -14,23 +14,14 @@ autocmd("TextYankPost", {
   end,
 })
 
+-- Remove trailing whitespace on save
 autocmd("BufWritePre", {
   group = "GeneralSettings",
   pattern = "*",
   callback = function()
-    -- Highlight on yank with animation
-augroup("YankHighlight", { clear = true })
-autocmd("TextYankPost", {
-  group = "YankHighlight",
-  pattern = "*",
-  callback = function()
-    vim.highlight.on_yank({
-      higroup = "IncSearch",
-      timeout = 150,
-      on_visual = true,
-    })
-  end,
-})
+    local save_cursor = vim.fn.getpos(".")
+    pcall(function() vim.cmd([[%s/\s\+$//e]]) end)
+    vim.fn.setpos(".", save_cursor)
   end,
 })
 
@@ -101,46 +92,6 @@ autocmd("LspAttach", {
         callback = vim.lsp.buf.clear_references,
       })
     end
-  end,
-})
-
--- Auto format on save
-augroup("AutoFormat", { clear = true })
-autocmd("BufWritePre", {
-  group = "AutoFormat",
-  pattern = { "*.lua", "*.py", "*.js", "*.ts", "*.json", "*.css", "*.html" },
-  callback = function()
-    vim.lsp.buf.format({ async = true })
-  end,
-})
-
--- LSP auto commands
-augroup("LSPAutoCommands", { clear = true })
-autocmd("LspAttach", {
-  group = "LSPAutoCommands",
-  pattern = "*",
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client and client.server_capabilities.documentHighlightProvider then
-      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        buffer = args.buf,
-        callback = vim.lsp.buf.document_highlight,
-      })
-      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-        buffer = args.buf,
-        callback = vim.lsp.buf.clear_references,
-      })
-    end
-  end,
-})
-
--- Auto format on save
-augroup("AutoFormat", { clear = true })
-autocmd("BufWritePre", {
-  group = "AutoFormat",
-  pattern = { "*.lua", "*.py", "*.js", "*.ts", "*.json", "*.css", "*.html" },
-  callback = function()
-    vim.lsp.buf.format({ async = false })
   end,
 })
 

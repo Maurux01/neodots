@@ -741,4 +741,27 @@ return {
     end,
   },
 
+  -- Smart window management
+  {
+    "anuvyklack/windows.nvim",
+    dependencies = {
+      "anuvyklack/middleclass",
+      "anuvyklack/animation.nvim"
+    },
+    keys = { { "<leader>wm", "<cmd>WindowsMaximize<cr>", desc = "Maximize Window" } },
+    config = function()
+      require("windows").setup()
+    end,
+  },
+
+  -- Better buffer management
+  {
+    "famiu/bufdelete.nvim",
+    cmd = { "Bdelete", "Bwipeout" },
+    keys = {
+      { "<leader>bd", "<cmd>Bdelete<cr>", desc = "Delete Buffer" },
+      { "<leader>bD", "<cmd>Bwipeout<cr>", desc = "Wipeout Buffer" },
+    },
+  },
+
 }
