@@ -2,13 +2,7 @@
 
 ## 🚀 Solución Rápida
 
-### 1. Ejecutar Script de Reparación
-```powershell
-# En PowerShell como administrador
-.\fix-issues.ps1
-```
-
-### 2. Comandos Manuales en Neovim
+### Comandos en Neovim
 ```vim
 :Lazy sync
 :Mason

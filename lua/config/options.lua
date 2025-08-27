@@ -21,45 +21,32 @@ vim.opt.termguicolors = true
 -- Enable transparency support
 vim.g.transparent_enabled = true
 
--- Force transparency function
-local function force_transparency()
-  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
-  vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
-  vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
-  vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
-  vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none" })
-  vim.api.nvim_set_hl(0, "Folded", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NonText", { bg = "none" })
-  vim.api.nvim_set_hl(0, "SpecialKey", { bg = "none" })
-  vim.api.nvim_set_hl(0, "VertSplit", { bg = "none" })
-  vim.api.nvim_set_hl(0, "WinSeparator", { bg = "none" })
-  vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
-  vim.api.nvim_set_hl(0, "Pmenu", { bg = "none" })
+-- Auto-fix transparency system
+local transparency_groups = {
+  "Normal", "NormalFloat", "NormalNC", "SignColumn", "EndOfBuffer",
+  "LineNr", "CursorLineNr", "Folded", "NonText", "SpecialKey",
+  "VertSplit", "WinSeparator", "FloatBorder", "Pmenu",
+  "TelescopeNormal", "TelescopeBorder", "TelescopePromptNormal",
+  "TelescopeResultsNormal", "TelescopePreviewNormal",
+  "NvimTreeNormal", "NvimTreeEndOfBuffer", "NvimTreeVertSplit",
+  "StatusLine", "StatusLineNC", "TabLine", "TabLineFill"
+}
+
+local function apply_transparency()
+  for _, group in ipairs(transparency_groups) do
+    vim.api.nvim_set_hl(0, group, { bg = "none" })
+  end
   vim.api.nvim_set_hl(0, "PmenuSel", { bg = "#3e4451" })
-  vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TelescopePromptNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TelescopeResultsNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TelescopePreviewNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NvimTreeVertSplit", { bg = "none" })
-  vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
-  vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TabLine", { bg = "none" })
-  vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
 end
 
--- Apply transparency on colorscheme change and after UI loads
-vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter", "UIEnter" }, {
-  pattern = "*",
-  callback = force_transparency,
+-- Multiple triggers to ensure transparency works
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter", "UIEnter", "BufWinEnter" }, {
+  callback = apply_transparency,
 })
 
--- Force transparency after a delay to ensure it applies
-vim.defer_fn(force_transparency, 100)
+-- Delayed application for stubborn themes
+vim.defer_fn(apply_transparency, 50)
+vim.defer_fn(apply_transparency, 200)
 
 -- Line numbers
 vim.opt.number = true
