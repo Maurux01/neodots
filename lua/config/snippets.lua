@@ -336,7 +336,7 @@ ls.add_snippets("rust", {
     t({"", "use reqwest;"),
     t({"", ""}),
     t({"", "async fn "}), i(1, "fetch_data"), t("(url: &str) -> Result<String, reqwest::Error> {"),
-    t({"", "    let response = reqwest::get(url).await?;"},
+    t({"", "    let response = reqwest::get(url).await?;"),
     t({"", "    let body = response.text().await?;"}),
     t({"", "    Ok(body)"}),
     t({"", "}"}),
@@ -433,7 +433,7 @@ ls.add_snippets("sql", {
     t({"", "FROM "}), i(2, "users"), t(" u"),
     t({"", "LEFT JOIN "}), i(3, "profiles"), t(" p ON u.id = p.user_id"),
     t({"", "WHERE u."}), i(4, "active"), t(" = true"),
-    t({"", "ORDER BY u.created_at DESC"},
+    t({"", "ORDER BY u.created_at DESC"),
     t({"", "LIMIT "}), i(5, "10"), t(";"), i(0)
   })
 })
