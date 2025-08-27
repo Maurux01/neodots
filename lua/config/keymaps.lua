@@ -174,6 +174,8 @@ local function setup_which_key()
       r = { ":set relativenumber!<CR>", "Relative Numbers" },
       w = { ":set wrap!<CR>", "Word Wrap" },
       c = { ":set cursorline!<CR>", "Cursor Line" },
+      b = { ":ToggleTransparency<CR>", "Toggle Transparency" },
+      s = { ":lua require('config.wallpaper').show_status()<CR>", "Transparency Status" },
     },
     ["<leader>c"] = {
       name = " Code",

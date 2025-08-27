@@ -11,10 +11,21 @@ return {
       require("tokyonight").setup({
         style = "night",
         transparent = true,
+        terminal_colors = true,
         styles = {
           comments = { italic = true },
           keywords = { italic = true },
+          sidebars = "transparent",
+          floats = "transparent",
         },
+        on_colors = function(colors)
+          colors.bg = "none"
+          colors.bg_dark = "none"
+          colors.bg_float = "none"
+          colors.bg_popup = "none"
+          colors.bg_sidebar = "none"
+          colors.bg_statusline = "none"
+        end,
       })
       vim.cmd.colorscheme("tokyonight-night")
     end,
@@ -30,9 +41,17 @@ return {
       require("catppuccin").setup({
         flavour = "mocha", -- latte, frappe, macchiato, mocha
         transparent_background = true,
+        term_colors = true,
         styles = {
           comments = { "italic" },
           conditionals = { "italic" },
+        },
+        integrations = {
+          telescope = {
+            enabled = true,
+            style = "nvchad"
+          },
+          nvimtree = true,
         },
       })
     end,
@@ -44,16 +63,38 @@ return {
     priority = 1000,
     config = function()
       require("kanagawa").setup({
+        compile = false,
+        undercurl = true,
+        commentStyle = { italic = true },
+        functionStyle = {},
+        keywordStyle = { italic = true},
+        statementStyle = { bold = true },
+        typeStyle = {},
         transparent = true,
+        dimInactive = false,
+        terminalColors = true,
         colors = {
           theme = {
             all = {
               ui = {
-                bg_gutter = "none"
+                bg_gutter = "none",
+                bg = "none",
+                bg_m1 = "none",
+                bg_m2 = "none",
+                bg_m3 = "none",
+                bg_p1 = "none",
+                bg_p2 = "none",
               }
             }
           }
-        }
+        },
+        overrides = function(colors)
+          return {
+            NormalFloat = { bg = "none" },
+            FloatBorder = { bg = "none" },
+            FloatTitle = { bg = "none" },
+          }
+        end,
       })
     end,
   },
@@ -68,8 +109,17 @@ return {
         variant = "main", -- auto, main, moon, dawn
         dark_variant = "main",
         disable_background = true,
+        disable_float_background = true,
         styles = {
           italic = true,
+          transparency = true,
+        },
+        groups = {
+          background = "none",
+          background_nc = "none",
+          panel = "none",
+          panel_nc = "none",
+          border = "highlight_med",
         },
       })
     end,
@@ -121,7 +171,7 @@ return {
     config = function()
       require("lualine").setup({
         options = {
-          theme = "tokyonight",
+          theme = "auto",
           component_separators = { left = "", right = "" },
           section_separators = { left = "", right = "" },
         },
@@ -251,6 +301,11 @@ return {
           separator_style = "slant",
           show_buffer_close_icons = false,
           show_close_icon = false,
+        },
+        highlights = {
+          fill = {
+            bg = "none",
+          },
         },
       })
     end,
