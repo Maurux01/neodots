@@ -79,7 +79,7 @@ local function setup_which_key()
   -- Group mappings
   wk.register({
     ["<leader>f"] = {
-      name = " Find",
+      name = " Find/File",
       f = { ":Telescope find_files<CR>", "Files" },
       g = { ":Telescope live_grep<CR>", "Grep" },
       b = { ":Telescope buffers<CR>", "Buffers" },
@@ -92,6 +92,10 @@ local function setup_which_key()
       m = { ":Telescope marks<CR>", "Marks" },
       e = { ":Telescope file_browser<CR>", "File Browser" },
       c = { ":Telescope commands<CR>", "Commands" },
+      n = { ":lua require('genghis').createNewFile()<CR>", "New File" },
+      d = { ":lua require('genghis').duplicateFile()<CR>", "Duplicate File" },
+      R = { ":lua require('genghis').renameFile()<CR>", "Rename File" },
+      x = { ":lua require('genghis').chmodx()<CR>", "Make Executable" },
     },
     ["<leader>g"] = {
       name = " Git",
@@ -172,9 +176,11 @@ local function setup_which_key()
       u = { ":Telescope undo<CR>", "Undo History" },
     },
     ["<leader>v"] = {
-      name = " Live Server",
+      name = " Web Dev",
       s = { ":LiveServerStart<CR>", "Start Server" },
       x = { ":LiveServerStop<CR>", "Stop Server" },
+      r = { ":RestNvim<CR>", "Run REST" },
+      p = { ":PackageInfoShow<CR>", "Package Info" },
     },
     ["<leader>u"] = {
       name = " UI",

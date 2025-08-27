@@ -10,6 +10,10 @@ vim.loader.enable()
 vim.opt.lazyredraw = true
 vim.opt.ttyfast = true
 vim.opt.regexpengine = 1
+vim.opt.synmaxcol = 300
+vim.opt.maxmempattern = 5000
+vim.opt.history = 1000
+vim.opt.undolevels = 10000
 
 -- Terminal colors and transparency
 vim.opt.termguicolors = true
@@ -172,11 +176,14 @@ vim.g.loaded_spellfile_plugin = 1
 vim.g.loaded_man = 1
 vim.g.loaded_shada_plugin = 1
 
--- Performance optimizations
-vim.opt.redrawtime = 1000
-vim.opt.ttimeoutlen = 0
-vim.opt.synmaxcol = 200
-vim.opt.maxmempattern = 2000
+-- Additional performance optimizations
+vim.opt.redrawtime = 1500
+vim.opt.ttimeoutlen = 10
+vim.opt.conceallevel = 0
+vim.opt.concealcursor = ""
+vim.opt.shortmess:append("c")
+vim.opt.whichwrap:append("<,>,[,],h,l")
+vim.opt.iskeyword:append("-")
 
 -- Wildmenu and completion
 vim.opt.wildmenu = true
