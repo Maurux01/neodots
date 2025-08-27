@@ -177,6 +177,14 @@ local function setup_which_key()
       b = { ":ToggleTransparency<CR>", "Toggle Transparency" },
       s = { ":lua require('config.wallpaper').show_status()<CR>", "Transparency Status" },
     },
+    ["<leader>p"] = {
+      name = " Discord Presence",
+      e = { ":lua require('presence'):update()<CR>", "Enable" },
+      d = { ":lua require('presence'):cancel()<CR>", "Disable" },
+      t = { ":lua require('utils.discord').toggle()<CR>", "Toggle" },
+      s = { ":lua require('utils.discord').status()<CR>", "Status" },
+      u = { ":lua require('utils.discord').update_with_project()<CR>", "Update Project" },
+    },
     ["<leader>c"] = {
       name = " Code",
       c = { ":lua require('Comment.api').toggle.linewise.current()<CR>", "Comment" },
